@@ -1,0 +1,178 @@
+﻿
+
+/* Variables */
+html {
+	--theme_text_color: hsl(0, 0%, 100%);
+	--theme_text_family: sans-serif;
+}
+
+/*///////////////////////////////////////////*/
+header {
+	height: 45px;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	background-color: hsl(0, 0%, 17%);
+}
+
+header .menu-btn,
+header .search-btn,
+header .account-btn {
+	font-family: var(--theme_text_family);
+	color: var(--theme_text_color);
+}
+
+/* Content */
+.video-main {
+	max-width: 1200px;
+
+	display: flex;
+	flex-direction: column;
+
+	background-color: hsl(0, 0%, 10%);
+}
+
+.video-main .video-stub {
+	width: 100%;
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: hsl(224, 38%, 34%);
+	font-family: monospace;
+	font-size: 50px;
+	color: white;
+	text-transform: uppercase;
+}
+
+.video-main .below {
+	margin: 0px 7px;
+}
+
+/* Video title */
+.video-main .row-0 {
+	margin-top: 7px;
+
+	display: flex;
+}
+
+.video-main .row-0 h1 {
+	font-family: var(--theme_text_family);
+	font-size: 25px;
+	font-weight: normal;
+	color: hsl(0, 0%, 100%);
+}
+
+/* Video stats */
+.video-main .row-1 {
+	margin-top: 7px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.video-main .row-1 .stats {
+	display: flex;
+	flex-direction: row;
+
+	font-family: var(--theme_text_family);
+}
+
+.video-main .row-1 .views-count {
+	font-style: normal;
+	color: hsl(0, 0%, 100%);
+}
+
+.video-main .row-1 .views-txt {
+	margin-left: 5px;
+	color: hsl(0, 0%, 100%);
+}
+
+.video-main .row-1 .dot {
+	margin: 0px 5px;
+	color: hsl(0, 0%, 100%);
+}
+
+.video-main .row-1 .video-date {
+	color: hsl(0, 0%, 100%);
+}
+
+.video-main .row-1 .btns {
+	display: flex;
+}
+
+/* Video Rating Numbers */
+.video-main .row-1 .likes {
+	color: white;
+}
+
+.video-main .row-1 .numbers {
+	display: flex;
+}
+
+.video-main .row-1 .numbers .up,
+.video-main .row-1 .numbers .down {
+	display: flex;
+
+	font-family: var(--theme_text_family);
+	font-size: 16px;
+}
+
+.video-main .row-1 .numbers .rating-count {
+	font-style: normal;
+}
+
+.video-main .row-1 .numbers .rating-txt {
+	margin-left: 5px;
+}
+
+.video-main .row-1 .numbers .down {
+	margin-left: 12px;
+}
+
+/* Video Rating Graph */
+.video-main .row-1 .graph {
+	
+}
+
+.video-main .row-1 .graph .progress {
+	height: 4px;
+	background-color: red;
+}
+
+.video-main .row-1 .graph .progress .fill {
+	width: 75%;
+	height: 100%;
+
+	background-color: blue;
+}
+
+.video-main .subscribe-btn {
+	margin-left: 10px;
+
+	background-color: hsl(0, 100%, 50%);
+
+	font-family: var(--theme_text_family);
+	font-size: 16px;
+	color: white;
+}
+
+/* Video tags */
+.video-main .tags {
+	display: flex;
+	gap: 7px;
+}
+
+.video-main .tags .tag {
+	font-family: var(--theme_text_family);
+	font-size: 14px;
+	color: white;
+}
+
+/* Recomendations */
+.video-recoms {
+	background-color: hsl(0, 0%, 23%);
+}

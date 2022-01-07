@@ -1,0 +1,29 @@
+﻿
+html {
+	min-height: 100%;
+
+	background-color: black;
+}
+
+body {
+	margin: 0px;
+	height: 100%;
+}
+
+button {
+	border-style: none;
+	border-width: 0px;
+	padding: 0px;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+h1 {
+	margin-block-start: 0px;
+	margin-block-end: 0px;
+}
+
+p {
+	margin-block-start: 0px;
+	margin-block-end: 0px;
+}
