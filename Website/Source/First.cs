@@ -4,14 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 public static class WatchVideo
 {
-    public static async Task<HttpContext> videoPage(HttpContext req)
-    {
-        req.Response.ContentType = "text/html";
-        await req.Response.WriteAsync("<h1>Text</h1>");
-        // await req.Response.WriteAsJsonAsync(new Bar());
-        return req;
-    }
-
     public class VideoRequest
     {
         public int video_id { get; set; }
@@ -29,7 +21,7 @@ public static class WatchVideo
         public List<string> tags { get; set; }
     }
 
-    public static async Task<VideoResponse> getVideo([FromBody] VideoRequest req)
+    public static VideoResponse getVideoInfo([FromBody] VideoRequest req)
     {
         var res = new VideoResponse();
         res.title = "This the Video Title";
@@ -40,5 +32,16 @@ public static class WatchVideo
         res.tags = new List<string> { "Podcast", "Philosophy", "Politics" };
 
         return res;
+    }
+
+    public static async Task<HttpContext> getVideoSegment(HttpContext context)
+    {
+        var res = context.Response;
+        res.ContentType = "video/mp4";
+
+        var bytes = await File.ReadAllBytesAsync("Database/video.mp4");
+        await res.Body.WriteAsync(bytes);
+
+        return context;
     }
 }

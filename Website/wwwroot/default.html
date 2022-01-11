@@ -28,43 +28,41 @@
 	<div class="content">
 		<main class="video-main">
 			<article>
-				<div class="video-stub">
-					Video Stub
-				</div>
+				<video id="video"></video>
 			</article>
 
 			<div class="below">
 
 				<!-- Video Title -->
 				<div class="row-0">
-					<h1>Video Title</h1>
+					<h1 id="title">Content not loaded</h1>
 				</div>
 
 				<!-- Content Stats and Buttons -->
 				<div class="row-1">
 
 					<div class="stats">
-						<var class="views-count">1,851,638</var>
+						<var class="views-count" id="views">-1</var>
 						<p class="views-txt">views</p>
 						<p class="dot">•</p>
-						<p class="video-date">21.06.2022</p>
+						<p class="video-date" id="date">00.00.0000</p>
 					</div>
 
 					<div class="btns">
 						<div class="likes">
 							<div class="numbers">
 								<div class="up">
-									<var class="rating-count">81,456</var>
+									<var class="rating-count" id="likes">-1</var>
 									<p class="rating-txt">Up</p>
 								</div>
 								<div class="down">
-									<var class="rating-count">3,201</var>
+									<var class="rating-count" id="dislikes">-1</var>
 									<p class="rating-txt">Down</p>
 								</div>
 							</div>
 							<div class="graph">
 								<div class="progress">
-									<div class="fill"></div>
+									<div class="fill" id="likes_fill_bar"></div>
 								</div>
 							</div>
 						</div>
@@ -72,12 +70,7 @@
 					</div>
 				</div>
 
-				<!-- Tags -->
-				<div class="tags">
-					<button class="tag">Tag 1</button>
-					<button class="tag">Tag 2</button>
-					<button class="tag">Tag 3</button>
-				</div>
+				<div class="tags" id="tags"></div>
 			</div>
 
 		</main>

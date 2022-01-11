@@ -17,8 +17,8 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();  // to load default.html
 app.UseStaticFiles();  // to resolve CSS and JavaScript links
 
-app.Map("/video", WatchVideo.videoPage);
-app.Map("/api/getVideo", WatchVideo.getVideo);
+app.Map("/api/getVideoInfo", WatchVideo.getVideoInfo);
+app.Map("/api/getVideoSegment", WatchVideo.getVideoSegment);
 
 app.Run();
 

@@ -34,6 +34,7 @@ header .account-btn {
 	background-color: hsl(0, 0%, 10%);
 }
 
+/* The Video Itself */
 .video-main .video-stub {
 	width: 100%;
 	height: 300px;
