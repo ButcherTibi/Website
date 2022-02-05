@@ -27,18 +27,19 @@
 	</header>
 	<div class="content">
 		<main class="video-main">
-			<article>
-				<video id="video"></video>
-			</article>
 
-			<div class="below">
+			<section>
+				<video id="video"></video>
+			</section>
+
+			<section class="info">
 
 				<!-- Video Title -->
 				<div class="row-0">
 					<h1 id="title">Content not loaded</h1>
 				</div>
 
-				<!-- Content Stats and Buttons -->
+				<!-- Content Stats -->
 				<div class="row-1">
 
 					<div class="stats">
@@ -66,17 +67,41 @@
 								</div>
 							</div>
 						</div>
-						<button class="subscribe-btn">Subscribe</button>
+						<!--<button class="subscribe-btn">Subscribe</button>-->
 					</div>
 				</div>
 
+				<!-- Folder -->
+				<div class="folder" id="folder"></div>
+
+				<!-- Tags -->
 				<div class="tags" id="tags"></div>
-			</div>
 
+				<!-- Description -->
+				<div class="description">
+					<div class="left">
+						<img id="author" />
+					</div>
+					<div class="right">
+						<div class="author">
+							<h1 id="author_name"></h1>
+						</div>
+						<div class="description">
+							<p id="description"></p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Comments -->
+			<div class="comments" id="comments"></div>
 		</main>
-		<aside class="video-recoms">
 
-		</aside>
+		<aside class="video-recoms"></aside>
 	</div>
+	
+	<footer>
+
+	</footer>
 </body>
 </html>

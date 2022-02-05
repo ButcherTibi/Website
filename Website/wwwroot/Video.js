@@ -1,74 +1,112 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var FetchBinaryResponseType;
+(function (FetchBinaryResponseType) {
+    FetchBinaryResponseType[FetchBinaryResponseType["BLOB"] = 0] = "BLOB";
+    FetchBinaryResponseType[FetchBinaryResponseType["ARRAY_BUFFER"] = 1] = "ARRAY_BUFFER";
+})(FetchBinaryResponseType || (FetchBinaryResponseType = {}));
+;
 /**
  * Simple wrapper over the fecth API
- * @param url target URL to send request
- * @param body object to send to server
  */
-function serverFetch(url, body) {
-    var req_headers = new Headers();
-    req_headers.append("Accept", "application/json");
+function serverFetch(url, body, response_type = FetchBinaryResponseType.BLOB) {
+    let req_headers = new Headers();
+    // req_headers.append("Accept", "application/json");
     req_headers.append("Content-Type", "application/json");
-    var req_init = {
+    let req_init = {
         method: "POST",
         body: JSON.stringify(body),
         headers: req_headers
     };
-    return fetch(url, req_init).then(function (response) {
+    return fetch(url, req_init).then((response) => {
         if (response.ok === false) {
             throw response;
         }
-        switch (response.headers.get("Content-Type")) {
-            case "video/mp4": {
-                return response.blob();
+        let content_type = response.headers.get("Content-Type");
+        if (content_type.includes("application/json")) {
+            return response.json();
+        }
+        else {
+            switch (content_type) {
+                case "video/mp4": {
+                    switch (response_type) {
+                        case FetchBinaryResponseType.BLOB: {
+                            return response.blob();
+                        }
+                        case FetchBinaryResponseType.ARRAY_BUFFER: {
+                            return response.arrayBuffer();
+                        }
+                    }
+                }
             }
         }
-        return response.json();
-    }, function (err) { throw err; });
+        return response.text();
+    }, (err) => { throw err; });
 }
 ;
 function formatDate(raw_date) {
-    var date = new Date(raw_date);
+    let date = new Date(raw_date);
     return Intl.DateTimeFormat("ro").format(date);
 }
 function formatNumber(number) {
     return Intl.NumberFormat("ro").format(number);
 }
-window.onload = function () {
-    serverFetch("api/getVideoInfo", { video_id: 1 }).then(function (res) {
-        var title = document.getElementById("title");
+function assert(expression_result) {
+    if (expression_result == false) {
+        throw "assertion failed";
+    }
+}
+function mustGetElementById(id) {
+    let elem = document.getElementById(id);
+    assert(elem != null);
+    return elem;
+}
+window.onload = () => __awaiter(this, void 0, void 0, function* () {
+    serverFetch("api/getVideoInfo", { video_id: 0 }).then(res => {
+        let title = mustGetElementById("title");
         title.textContent = res.title;
-        var views = document.getElementById("views");
+        let views = mustGetElementById("views");
         views.textContent = res.views;
-        var date = document.getElementById("date");
+        let date = mustGetElementById("date");
         date.textContent = formatDate(res.publish_date);
         // Rating
         {
-            var likes_count = res.likes;
-            var likes = document.getElementById("likes");
+            let likes_count = res.likes;
+            let likes = mustGetElementById("likes");
             likes.textContent = formatNumber(likes_count);
-            var dislikes_count = res.dislikes;
-            var dislikes = document.getElementById("dislikes");
+            let dislikes_count = res.dislikes;
+            let dislikes = mustGetElementById("dislikes");
             dislikes.textContent = formatNumber(dislikes_count);
-            var bar = document.getElementById("likes_fill_bar");
-            bar.style.width = "".concat((likes_count / (likes_count + dislikes_count)) * 100, "%");
+            let bar = mustGetElementById("likes_fill_bar");
+            bar.style.width = `${(likes_count / (likes_count + dislikes_count)) * 100}%`;
         }
         // Tags
         {
-            var tags_wrap_1 = document.getElementById("tags");
-            var tag_names = res.tags;
-            tag_names.forEach(function (tag) {
-                var button = document.createElement("button");
+            let tags_wrap = mustGetElementById("tags");
+            let tag_names = res.tags;
+            tag_names.forEach(tag => {
+                let button = document.createElement("button");
                 button.classList.add("tag");
                 button.innerText = tag;
-                tags_wrap_1.appendChild(button);
+                tags_wrap.appendChild(button);
             });
         }
     });
-    serverFetch("api/getVideoSegment", { video_id: 1 }).then(function (res) {
-        var blob_url = URL.createObjectURL(res);
-        var video = document.getElementById("video");
+    serverFetch("api/getWholeMP4_Video", { video_id: 0 }).then((res) => {
+        let blob_url = URL.createObjectURL(res);
+        let video = document.getElementById("video");
         video.src = blob_url;
-        // video.style.aspectRatio = video.videoWidth / video.videoHeight;
-        console.log(res.type);
     });
-};
+    serverFetch("api/getVideoComments", { video_id: 0 }).then(res => {
+        let comments = res.comments;
+        console.log(comments);
+    });
+});
 //# sourceMappingURL=Video.js.map

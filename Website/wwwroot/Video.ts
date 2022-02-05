@@ -1,104 +1,157 @@
 ﻿
+enum FetchBinaryResponseType {
+	BLOB,
+	ARRAY_BUFFER
+};
 
 /**
  * Simple wrapper over the fecth API
- * @param url target URL to send request
- * @param body object to send to server
  */
-function serverFetch(url: RequestInfo, body: any): Promise<any> {
+function serverFetch(url: RequestInfo, body: any, response_type: FetchBinaryResponseType = FetchBinaryResponseType.BLOB): Promise<any> {
 
-    let req_headers = new Headers();
-    req_headers.append("Accept", "application/json");
-    req_headers.append("Content-Type", "application/json");
+	let req_headers = new Headers();
+	// req_headers.append("Accept", "application/json");
+	req_headers.append("Content-Type", "application/json");
 
-    let req_init: RequestInit = {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: req_headers
-    };
+	let req_init: RequestInit = {
+		method: "POST",
+		body: JSON.stringify(body),
+		headers: req_headers
+	};
 
-    return fetch(url, req_init).then(
-        (response: Response) => {
-            if (response.ok === false) {
-                throw response;
+	return fetch(url, req_init).then(
+		(response: Response) => {
+			if (response.ok === false) {
+				throw response;
+			}
+
+			let content_type = response.headers.get("Content-Type");
+
+			if (content_type.includes("application/json")) {
+				return response.json();
+			}
+			else {
+				switch (content_type) {
+					case "video/mp4": {
+						switch (response_type) {
+							case FetchBinaryResponseType.BLOB: {
+								return response.blob();
+							}
+							case FetchBinaryResponseType.ARRAY_BUFFER: {
+								return response.arrayBuffer();
+							}
+						}
+					}
+				}
             }
 
-            switch (response.headers.get("Content-Type")) {
-                case "video/mp4": {
-                    return response.blob();
-                }
-            }
-
-            return response.json();
-        },
-        (err: Error) => { throw err }
-    );
+			return response.text();
+		},
+		(err: Error) => { throw err }
+	);
 };
 
 function formatDate(raw_date: string): string {
-    let date = new Date(raw_date);
-    return Intl.DateTimeFormat("ro").format(date);
+	let date = new Date(raw_date);
+	return Intl.DateTimeFormat("ro").format(date);
 }
 
 function formatNumber(number: number): string {
-    return Intl.NumberFormat("ro").format(number);
+	return Intl.NumberFormat("ro").format(number);
 }
 
+function assert(expression_result: boolean) {
+	if (expression_result == false) {
+		throw "assertion failed";
+    }
+}
 
-window.onload = () => {
-    
-    serverFetch("api/getVideoInfo", { video_id: 1 }).then(
-        res => {
+function mustGetElementById(id: string) {
+	let elem = document.getElementById(id);
 
-            let title: HTMLElement = document.getElementById("title");
-            title.textContent = res.title;
+	assert(elem != null);
+	return elem;
+}
 
-            let views: HTMLElement = document.getElementById("views");
-            views.textContent = res.views;
+type VideoComment = {
+	id: number,
 
-            let date: HTMLElement = document.getElementById("date");
-            date.textContent = formatDate(res.publish_date);
+	depth: number,
 
-            // Rating
-            {
-                let likes_count = res.likes;
-                let likes: HTMLElement = document.getElementById("likes");
-                likes.textContent = formatNumber(likes_count);
+	// User Info
+	user_id: number,
+	user_name: string,
 
-                let dislikes_count = res.dislikes;
-                let dislikes: HTMLElement = document.getElementById("dislikes");
-                dislikes.textContent = formatNumber(dislikes_count);
+	// Comment Info
+	likes: number,
+	dislikes: number,
+	last_edit: Date,
 
-                let bar: HTMLDivElement = document.getElementById("likes_fill_bar") as HTMLDivElement;
-                bar.style.width = `${(likes_count / (likes_count + dislikes_count)) * 100}%`;
-            }
+	// Content
+	text: string
+};
 
-            // Tags
-            {
-                let tags_wrap: HTMLDivElement = document.getElementById("tags") as HTMLDivElement;
 
-                let tag_names: [string] = res.tags;
-                tag_names.forEach(tag => {
+window.onload = async () => {
+	
+	serverFetch("api/getVideoInfo", { video_id: 0 }).then(
+		res => {
 
-                    let button = document.createElement("button") as HTMLButtonElement;
-                    button.classList.add("tag");
-                    button.innerText = tag;
+			let title: HTMLElement = mustGetElementById("title");
+			title.textContent = res.title;
 
-                    tags_wrap.appendChild(button);
-                });
-            }
+			let views: HTMLElement = mustGetElementById("views");
+			views.textContent = res.views;
+
+			let date: HTMLElement = mustGetElementById("date");
+			date.textContent = formatDate(res.publish_date);
+
+			// Rating
+			{
+				let likes_count = res.likes;
+				let likes: HTMLElement = mustGetElementById("likes");
+				likes.textContent = formatNumber(likes_count);
+
+				let dislikes_count = res.dislikes;
+				let dislikes: HTMLElement = mustGetElementById("dislikes");
+				dislikes.textContent = formatNumber(dislikes_count);
+
+				let bar: HTMLDivElement = mustGetElementById("likes_fill_bar") as HTMLDivElement;
+				bar.style.width = `${(likes_count / (likes_count + dislikes_count)) * 100}%`;
+			}
+
+			// Tags
+			{
+				let tags_wrap: HTMLDivElement = mustGetElementById("tags") as HTMLDivElement;
+
+				let tag_names: [string] = res.tags;
+				tag_names.forEach(tag => {
+
+					let button = document.createElement("button") as HTMLButtonElement;
+					button.classList.add("tag");
+					button.innerText = tag;
+
+					tags_wrap.appendChild(button);
+				});
+			}
+		}
+	);
+
+	serverFetch("api/getWholeMP4_Video", { video_id: 0 }).then(
+	    (res: Blob) => {
+
+	        let blob_url = URL.createObjectURL(res);
+
+	        let video = document.getElementById("video") as HTMLVideoElement;
+	        video.src = blob_url;
+	    }
+	);
+
+	serverFetch("api/getVideoComments", { video_id: 0 }).then(
+		res => {
+
+			let comments: [VideoComment] = res.comments;
+			console.log(comments);
         }
-    );
-
-    serverFetch("api/getVideoSegment", { video_id: 1 }).then(
-        (res: Blob) => {
-            let blob_url = URL.createObjectURL(res);
-
-            let video = document.getElementById("video") as HTMLVideoElement;
-            video.src = blob_url;
-            // video.style.aspectRatio = video.videoWidth / video.videoHeight;
-
-            console.log(res.type);
-        }
-    );
+	);
 };

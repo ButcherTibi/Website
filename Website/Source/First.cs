@@ -1,47 +1,95 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 
 
 public static class WatchVideo
 {
-    public class VideoRequest
-    {
-        public int video_id { get; set; }
-    }
+	
 
-    public class VideoResponse
-    {
-        public string title { get; set; }
-        public uint views { get; set; }
-        public DateTime publish_date { get; set; }
+	public class CommnonVideoRequest
+	{
+		public uint video_id { get; set; }
+	}
 
-        public uint likes { get; set; }
-        public uint dislikes { get; set; }
+	public class VideoResponse
+	{
+		public string title { get; set; }
+		public uint views { get; set; }
+		public DateTime publish_date { get; set; }
 
-        public List<string> tags { get; set; }
-    }
+		public uint likes { get; set; }
+		public uint dislikes { get; set; }
 
-    public static VideoResponse getVideoInfo([FromBody] VideoRequest req)
-    {
-        var res = new VideoResponse();
-        res.title = "This the Video Title";
-        res.views = 1_851_638;
-        res.publish_date = new DateTime(2022, 6, 21);
-        res.likes = 81_456;
-        res.dislikes = 3_201;
-        res.tags = new List<string> { "Podcast", "Philosophy", "Politics" };
+		public List<string> tags { get; set; }
+	}
 
-        return res;
-    }
+	public static async Task<HttpContext> getVideoInfo(HttpContext context)
+	{
+		var req = await context.Request.ReadFromJsonAsync<CommnonVideoRequest>();
 
-    public static async Task<HttpContext> getVideoSegment(HttpContext context)
-    {
-        var res = context.Response;
-        res.ContentType = "video/mp4";
+		db.Video video;
+		Globals.database.getVideo(req.video_id, out video);
 
-        var bytes = await File.ReadAllBytesAsync("Database/video.mp4");
-        await res.Body.WriteAsync(bytes);
+		if (video == null) {
+			context.Response.StatusCode = 404;
+			return context;
+		}
 
-        return context;
-    }
+		var res = new VideoResponse();
+		res.title = video.title;
+		res.views = video.views;
+		res.publish_date = video.publish_date;
+		res.likes = video.likes;
+		res.dislikes = video.dislikes;
+		res.tags = video.tags;
+
+		await context.Response.WriteAsJsonAsync(res);
+		return context;
+	}
+
+	public static async Task<HttpContext> getWholeVideo(HttpContext context)
+	{
+		var req = await context.Request.ReadFromJsonAsync<CommnonVideoRequest>();
+
+		db.Video video;
+		Globals.database.getVideo(req.video_id, out video);
+
+		if (video == null) {
+			context.Response.StatusCode = 404;
+			return context;
+		}
+
+		context.Response.ContentType = "video/mp4";
+		await context.Response.Body.WriteAsync(await File.ReadAllBytesAsync(video.file_path));
+		return context;
+	}
+
+	public class VideoCommentsRequest
+	{
+		public uint video_id { get; set; }
+	}
+
+	public class VideoCommentsResponse
+	{
+		public List<ClientVideoComment> comments { get; set; }
+	}
+
+	public static async Task<HttpContext> getVideoComments(HttpContext context)
+	{
+		var req = await context.Request.ReadFromJsonAsync<VideoCommentsRequest>();
+
+		List<ClientVideoComment> comments;
+
+		if (Globals.database.getNiceVideoComments(req.video_id, out comments) == false) {
+			context.Response.StatusCode = 404;
+			return context;
+		}
+
+		var res = new VideoCommentsResponse();
+		res.comments = comments;
+
+		await context.Response.WriteAsJsonAsync(res);
+		return context;
+	}
 }

@@ -1,0 +1,9 @@
+# Server Folders
+.vs/
+obj/
+
+# Client Folders
+
+# Server Extension
+*.pdb
+*.exe

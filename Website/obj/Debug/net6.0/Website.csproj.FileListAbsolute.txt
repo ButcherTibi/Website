@@ -6,7 +6,6 @@ G:\My work\Site\Website\Website\bin\Debug\net6.0\Website.runtimeconfig.json
 G:\My work\Site\Website\Website\bin\Debug\net6.0\Website.dll
 G:\My work\Site\Website\Website\bin\Debug\net6.0\ref\Website.dll
 G:\My work\Site\Website\Website\bin\Debug\net6.0\Website.pdb
-G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.csproj.AssemblyReference.cache
 G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.GeneratedMSBuildEditorConfig.editorconfig
 G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.AssemblyInfoInputs.cache
 G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.AssemblyInfo.cs
@@ -20,3 +19,5 @@ G:\My work\Site\Website\Website\obj\Debug\net6.0\ref\Website.dll
 G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.pdb
 G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.genruntimeconfig.cache
 G:\My work\Site\Website\Website\bin\Debug\net6.0\Website.staticwebassets.runtime.json
+G:\My work\Site\Website\Website\bin\Debug\net6.0\tsconfig.json
+G:\My work\Site\Website\Website\obj\Debug\net6.0\Website.csproj.AssemblyReference.cache
