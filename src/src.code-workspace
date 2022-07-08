@@ -4,5 +4,24 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"[html]": {
+			"editor.insertSpaces": false,
+			"editor.tabSize": 2
+		},
+		"[css]": {
+			"editor.insertSpaces": false,
+			"editor.tabSize": 2
+		},
+		"[typescript]": {
+			"editor.insertSpaces": false,
+			"editor.tabSize": 2
+		},
+		"[tsx]": {
+			"editor.insertSpaces": false,
+			"editor.tabSize": 2
+		}
+	}
 }

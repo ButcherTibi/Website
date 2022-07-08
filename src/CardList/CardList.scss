@@ -1,0 +1,35 @@
+.card-list {
+	--card_width: 200px;
+
+	position: relative;
+
+	margin: 30px;
+	width: var(--card_width);
+}
+
+.card-list li {
+	position: absolute;
+	left: 0px;
+
+	width: max-content;
+	height: max-content;
+
+	transition: top .2s;
+}
+
+.card-list .card {
+	border-radius: 15px;
+	padding: 5px;
+	
+	width: var(--card_width);
+	height: 230px;
+	background-color: hsl(138, 71%, 61%);
+	box-shadow: 0px -15px 32px -18px hsl(0deg 0% 0%);
+
+	transition: transform .2s;
+}
+
+.card-list li:hover .card,
+.card-list .card:hover {
+	transform: translate(-57px, -40px) rotate(-15deg);
+}
