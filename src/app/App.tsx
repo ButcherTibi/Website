@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.scss';
 
-import DemoCardList from '../Pages/DemoCardList';
+import AccordionPage from '../Pages/AccordionPage';
 
 function App() {
   return (
-    <DemoCardList />
+    <AccordionPage />
   );
 }
 

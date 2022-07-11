@@ -9,10 +9,37 @@ function DemoCardList()
 {
 	let items: CardData[] = [];
 
-	for (let i = 0; i < 10; i++) {
+	let titles = [
+		'Quisque egestas',
+		'Mauris lectus',
+		'Vivamus',
+		'Duis non bibendum',
+		'Sed a volutpat ligula'
+	];
+
+	let descriptions = [
+		'Praesent iaculis enim ut turpis rhoncus, sed aliquam eros pretium.',
+		'Quisque egestas iaculis tellus id vulputate.',
+		'Nulla varius nisi in augue ornare.',
+		'Class aptent taciti sociosqu ad litora torquent per conubia nostra.',
+		'Donec convallis metus ut mi lacinia, sed egestas massa sollicitudin.'
+	];
+
+	let authors = [
+		'Quisque',
+		'Aenean',
+		'Vestibulum',
+		'Vivamus',
+		'Curabitu'
+	];
+
+	for (let i = 0; i < 15; i++) {
 		items.push({
-			title: `Card ${i}`
-		})
+			title: titles[i % titles.length],
+			date: new Date(),
+			description: descriptions[i % descriptions.length],
+			author: authors[i % authors.length]
+		});
 	}
 
 	return (

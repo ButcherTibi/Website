@@ -69,7 +69,6 @@ html, body, #root {
 }
 
 ol, ul {
-	height: 100%;
 	list-style: none;
 }
 
