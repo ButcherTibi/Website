@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 
 import './Accordion.scss'
 
@@ -28,8 +28,13 @@ export function Item(props: ItemProps)
 	};
 
 	let height: number;
+	let arrow_style: CSSProperties | undefined;
+
 	if (is_open) {
 		height = scroll_height;
+		arrow_style = {
+			transform: 'rotate(90deg)'
+		};
 	}
 	else {
 		height = 0;
@@ -38,7 +43,7 @@ export function Item(props: ItemProps)
 	return (
 		<li>
 			<summary onClick={toggle}>
-				<i className='arrow'>⯈</i>
+				<i className='arrow' style={arrow_style}>⯈</i>
 				<label>{props.name}</label>
 			</summary>
 			<div className='content-wrap' style={{height: `${height}px`}}>

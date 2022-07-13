@@ -6,8 +6,6 @@ import { store } from './app/AppStore';
 
 import App from './app/App';
 
-import './index.css';
-
 
 const root = createRoot(document.getElementById('root')!);
 

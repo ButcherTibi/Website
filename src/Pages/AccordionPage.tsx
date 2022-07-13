@@ -13,6 +13,9 @@ function AccordionPage() {
 				<Item name='Foo content 2'>
 					<p>Foo 2</p>
 				</Item>
+				<Item name='Foo content 3'>
+					<p>Foo 3</p>
+				</Item>
 			</Accordion>
 		</div>
 	</>;

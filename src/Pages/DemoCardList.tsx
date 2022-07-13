@@ -1,12 +1,16 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
 import CardList, { CardData } from "../CardList/CardList";
-
-import './DemoCardList.scss';
 
 
 function DemoCardList()
 {
+	let style: CSSProperties = {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'end'
+	};
+
 	let items: CardData[] = [];
 
 	let titles = [
@@ -43,7 +47,7 @@ function DemoCardList()
 	}
 
 	return (
-		<div className='demo-card-list'>
+		<div className='demo-card-list' style={style}>
 			<CardList items={items} />
 		</div>
 	);

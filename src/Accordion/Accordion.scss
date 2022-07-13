@@ -1,3 +1,4 @@
+@use '../index.scss';
 
 .accordion {
 	display: flex;
@@ -25,20 +26,22 @@
 	align-items: center;
 
 	cursor: pointer;
+
+	i {
+		margin-right: 5px;
+		font-style: normal;
+
+		transition: transform .2s;
+	}
+	
+	label {
+		font-family: var(--theme_font);
+		cursor: pointer;
+	}
 }
 
 .accordion > li > summary:hover {
 	background-color: var(--theme_backgrd_hover_color);
-}
-
-.accordion > li > summary i {
-	margin-right: 5px;
-	font-style: normal;
-}
-
-.accordion > li > summary label {
-	font-family: var(--theme_font);
-	cursor: pointer;
 }
 
 .accordion > li > .content-wrap {

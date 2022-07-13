@@ -124,7 +124,7 @@ function MenuItem(props: MenuItemProps)
 				onMouseEnter={showMenuOnEnter} onMouseLeave={scheduleHidingMenu}>
 				<div className="content" onClick={showMenuOnTitleClick}>
 					<h3 className="name">{props.name}</h3>
-					{<i className="arrow">⯈</i> && props.level !== 0}
+					{props.level !== 0 && <i className="arrow">⯈</i>}
 				</div>
 				<ul className="hide">
 					{props.children!.map((child, idx) => {

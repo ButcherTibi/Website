@@ -37,10 +37,11 @@ code {
 		71%
 	);
 
+	--theme_backgrd_edit_lum: 94%;
 	--theme_backgrd_edit_color: hsl(
 		var(--theme_backgrd_hue)
 		var(--theme_backgrd_sat)
-		94%
+		var(--theme_backgrd_edit_lum)
 	);
 }
 
