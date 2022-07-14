@@ -8,7 +8,10 @@ import './Slider.scss';
 export interface SliderProps {
 	min?: number;
 	max?: number;
-}
+	step?: number;
+	show_numeric_input?: boolean;
+	numeric_input_width?: number;
+};
 
 export default function Slider(props: SliderProps)
 {
@@ -23,6 +26,9 @@ export default function Slider(props: SliderProps)
 
 	let min = props.min === undefined ? 0 : props.min;
 	let max = props.max === undefined ? 1 : props.max;
+	let step = props.step === undefined ? 0 : props.step;
+	let show_numeric_input = props.show_numeric_input === undefined ? false : true;
+	let numeric_input_width = props.numeric_input_width === undefined ? 40 : props.numeric_input_width;
 
 	const thumbEnter = () => {
 		setIsThumbHovered(true);
@@ -44,8 +50,11 @@ export default function Slider(props: SliderProps)
 	};
 
 	const setValueFromRatio = (ratio: number) => {
-		
-		let new_value = (max - min) * ratio;
+		let new_value = ((max - min) * ratio) + min;
+
+		if (step !== 0 && new_value !== max && new_value !== min) {
+			new_value -= new_value % step;
+		}
 
 		setValue(new_value);
 		setDisplayValue(new_value.toFixed(2));
@@ -96,6 +105,11 @@ export default function Slider(props: SliderProps)
 
 		if (isNaN(new_value) === false) {
 			if (min <= new_value && new_value <= max) {
+				
+				if (step !== 0 && new_value !== max && new_value !== min) {
+					new_value -= new_value % step;
+				}
+
 				setValue(new_value);
 				setDisplayValue(e.target.value);
 			}
@@ -105,7 +119,7 @@ export default function Slider(props: SliderProps)
 		}
 	};
 
-	let ratio: number = (value - min) / max;
+	let ratio: number = (value - min) / (max - min);
 
 	let track_fill_style: CSSProperties = {
 		width: `${ratio * 100}%`
@@ -116,28 +130,35 @@ export default function Slider(props: SliderProps)
 	};
 	
 	let highlight_style: CSSProperties | undefined;
+
 	if (is_thumb_pressed) {
+
+		let color = `hsla(
+			var(--theme_backgrd_hue),
+			var(--theme_backgrd_sat),
+			var(--theme_backgrd_lum),
+			0.75
+		)`;
+
 		highlight_style = {
 			width: `${highlight_size}px`,
 			height: `${highlight_size}px`,
-			backgroundColor: `hsla(
-				var(--theme_backgrd_hue),
-				var(--theme_backgrd_sat),
-				var(--theme_backgrd_lum),
-				0.75
-			)`
+			backgroundColor: color
 		};
 	}
 	else if (is_hovered) {
+
+		let color = `hsla(
+			var(--theme_backgrd_hue),
+			var(--theme_backgrd_sat),
+			var(--theme_backgrd_lum),
+			0.5
+		)`;
+
 		highlight_style = {
 			width: `${highlight_size}px`,
 			height: `${highlight_size}px`,
-			backgroundColor: `hsla(
-				var(--theme_backgrd_hue),
-				var(--theme_backgrd_sat),
-				var(--theme_backgrd_lum),
-				0.50
-			)`
+			backgroundColor: color
 		};
 	}
 
@@ -160,13 +181,17 @@ export default function Slider(props: SliderProps)
 					</div>
 				</div>
 			</div>
-			<div className="numeric">
-				<input
-					type={'number'}
-					value={display_val}
-					onInput={setInputValue}
-					style={{marginLeft: `${highlight_size / 2}px`}} />
-			</div>
+			{
+				show_numeric_input &&
+				<div className="numeric" style={{marginLeft: `${highlight_size / 2}px`}}>
+					<input
+						type={'number'}
+						value={display_val}
+						onInput={setInputValue}
+						style={{width: `${numeric_input_width}px`}}
+					/>
+				</div>
+			}
 		</div>
 	</>;
-}
+};

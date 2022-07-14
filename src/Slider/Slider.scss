@@ -93,5 +93,26 @@ $max_highlight_size: 100px;
 }
 
 .slider .numeric {
-	
+	display: flex;
+	align-items: center;
+
+	input {
+		border: 1px solid black;
+		border-radius: 4px;
+
+		font-family: var(--theme_font);
+		font-size: 0.9rem;
+		color: black;
+		text-align: right;
+	}
+
+	input:focus {
+		outline: none;
+	}
+
+	::-webkit-outer-spin-button,
+	::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 }
