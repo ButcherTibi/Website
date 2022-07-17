@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { increment, decrement } from "../app/AppStore"
+import { increment, decrement } from '../../App/AppStore';
 
 import './SimpleCounter.scss';
 

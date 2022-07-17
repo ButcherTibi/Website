@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 
-import CardList, { CardData } from "../CardList/CardList";
+import CardList, { CardData } from "../Components/CardList/CardList";
 
 
 function DemoCardList()

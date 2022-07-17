@@ -1,9 +1,15 @@
 import React from "react";
 
-import Slider from '../Components/Slider/Slider';
+import Dropdown from "../Components/Dropdown/Dropdown";
 
-export default function SliderPage()
+export default function DropdownPage()
 {
+	let options: string[] = [
+		'Option 1',
+		'Option 2',
+		'Option 3',
+	];
+
 	return <>
 		<div style={{
 			height: '100%',
@@ -12,7 +18,7 @@ export default function SliderPage()
 			alignItems: 'center'
 		}}>
 			<div style={{flexBasis: '500px'}}>
-				<Slider />
+				<Dropdown options={options} />
 			</div>
 		</div>
 	</>;

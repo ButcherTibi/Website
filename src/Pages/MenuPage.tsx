@@ -1,5 +1,5 @@
 import React from "react";
-import MainMenuVanilla, { MainMenuItemData } from "../Menu/MainMenuVanilla";
+import MainMenuVanilla, { MainMenuItemData } from "../Components/Menu/MainMenuVanilla";
 
 // import './DemoCardList.scss';
 

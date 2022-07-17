@@ -1,6 +1,6 @@
 import React from "react";
 
-import Accordion, { Item } from "../Accordion/Accordion";
+import Accordion, { Item } from '../Components/Accordion/Accordion';
 
 
 function AccordionPage() {

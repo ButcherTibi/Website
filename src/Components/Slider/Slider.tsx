@@ -6,6 +6,7 @@ import './Slider.scss';
 
 
 export interface SliderProps {
+	default?: number;
 	min?: number;
 	max?: number;
 	step?: number;
@@ -15,8 +16,15 @@ export interface SliderProps {
 
 export default function Slider(props: SliderProps)
 {
-	const [value, setValue] = useState(0.5);
-	const [display_val, setDisplayValue] = useState('0.5');
+	let default_value = props.default === undefined ? 0.5 : props.default;
+	let min = props.min === undefined ? 0 : props.min;
+	let max = props.max === undefined ? 1 : props.max;
+	let step = props.step;
+	let show_numeric_input = props.show_numeric_input === undefined ? false : true;
+	let numeric_input_width = props.numeric_input_width === undefined ? 40 : props.numeric_input_width;
+
+	const [value, setValue] = useState(default_value);
+	const [display_val, setDisplayValue] = useState(default_value.toFixed(2));
 
 	const max_highlight_size = 100;
 	const highlight_size = 40;
@@ -24,19 +32,16 @@ export default function Slider(props: SliderProps)
 	const [is_thumb_pressed, setIsThumbPressed] = useState(false);
 	const [track_wrap_elem, setTrackWrapElem] = useState<HTMLElement | null>(null);
 
-	let min = props.min === undefined ? 0 : props.min;
-	let max = props.max === undefined ? 1 : props.max;
-	let step = props.step === undefined ? 0 : props.step;
-	let show_numeric_input = props.show_numeric_input === undefined ? false : true;
-	let numeric_input_width = props.numeric_input_width === undefined ? 40 : props.numeric_input_width;
 
 	const thumbEnter = () => {
 		setIsThumbHovered(true);
 	};
 
+
 	const thumbLeave = () => {
 		setIsThumbHovered(false);
 	};
+
 
 	const beginThumb = (e: React.MouseEvent) => {
 		e.preventDefault();  // nu încerca să copiezi elementul cu drag and drop
@@ -49,16 +54,18 @@ export default function Slider(props: SliderProps)
 		setTrackWrapElem(track_wrap);
 	};
 
+
 	const setValueFromRatio = (ratio: number) => {
 		let new_value = ((max - min) * ratio) + min;
 
-		if (step !== 0 && new_value !== max && new_value !== min) {
+		if (step !== undefined && new_value !== max && new_value !== min) {
 			new_value -= new_value % step;
 		}
 
 		setValue(new_value);
 		setDisplayValue(new_value.toFixed(2));
 	};
+
 
 	const moveThumb = (e: MouseEvent) => {
 		if (is_thumb_pressed === false || track_wrap_elem === null) {
@@ -73,9 +80,11 @@ export default function Slider(props: SliderProps)
 		setValueFromRatio(new_ratio);
 	};
 
+
 	const endThumbMovement = () => {
 		setIsThumbPressed(false);
 	};
+
 
 	useEffect(() => {
 		document.body.addEventListener('mousemove', moveThumb);
@@ -87,12 +96,14 @@ export default function Slider(props: SliderProps)
 		};
 	});
 
+
 	const setThumb = (e: React.MouseEvent) => {
+		e.preventDefault();
 		setIsThumbPressed(true);
 
-		let track_elem = e.currentTarget as HTMLElement;
+		setTrackWrapElem(e.currentTarget as HTMLElement);
 
-		let rect = track_elem.getBoundingClientRect();
+		let rect = e.currentTarget!.getBoundingClientRect();
 		let new_ratio = (e.pageX - rect.left) / (rect.right - rect.left);
 		new_ratio = new_ratio < 0 ? 0 : new_ratio;
 		new_ratio = new_ratio > 1 ? 1 : new_ratio;
@@ -100,13 +111,14 @@ export default function Slider(props: SliderProps)
 		setValueFromRatio(new_ratio);
 	};
 
+
 	const setInputValue = (e: any) => {	
 		let new_value = parseFloat(e.target.value);
 
 		if (isNaN(new_value) === false) {
 			if (min <= new_value && new_value <= max) {
 				
-				if (step !== 0 && new_value !== max && new_value !== min) {
+				if (step !== undefined && new_value !== max && new_value !== min) {
 					new_value -= new_value % step;
 				}
 
@@ -118,6 +130,7 @@ export default function Slider(props: SliderProps)
 			setDisplayValue('');
 		}
 	};
+
 
 	let ratio: number = (value - min) / (max - min);
 

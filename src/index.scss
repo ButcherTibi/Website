@@ -14,8 +14,7 @@ code {
 
 
 :root {
-	--theme_font: sans-serif;
-
+	/* Background */
 	--theme_backgrd_hue: 208deg;
 	--theme_backgrd_sat: 100%;
 	--theme_backgrd_lum: 86%;
@@ -43,6 +42,11 @@ code {
 		var(--theme_backgrd_sat)
 		var(--theme_backgrd_edit_lum)
 	);
+
+	/* Text */
+	--theme_font: sans-serif;
+	--theme_text_color: hsla(0deg, 0%, 0%, 0.75);
+	--theme_text_hover_color: hsla(0deg, 0%, 0%, 1);
 }
 
 /* Style Reset *********************************************/
@@ -71,6 +75,11 @@ html, body, #root {
 
 ol, ul {
 	list-style: none;
+}
+
+button {
+	border: none;
+	background-color: transparent;
 }
 
 button:focus {
