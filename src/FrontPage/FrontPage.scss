@@ -1,0 +1,25 @@
+@use '../index.scss';
+
+
+.front-page {
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.leafs {
+	position: relative;
+}
+
+.leafs .leaf {
+	position: absolute;
+
+	transform: rotate(45deg);
+
+	--side_radius_a: 51px;
+	--side_radius_b: 29px;
+	border-top-right-radius: var(--side_radius_a) var(--side_radius_b);
+	border-bottom-left-radius: var(--side_radius_b) var(--side_radius_a);
+}

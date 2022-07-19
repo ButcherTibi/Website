@@ -1,8 +1,6 @@
 import React from "react";
 import MainMenuVanilla, { MainMenuItemData } from "../Components/Menu/MainMenuVanilla";
 
-// import './DemoCardList.scss';
-
 
 function MenuPage()
 {

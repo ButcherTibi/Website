@@ -3,7 +3,7 @@ import React, { CSSProperties } from "react";
 import CardList, { CardData } from "../Components/CardList/CardList";
 
 
-function DemoCardList()
+function CardListPage()
 {
 	let style: CSSProperties = {
 		display: 'flex',
@@ -53,4 +53,4 @@ function DemoCardList()
 	);
 }
 
-export default DemoCardList;
+export default CardListPage;

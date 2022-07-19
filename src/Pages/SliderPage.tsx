@@ -12,7 +12,7 @@ export default function SliderPage()
 			alignItems: 'center'
 		}}>
 			<div style={{flexBasis: '500px'}}>
-				<Slider />
+				<Slider show_numeric_input />
 			</div>
 		</div>
 	</>;
