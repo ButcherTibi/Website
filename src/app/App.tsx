@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 
-import FrontPage from '../FrontPage/FrontPage';
+import LeafsPage from '../Components/Leafs/Leafs';
 import AccordionPage from '../Pages/AccordionPage';
 import CardListPage from '../Pages/CardListPage';
 import DropdownPage from '../Pages/DropdownPage';
@@ -14,7 +14,7 @@ import Page404 from '../Pages/404';
 function App() {
   return <>
 		<Routes>
-			<Route path='/' element={<FrontPage />} />
+			<Route path='/' element={<LeafsPage />} />
 			<Route path='Accordion' element={<AccordionPage />} />
 			<Route path='CardList' element={<CardListPage />} />
 			<Route path='DropDown' element={<DropdownPage />} />

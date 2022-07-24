@@ -1,7 +1,7 @@
-@import '../index.scss';
+@import '../../index.scss';
 
 
-.front-page {
+.leafs-page {
 	height: 100%;
 
 	display: flex;
@@ -11,7 +11,10 @@
 
 .leafs-wrap {
 	width: 100%;
-	display: flex;
+
+	flex-shrink: 0;
+
+	display: flex;	
 	justify-content: center;
 
 	overflow: hidden;
@@ -42,4 +45,9 @@
 	background-repeat: repeat;
 	background-position: center;
 	background-size: contain;
+}
+
+.leafs-page .editor {
+	display: flex;
+	flex-direction: column;
 }
