@@ -24,10 +24,22 @@
 .leafs .leaf {
 	position: absolute;
 
-	transform: rotate(45deg);
+	transition-property: top left;
+	transition-duration: 3s;
 
-	--side_radius_a: 51px;
-	--side_radius_b: 29px;
-	border-top-right-radius: var(--side_radius_a) var(--side_radius_b);
-	border-bottom-left-radius: var(--side_radius_b) var(--side_radius_a);
+	overflow: hidden;
+}
+
+.leafs .leaf > div {
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	
+	width: 200%;
+	height: 200%;
+
+	transform: rotate(45deg);
+	background-repeat: repeat;
+	background-position: center;
+	background-size: contain;
 }
