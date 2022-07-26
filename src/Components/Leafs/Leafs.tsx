@@ -10,14 +10,19 @@ import NumericInput from "../NumericInput/NumericInput";
 
 
 interface LeafsProps {
-	/**
-	 * Height of the container.
-	 */
 	height?: number;
-	/**
-	 * Leaf count of each ring.
-	 */
+
 	ring_count?: number;
+	ring_open_overlap?: number;
+	ring_close_overlap?: number;
+	ring_close_size?: number;
+	ring_closed_angle_offset?: number;
+	ring_open_angle_offset?: number;
+	ring_angle_offset_growth?: number;
+
+	leaf_init_size?: number;
+	leaf_growth_factor?: number;
+	leaf_overlap?: number;
 }
 
 class LeafData {
@@ -49,36 +54,30 @@ class ComputedRing {
 
 export function Leafs(props: LeafsProps)
 {
-	const [inited, setInited] = useState(false);
-
 	// Configuration
-	const [size, setSize] = useState(props.height ?? 700);
+	const size = props.height ?? 700;
 
-	const [ring_count, setRingCount] = useState(props.ring_count ?? 14);
+	// Ring Params
+	const ring_count = props.ring_count ?? 14;
+	const ring_open_overlap = props.ring_open_overlap ?? -2;
+	const ring_close_overlap = props.ring_close_overlap ?? 0.5;
+	const ring_close_size = props.ring_close_size ?? 100;
+	const ring_closed_angle_offset = props.ring_closed_angle_offset ?? 0;
+	const ring_open_angle_offset = props.ring_open_angle_offset ?? Math.PI * 0.5;
+	const ring_angle_offset_growth = props.ring_angle_offset_growth ?? Math.PI / 4;
 
+	// Leaf Params
+	/** Must remain the same between open and close keyframes or else
+	 * bad performance */
+	const leaf_init_size = props.leaf_init_size ?? 50;
+	const leaf_growth_factor = props.leaf_growth_factor ?? 1.1;
+	const leaf_overlap = props.leaf_overlap ?? 0.5;	
 
 	// Internal state
+	const [inited, setInited] = useState(false);
 	const [open_rings, setOpenRings] = useState<ComputedRing[]>([]);
 	const [close_rings, setCloseRings] = useState<ComputedRing[]>([]);
 	const [is_open, setIsOpen] = useState(true);
-
-	
-	// Ring Params
-	const ring_open_overlap = -2;
-	const ring_close_overlap = 0.5;
-	const ring_close_size = 100;
-	const ring_closed_angle_offset = 0;
-	const ring_open_angle_offset = Math.PI * 0.5;
-	const ring_angle_offset_growth = Math.PI / 4;
-
-	// Leaf Params
-	const leaf_growth_factor = 1.1;
-	const leaf_overlap = 0.5;
-	/** Must remain the same between open and close keyframes or else
-	 * bad performance */
-	const leaf_init_size = 50;
-
-	// Leaf Randomization
 
 
 	const recompute = () => {
@@ -233,7 +232,7 @@ export function Leafs(props: LeafsProps)
 
 	// First time animation
 	useEffect(() => {
-		if (inited === false) {		
+		if (inited === false) {
 			recompute();
 			setInited(true);
 		}
@@ -244,14 +243,8 @@ export function Leafs(props: LeafsProps)
 
 
 	useEffect(() => {
-		if (props.height !== undefined) setSize(props.height);
-		if (props.ring_count !== undefined) setRingCount(props.ring_count);
+	 	recompute();
 	}, [props]);
-
-
-	useEffect(() => {
-		recompute();
-	}, [size, ring_count]);
 
 
 	const toggle = () => {
@@ -282,8 +275,6 @@ export function Leafs(props: LeafsProps)
 			let l = rings[r].leafs[i];
 	
 			let leaf_style: CSSProperties = {
-				top: `${l.leaf_y}px`,
-				left: `${l.leaf_x}px`,
 				zIndex: `${l.z_index}`,
 
 				border: `1px solid black`,
@@ -293,7 +284,7 @@ export function Leafs(props: LeafsProps)
 				width: `${l.size}px`,
 				height: `${l.size}px`,
 
-				transform: `rotate(${l.rotation}rad) scale(${l.scale_x}, ${l.scale_y})`,
+				transform: `translate(${l.leaf_x}px, ${l.leaf_y}px) rotate(${l.rotation}rad) scale(${l.scale_x}, ${l.scale_y})`,
 
 				// backgroundColor: 'green',
 				boxShadow: `0px 0px 5px 1px black`
@@ -329,28 +320,86 @@ export function Leafs(props: LeafsProps)
 	);
 }
 
-function LeafsPage()
+function LeafsDemo()
 {
 	const [height, setHeight] = useState(700);
 	const [ring_count, setRingCount] = useState(14);
+	const [ring_close_size, setRingCloseSize] = useState(100);
+	const [ring_open_angle_offset, setRingOpenAngleOffset] = useState(Math.PI * 0.5);
+
+	const [leaf_init_size, setLeafInitSize] = useState(50);
+	const [leaf_growth_factor, setLeafGrowthFactor] = useState(1.1);
+	const [leaf_overlap, setLeafOverlap] = useState(0.5);
 
 	return <>
 		{/* <React.StrictMode> */}
-		<div className="leafs-page">
-			<Leafs height={height} ring_count={ring_count} />
+		<main className="leafs-demo">
+			<Leafs
+				height={height}
+				ring_count={ring_count}
+				ring_close_size={ring_close_size}
+				ring_open_angle_offset={ring_open_angle_offset}
+
+				leaf_init_size={leaf_init_size}
+				leaf_growth_factor={leaf_growth_factor}
+			/>
+
 			<div className="editor">
-				<NumericInput
-					value={height}
-					onValueChange={setHeight}
-				/>
-				<NumericInput
-					value={ring_count}
-					onValueChange={setRingCount}
-				/>
+				<div className="description">
+					<h3><code>Leafs</code> component</h3>
+					<p>Creates a series of concentric circles of leafs. Each leaf is randomized to appear more natural.</p>
+					<p>You can click on the center to replay to opening/closing animation.</p>
+					<p>The aperance can be changed using the inputs below.</p>
+				</div>
+
+				<div className="params general-params">
+					<NumericInput
+						label="Container height"
+						value={height}
+						onValueChange={setHeight}
+					/>
+				</div>
+
+				<div className="params ring-params">	
+					<NumericInput
+						label="Ring count"
+						value={ring_count}
+						onValueChange={setRingCount}
+					/>
+					<NumericInput
+						label="Ring close size"
+						value={ring_close_size}
+						onValueChange={setRingCloseSize}
+					/>
+					<NumericInput
+						label="Ring open angle offset"
+						value={ring_open_angle_offset}
+						onValueChange={setRingOpenAngleOffset}
+					/>
+				</div>
+
+				<div className="params leaf-params">
+					<NumericInput
+						label="Leaf initial size"
+						value={leaf_init_size}
+						onValueChange={setLeafInitSize}
+					/>
+					<NumericInput
+						label="Leaf growth factor"
+						value={leaf_growth_factor}
+						onValueChange={setLeafGrowthFactor}
+					/>
+					<NumericInput
+						label="Leaf overlap"
+						value={leaf_overlap}
+						onValueChange={setLeafOverlap}
+					/>
+				</div>
 			</div>
-		</div>
+			
+		</main>
 		{/* </React.StrictMode> */}
 	</>;
 }
 
-export default LeafsPage;
+export default LeafsDemo;

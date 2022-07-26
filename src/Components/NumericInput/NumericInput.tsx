@@ -1,7 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
+
+import './NumericInput.scss'
 
 
 interface NumericInputProps {
+	label?: string;
 	value: number;
 	onValueChange: (new_value: number) => void
 }
@@ -30,9 +33,16 @@ function NumericInput(props: NumericInputProps)
 		}
 	}
 
-	return <>
+
+	let label: ReactNode | undefined;
+	if (props.label !== undefined) {
+		label = <label>{props.label}</label>
+	}
+
+	return <div className="numeric-input">
+		{label}
 		<input type={'number'} value={display_value} onChange={onChange} />
-	</>;
+	</div>;
 }
 
 export default NumericInput;
