@@ -2,6 +2,8 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 
+import FrontPage from '../Pages/FrontPage/FrontPage';
+
 import LeafsPage from '../Components/Leafs/Leafs';
 import AccordionPage from '../Pages/AccordionPage';
 import CardListPage from '../Pages/CardListPage';
@@ -10,11 +12,16 @@ import MenuPage from '../Pages/MenuPage'
 import SliderPage from '../Pages/SliderPage';
 import Page404 from '../Pages/404';
 
+import PageWrapper from '../Components/PageWrapper/PageWrapper';
+
 
 function App() {
   return <>
 		<Routes>
-			<Route path='/' element={<LeafsPage />} />
+			<Route path='/' element={<FrontPage />} />
+
+			<Route path='leafs' element={<PageWrapper children={<LeafsPage />} />} />
+
 			<Route path='Accordion' element={<AccordionPage />} />
 			<Route path='CardList' element={<CardListPage />} />
 			<Route path='DropDown' element={<DropdownPage />} />
