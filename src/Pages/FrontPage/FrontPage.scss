@@ -1,4 +1,4 @@
-@import '../../index.scss';
+@use '../../index.scss';
 
 #root {
 	height: 100%;
@@ -13,6 +13,20 @@
 	display: flex;
 	flex-direction: column;
 
+	--top_backgrd_hue: 226;
+	--top_backgrd_color: hsl(var(--top_backgrd_hue), 100%, 50%);
+
+	--bot_backgrd_color: hsl(182, 100%, 50%);
+	
+	--text_title_color: hsl(216, 100%, 25%);
+	--text_color: hsl(216, 100%, 25%);
+
+	// background: radial-gradient(ellipse at top, var(--top_backgrd_color), transparent),
+	// 	radial-gradient(ellipse at bottom, var(--bot_backgrd_color), transparent)
+	// ;
+
+	background-color: hsl(212, 100%, 27%);
+
 	.content-wrap {
 		width: 100%;
 
@@ -24,58 +38,56 @@
 		}
 	}
 
-	header {
-		.content {
-			height: 400px;
+	main > .content {
+		height: 600px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		gap: 70px;
+
+		.left {
+			height: 100%;
 
 			display: flex;
 			align-items: center;
-			justify-content: center;
 
-			background-color: hsla(208, 100%, 70%, 0);
+			.intro {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
 
-			// box-shadow: 0px 0px 20px 5px hsl(208, 100%, 70%);
+				.fullname {
+					font-family: "Montserrat";
+					font-size: 41px;
+					color: white;
+				}
+
+				.profesion {
+					font-family: "Montserrat";
+					font-size: 22px;
+					font-weight: 500;
+					color: white;
+				}
+			}
 		}
 
-		h1 {
-			font-size: 40px;
-			font-weight: 400;
-			
-			letter-spacing: normal;
-			text-rendering: auto;
-			text-shadow: 0px 0px 0px white;
+		.right {
+			height: 100%;
 
-			color: hsla(0, 100%, 100%, 1);
+			display: flex;
+			align-items: center;
+
+			img {
+				--size: 300px;
+				width: var(--size);
+				height: var(--size);
+				border-radius: 50%;
+
+				// box-shadow: 0px 0px 50px 22px hsl(0, 100%, 100%, 0.99);
+				// box-shadow: 0px 0px 10px 0px hsl(0, 100%, 100%, 0.99);
+				// box-shadow: 0px 0px 10px 0px hsl(0, 100%, 0%, 0.99);
+			}
 		}
-	}
-
-	main {
-		flex-grow: 1;
-
-		.content {
-			// background-color: green;
-		}
-	}
-
-	footer {
-		height: 300px;
-		
-		.content {
-			// background-color: blue;
-		}
-	}
-}
-
-
-.rain-layer {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-
-	width: 100vw;
-	height: 100vh;
-
-	.ray {
-		position: absolute;
 	}
 }
