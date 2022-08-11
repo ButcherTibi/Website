@@ -1,106 +1,151 @@
-import React, { useEffect } from 'react'
+import React, { CSSProperties, LegacyRef, useEffect, useRef } from 'react'
 import { jitter } from '../../Common'
+
+import './Rain.scss'
 
 
 interface RainLayerProps {
 	class_name?: string
 	drop_color?: string
+	drop_count?: number
+	layer_angle?: number
+
+	drop_max_delay?: number
+	drop_duration_min?: number
+	drop_duration_max?: number
+
+	drop_x_deviation_min?: number
+	drop_x_deviation_max?: number
+
+	drop_thickness_min?: number
+	drop_thickness_max?: number
+	drop_height_min?: number
+	drop_height_max?: number
 }
 
 function Rain(props: RainLayerProps)
 {
-	const class_name = props.class_name ?? 'rain-layer';
-	const drop_color = props.drop_color ?? 'white';
+	const class_name = props.class_name ?? ''
+	const drop_color = props.drop_color ?? 'blue'
+	const drop_count = props.drop_count ?? 100
+	const layer_angle = props.layer_angle ?? 0
 
-	const drop_count = 100;
+	const uniform_size = 700
+	
+	const drop_max_delay = props.drop_max_delay ?? 1000
+	const drop_duration_min = props.drop_duration_min ?? 6000
+	const drop_duration_max = props.drop_duration_max ?? 8000
 
-	const uniform_screen_size = 700;
-	const drop_duration_min = 6000;
-	const drop_duration_max = 8000;
+	const drop_x_deviation_min = props.drop_x_deviation_min ?? 2
+	const drop_x_deviation_max = props.drop_x_deviation_max ?? 1
 
-	const drop_x_deviation_min = 2;
-	const drop_x_deviation_max = 1;
-
-	const drop_thickness_min = 3;
-	const drop_thickness_max = 10;
-	const drop_height_min = 100;
-	const drop_height_max = 500;
+	const drop_thickness_min = props.drop_thickness_min ?? 3
+	const drop_thickness_max = props.drop_thickness_max ?? 10
+	const drop_height_min = props.drop_height_min ?? 100
+	const drop_height_max = props.drop_height_max ?? 500
 
 
-	const animateDrop = (elem: HTMLElement, event?: AnimationPlaybackEvent) => {
-		
-		// remove previous animation, happens when developing
-		if (elem.getAnimations().length > 0) {
-			elem.getAnimations()[0].cancel();
-		}
+	const wrapper_ref = useRef<HTMLDivElement>(null);
+	const wrapper_height = useRef(0);
+	const hipo = useRef(0);
 
-		let drop_size_ratio = jitter();
 
-		let drop_width = drop_thickness_min + drop_thickness_max * drop_size_ratio;
-		let drop_height = drop_width + drop_height_min +
-			drop_height_max * drop_size_ratio;
-		let drop_speed = drop_duration_min + drop_duration_max * (1 - drop_size_ratio);
-		let x = jitter(0, 100);
-
-		drop_height = Math.trunc(drop_height);
-
+	const animateDrop = (elem: HTMLElement, is_first: boolean) => {
 		requestAnimationFrame(() => {
+
+			// remove previous animation, happens when developing
+			if (elem.getAnimations().length > 0) {
+				elem.getAnimations()[0].cancel();
+			}
+
+			let drop_size_ratio = jitter();
+
+			let drop_width = drop_thickness_min + drop_thickness_max * drop_size_ratio;
+			let drop_height = drop_width + drop_height_min +
+				drop_height_max * drop_size_ratio;
+			let drop_speed = drop_duration_min + drop_duration_max * (1 - drop_size_ratio);
+			let x = jitter(0, 100);
+
+			drop_height = Math.trunc(drop_height);
+
 			elem.style.display = 'initial';
 			elem.style.top = `${-drop_height}px`;
 			elem.style.left = `${x}%`;
+			elem.style.borderTopLeftRadius = `100%`
+			elem.style.borderTopRightRadius = `100%`
+			elem.style.borderBottomLeftRadius = `${drop_width}px`
+			elem.style.borderBottomRightRadius = `${drop_width}px`
 			elem.style.width = `${drop_width}px`;
 			elem.style.height = `${drop_height}px`;
-			elem.style.backgroundColor = drop_color;
-		});
+			elem.style.background = `linear-gradient(0deg, ${drop_color}, transparent)`;
+			
+			let drop_x_deviation = drop_x_deviation_min + drop_x_deviation_max * drop_size_ratio;
+			let x_deviation = jitter(-drop_x_deviation, drop_x_deviation);
 
-		let drop_x_deviation = drop_x_deviation_min + drop_x_deviation_max * drop_size_ratio;
-		let x_deviation = jitter(-drop_x_deviation, drop_x_deviation);
+			let keyframes: Keyframe[] | PropertyIndexedKeyframes = [
+				{
+					transform: `translate(${x_deviation}vw, calc(${hipo.current}px + ${drop_height}px))`
+				}
+			];
 
-		let keyframes: Keyframe[] | PropertyIndexedKeyframes = [
-			{
-				transform: `translate(${x_deviation}vw, calc(100vh + ${drop_height}px))`
+			// make the speed uniform regardless of size
+			let size_correction: number;
+
+			// go faster if smaller
+			if (wrapper_height.current < uniform_size) {
+				size_correction = wrapper_height.current / uniform_size;
 			}
-		];
+			// go slower if larger
+			else {
+				size_correction = uniform_size / wrapper_height.current;
+			}
+			
+			let options: KeyframeAnimationOptions = {
+				delay: is_first ? jitter(0, drop_max_delay) : 0,
+				duration: drop_speed * size_correction
+			};
 
-		// make the speed uniform regardless of screen size
-		let screen_correction: number;
-
-		// go faster if window is smaller
-		if (window.innerHeight < uniform_screen_size) {
-			screen_correction = window.innerHeight / uniform_screen_size;
-		}
-		// go slower if window is larger
-		else {
-			screen_correction = uniform_screen_size / window.innerHeight;
-		}
-		
-		let options: KeyframeAnimationOptions = {
-			delay: jitter(0, drop_duration_max),
-			duration: drop_speed * screen_correction
-		};
-
-		let handle = elem.animate(keyframes, options);
-		handle.addEventListener('finish', (e) => {
-			animateDrop(elem, e);
+			let handle = elem.animate(keyframes, options);
+			handle.addEventListener('finish', (e) => {
+				animateDrop(elem, false);
+			});
 		});
 	};
 
 
 	const animateRain = () => {
-		let layer_elem = document.getElementsByClassName(class_name).item(0) as HTMLDivElement;
+		requestAnimationFrame(() => {
+			let wrapper = wrapper_ref.current!;
 
-		for (let i = 0; i < layer_elem.children.length; i++) {
-			let child_elem = layer_elem.children.item(i) as HTMLDivElement;
-		
-			/** cancel previous animation so that you don't add to the next
-			 * causing it to move lower */
-			let current_animations = child_elem.getAnimations();
-			if (current_animations.length > 0) {
-				current_animations[0].cancel()
+			let rain_layer = wrapper.getElementsByClassName('rain-layer')
+				.item(0) as HTMLDivElement
+			;
+	
+			// resize rain layer for worse case scenario
+			let rect = wrapper.getBoundingClientRect();
+			wrapper_height.current = rect.height;
+			hipo.current = Math.sqrt(Math.pow(rect.width, 2) + Math.pow(rect.height, 2));
+	
+			rain_layer.style.top = `-${(hipo.current - rect.height) / 2}px`;
+			rain_layer.style.left = `-${(hipo.current - rect.width) / 2}px`;
+			rain_layer.style.width = `${hipo.current}px`
+			rain_layer.style.height = `${hipo.current}px`
+			rain_layer.style.transformOrigin = 'center'
+			rain_layer.style.transform = `rotate(${layer_angle}deg)`
+	
+			for (let i = 0; i < rain_layer.children.length; i++) {
+				let child_elem = rain_layer.children.item(i) as HTMLDivElement;
+			
+				/** cancel previous animation so that you don't add to the next
+				 * causing it to move lower */
+				let current_animations = child_elem.getAnimations();
+				if (current_animations.length > 0) {
+					current_animations[0].cancel()
+				}
+	
+				animateDrop(child_elem, true);
 			}
-
-			animateDrop(child_elem);
-		}
+		});
 	};
 	
 
@@ -120,9 +165,14 @@ function Rain(props: RainLayerProps)
 		drops.push(new_drop);
 	}
 
-	return <div className={`rain-layer ${class_name}`}>
-		{drops}
-	</div>;
+	return (
+		<div className={`rain-layer-wrap ${class_name}`} ref={wrapper_ref}>
+			<div className={`rain-layer`}>
+				{drops}
+			</div>
+		</div>
+	);
+	;
 }
 
 export default Rain;

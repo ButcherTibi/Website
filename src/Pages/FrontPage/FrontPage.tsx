@@ -4,6 +4,7 @@ import { factory, JsxAttribute, JsxElement } from "typescript";
 import { GiSmartphone } from 'react-icons/gi'
 import { AiOutlineMail } from 'react-icons/ai'
 
+import Rain from '../../Components/Rain/Rain'
 
 import portret from '../../Resources/Me.jpeg';
 import portret2 from '../../Resources/bigger_me.jpg';
@@ -20,6 +21,7 @@ function FrontPage()
 						<div className="intro">
 							<h1 className="fullname">Măcelaru Tiberiu</h1>
 							<h1 className="profesion">Front-end Developer</h1>
+							<button className="about-me">Despre mine</button>
 						</div>					
 					</div>
 					
@@ -28,6 +30,25 @@ function FrontPage()
 						<div></div>
 					</div>
 				</div>
+	
+				<Rain
+					drop_color="hsl(202, 69%, 50%, 0.8)"
+					drop_count={100}
+					layer_angle={15}
+
+					drop_max_delay={700}
+					drop_duration_min={700}
+					drop_duration_max={1500}
+
+					drop_x_deviation_min={0}
+					drop_x_deviation_max={5}
+
+					drop_thickness_min={3}
+					drop_thickness_max={4}
+					drop_height_min={10}
+					drop_height_max={50}
+				/>
+				
 			</main>
 
 			<section className="content-wrap">

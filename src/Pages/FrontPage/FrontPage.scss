@@ -13,19 +13,7 @@
 	display: flex;
 	flex-direction: column;
 
-	--top_backgrd_hue: 226;
-	--top_backgrd_color: hsl(var(--top_backgrd_hue), 100%, 50%);
-
-	--bot_backgrd_color: hsl(182, 100%, 50%);
-	
-	--text_title_color: hsl(216, 100%, 25%);
-	--text_color: hsl(216, 100%, 25%);
-
-	// background: radial-gradient(ellipse at top, var(--top_backgrd_color), transparent),
-	// 	radial-gradient(ellipse at bottom, var(--bot_backgrd_color), transparent)
-	// ;
-
-	background-color: hsl(212, 100%, 27%);
+	// background-color: hsl(212, 100%, 27%);
 
 	.content-wrap {
 		width: 100%;
@@ -38,8 +26,13 @@
 		}
 	}
 
-	main > .content {
+	main {
+		position: relative;
 		height: 600px;
+	}
+
+	main > .content {
+		z-index: 2;
 
 		display: flex;
 		flex-direction: row;
@@ -52,22 +45,49 @@
 			display: flex;
 			align-items: center;
 
+			--text_color: hsl(212, 100%, 27%);
+
 			.intro {
 				display: flex;
 				flex-direction: column;
-				gap: 10px;
+				gap: 15px;
 
 				.fullname {
 					font-family: "Montserrat";
 					font-size: 41px;
-					color: white;
+					color: var(--text_color);
 				}
 
 				.profesion {
 					font-family: "Montserrat";
 					font-size: 22px;
 					font-weight: 500;
+					color: var(--text_color);
+				}
+
+				.about-me {
+					border: 2px solid var(--text_color);
+					border-radius: 5px;
+					padding: 10px 40px;
+					width: fit-content;
+
+					background-color: white;
+
+					font-family: "Montserrat";
+					font-size: 16px;
+					font-weight: 500;
+					color: var(--text_color);
+					line-height: 1;
+
+					cursor: pointer;
+
+					transition-property: background color border-color;
+					transition-duration: .2s;
+				}
+
+				.about-me:hover {
 					color: white;
+					background-color: var(--text_color);
 				}
 			}
 		}
