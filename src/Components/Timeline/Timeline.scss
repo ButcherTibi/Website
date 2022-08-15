@@ -1,0 +1,29 @@
+@use '../../index.scss';
+
+
+.Timeline {
+	display: flex;
+	flex-direction: row;
+
+	.item {
+		flex-grow: 1;
+		flex-shrink: 1;
+
+		.intro {
+			height: 500px;
+
+			.logo {
+				--size: 150px;
+				width: var(--size);
+				height: var(--size);
+
+				object-fit: contain;
+			}
+		}
+
+		.more {
+			max-height: 0px;
+			overflow: hidden;
+		}
+	}
+}
