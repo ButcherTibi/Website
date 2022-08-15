@@ -15,10 +15,12 @@ function extractMonthYear(date: Date): string {
 
 interface ItemProps {
 	company: string
+	job: string
 	start_date: Date
 	end_date?: Date
 	logo: string
 	background: string
+	
 	description?: string
 }
 
@@ -27,18 +29,25 @@ export function Item(props: ItemProps) {
 	let start = extractMonthYear(props.start_date)
 	let end = props.end_date !== undefined ? extractMonthYear(props.end_date) : 'Prezent';
 
-	console.log(props.background)
-
 	return (
 		<div className="item">
-			<div className="intro" style={{background: `url(${props.background})`}}>
-				<img className="logo" src={props.logo} />
-				<div className="timespan">
-					<time>{start}</time>
-					<p>-</p>
-					<time>{end}</time>
+			<div className="intro">
+				<div className="background"
+					style={{backgroundImage: `url(${props.background})`}}>
 				</div>
-				<h3>{props.company}</h3>
+
+				<div className="inner">
+					<img className="logo" src={props.logo} />
+					<div className="text">
+						<h3 className="company">{props.company}</h3>
+						<h3 className="job">{props.job}</h3>
+						<div className="timespan">
+							<time>{start}</time>
+							<p className="separator">-</p>
+							<time>{end}</time>
+						</div>
+					</div>
+				</div>		
 			</div>
 			<div className="more">
 				<p>Detaili complete</p>

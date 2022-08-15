@@ -85,12 +85,14 @@ function FrontPage()
 						<Timeline>
 							<TimelineItem
 								company="Advanced Technology Systems"
+								job="Full-stack developer"
 								start_date={new Date(2020, 7)}
 								logo={ats_logo}
 								background={ats_office}
 							/>
 							<TimelineItem
 								company="Bloom Data Solutions"
+								job="Mapper / GPS Route Checker"
 								start_date={new Date(2019, 3)}
 								end_date={new Date(2020, 3)}
 								logo={tomtom_logo}
@@ -102,7 +104,7 @@ function FrontPage()
 			</section>
 
 			<footer>
-				
+
 			</footer>
 		</div>
 	</>;
