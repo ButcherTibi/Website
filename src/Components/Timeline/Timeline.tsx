@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React, { Children, CSSProperties, useEffect, useState } from "react";
 
 import './Timeline.scss'
 
@@ -21,23 +21,58 @@ interface ItemProps {
 	logo: string
 	background: string
 	
-	description?: string
+	// More Details
+	more_classname?: string
+	// company_description?: string
+	// activity?: string
+	skills?: string[]
+	children?: any
+
+	// Parent
+	item_index?: number
+	setSelected?: (new_selected_index?: number) => void
+	is_selected?: boolean
 }
 
-export function Item(props: ItemProps) {
+export function Item(props: ItemProps)
+{
+	const is_selected = props.is_selected ?? false;
 
 	let start = extractMonthYear(props.start_date)
 	let end = props.end_date !== undefined ? extractMonthYear(props.end_date) : 'Prezent';
 
+	let item_style: CSSProperties | undefined;
+	if (props.is_selected) {
+		
+	}
+	else if (props.is_selected === false) {
+		item_style = {
+			flexGrow: '0'
+		}
+	}
+
+	let more_style: CSSProperties = {
+		maxHeight: is_selected ? 'initial' : '0px'
+	}
+
+	let children: any[] | null = null
+	if (props.children !== undefined) {
+		
+		children = React.Children.map(props.children, (child) => {
+			return child
+		})
+	}
+
 	return (
-		<div className="item">
-			<div className="intro">
+		<div className="item"
+			style={item_style}>
+			<div className="intro" onClick={() => props.setSelected!(props.item_index!)}>
 				<div className="background"
 					style={{backgroundImage: `url(${props.background})`}}>
 				</div>
 
 				<div className="inner">
-					<img className="logo" src={props.logo} />
+					<img className="logo" src={props.logo} alt="" />
 					<div className="text">
 						<h3 className="company">{props.company}</h3>
 						<h3 className="job">{props.job}</h3>
@@ -49,8 +84,12 @@ export function Item(props: ItemProps) {
 					</div>
 				</div>		
 			</div>
-			<div className="more">
-				<p>Detaili complete</p>
+			<div className={`more ${props.more_classname ?? ''}`} style={more_style}>
+				{/* <div>
+					<h3 className="company-desc">Descriere companiei</h3>
+					<p>{props.company_description}</p>
+				</div> */}
+				{children}
 			</div>
 		</div>
 	)
@@ -58,17 +97,37 @@ export function Item(props: ItemProps) {
 
 
 interface TimelineProps {
-	children?: React.ReactElement<ItemProps>[]
+	children?: any
 }
 
-function Timeline(props: TimelineProps) {
+function Timeline(props: TimelineProps)
+{
+	const [selected, setSelected] = useState<number>();
 
-	// let child_count = React.Children.count(props.children);
+	
+	useEffect(() => {
+		// TODO: click outside
+	}, [])
+
+	const setSelectedItem = (new_selected_index: number | undefined) => {
+		if (new_selected_index === selected) {
+			setSelected(undefined)
+		}
+		else {
+			setSelected(new_selected_index)
+		}
+	}
 
 	return (
 		<div className="Timeline">
-			{React.Children.map(props.children, (child) => {
-				return child
+			{React.Children.map(props.children, (child, index) => {
+				return <>
+					{React.cloneElement<ItemProps>(child, { 
+						item_index: index, 
+						setSelected: setSelectedItem,
+						is_selected: selected !== undefined ? index === selected : undefined
+					})}
+				</>;
 			})}
 		</div>
 	)

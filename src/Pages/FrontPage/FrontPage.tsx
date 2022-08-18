@@ -42,6 +42,7 @@ function FrontPage()
 					drop_height_max={50}
 				/>
 
+				{/* TODO: activează la tranziție */}
 				<Ripple
 					z_index={2}
 					color='hsl(202, 69%, 50%)'
@@ -58,7 +59,7 @@ function FrontPage()
 					</div>
 					
 					<div className="right">
-						<img src={portret} />
+						<img src={portret} alt="" />
 						<div></div>
 					</div>
 				</div>
@@ -89,7 +90,45 @@ function FrontPage()
 								start_date={new Date(2020, 7)}
 								logo={ats_logo}
 								background={ats_office}
-							/>
+								more_classname='work-activity'
+							>
+								<div className="company-desc">
+									<h3>Descriere companiei</h3>
+									<p></p>
+								</div>
+
+								<div className="work-desc">
+									<h3>Responsabilități</h3>
+									<p></p>
+								</div>
+
+								<div className="apps">
+									<h3>Aplicați</h3>
+
+									<div className="app">
+										<h3>Document Management</h3>
+										<p>Făceam dezvoltare la o aplicație de management a documentelor dintr-o instituție publică.</p>
+										<p>În cadrul aplicației se puteau defini diagrame compuse din noduri și arce, nodurile reprezentau utilizatori iar arcele dintre noduri controlau cum va parcurge un dosar de la un utilizator la altul.</p>
+										<p>Fiecare dosar creat primea un număr unic de înregistrare.</p>
+									</div>
+
+									<div className="app">
+										<h3>Backup App</h3>
+										<p>Am lucrat la crearea unei aplicați de backup remote care rulează pe Linux, aplicația permitea programarea calendaristică a unor task-uri prin care se transfera conținutul serverului remote în serverul local unde era instalată aplicația.</p>
+										<p>Transferul de fișiere de la locația de montare la locația destinație se făcea folosind comanda <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> invocată pe un process separat. Pentru fiecare fișier transferat se mențineau mai multe versiuni.</p>
+									</div>
+
+									<div className="app">
+										<h3>Autorizați de transport</h3>
+										<p>Am făcut o aplicație de management .</p>
+									</div>
+
+									<p></p>
+									<p>Am făcut o aplicație de uz intern pentru managementul Autorizațiilor de Transport pentru Primăria Lugoj.</p>
+									<p>Reasamblat o aplicație de management a investițiilor, achizițiilor și contractelor dintr-o instituție publică.</p>
+								</div>
+							</TimelineItem>
+
 							<TimelineItem
 								company="Bloom Data Solutions"
 								job="Mapper / GPS Route Checker"
@@ -97,6 +136,7 @@ function FrontPage()
 								end_date={new Date(2020, 3)}
 								logo={tomtom_logo}
 								background={infrared_map}
+								more_classname='work-activity'
 							/>
 						</Timeline>
 					</div>
@@ -110,7 +150,7 @@ function FrontPage()
 	</>;
 }
 
-{/* <div className="right">
+/* <div className="right">
 	<div className="title">
 		<h3 className="name">Măcelaru Tiberiu</h3>
 		<h3 className="profesion">Front-end developer - Târgoviște</h3>
@@ -126,6 +166,6 @@ function FrontPage()
 			<p>0730 857 817</p>
 		</div>
 	</div>
-</div> */}
+</div> */
 
 export default FrontPage;

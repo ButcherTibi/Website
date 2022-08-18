@@ -112,6 +112,21 @@
 		}
 	}
 
+	.experience {
+
+		.work-activity {
+
+			.apps {
+
+				.app {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+				}
+			}
+		}
+	}
+
 	footer {
 		height: 100px;
 	}
