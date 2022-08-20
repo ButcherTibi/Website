@@ -115,14 +115,73 @@
 	.experience {
 
 		.work-activity {
+			padding-top: 10px;
+
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+
+			font-family: Montserrat;
+
+			--subtitle_margin: 5px;
+			--content_indent: 15px;
+
+			.subtitle {
+				margin-bottom: var(--subtitle_margin);
+				font-size: 19px;
+			}
+
+			p {
+				font-size: 16px;
+				line-height: initial;
+			}
+
+			.company-desc {
+				p {
+					padding-left: var(--content_indent);
+				}
+			}
+
+			.work-desc {
+				> p {
+					padding-left: var(--content_indent);
+				}
+
+				ul {
+					padding-left: var(--content_indent);
+				}
+			}
 
 			.apps {
+				display: flex;
+					flex-direction: column;
+					gap: 10px;
 
-				.app {
+				.app-list {
+					padding-left: var(--content_indent);
+
 					display: flex;
 					flex-direction: column;
-					align-items: flex-start;
+					gap: 15px;
+
+					.app {
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+
+						h3 {
+							margin-bottom: var(--subtitle_margin);
+							font-size: 16px;
+						}
+					}
 				}
+			}
+		}
+
+		.ats-activity {
+			li {
+				margin-left: 30px;
+				list-style-type: circle;
 			}
 		}
 	}

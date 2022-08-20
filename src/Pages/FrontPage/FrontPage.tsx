@@ -1,12 +1,13 @@
 import React, { CSSProperties, useEffect, useState } from "react"
 import { factory, JsxAttribute, JsxElement } from "typescript"
 
-import { GiSmartphone } from 'react-icons/gi'
-import { AiOutlineMail } from 'react-icons/ai'
+// import { GiSmartphone } from 'react-icons/gi'
+// import { AiOutlineMail } from 'react-icons/ai'
 
 import Rain from '../../Components/Rain/Rain'
 import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
+import NewTabLink from "../../Components/NewTabLink/NewTabLink"
 
 import portret from '../../Resources/Me.jpeg'
 // import portret2 from '../../Resources/bigger_me.jpg'
@@ -90,42 +91,55 @@ function FrontPage()
 								start_date={new Date(2020, 7)}
 								logo={ats_logo}
 								background={ats_office}
-								more_classname='work-activity'
+								more_classname='ats-activity work-activity'
 							>
 								<div className="company-desc">
-									<h3>Descriere companiei</h3>
-									<p></p>
+									<h3 className="subtitle">Descrierea firmei</h3>
+									<p>ATS creează software pentru instituți publice care ajută la calcularea taxelor, plata salarilor, gestiunea bugetelor, facturilor, contractelor și altor tipuri de documente.</p>
 								</div>
 
 								<div className="work-desc">
-									<h3>Responsabilități</h3>
-									<p></p>
+									<h3 className="subtitle">Responsabilități</h3>
+									<p>Eram developer Fullstack care lucra la mai multe proiecte simultan.</p>
+									<ul>
+										<li><p>Cream partea de Frontend la aplicați în React cu Typescript;</p></li>
+										<li><p>Foloseam o librărie JavaScript <NewTabLink url="https://js.devexpress.com" >DevExtreme</NewTabLink> pentru datagriduri, inputuri de date, popups, tabele și exportare de date în Excel;</p></li>
+										<li><p>Foloseam <NewTabLink url="https://axios-http.com"><code>Axios</code></NewTabLink> sau <NewTabLink url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch API</code></NewTabLink> pentru requesturi către server;</p></li>
+										<li><p>Cream partea de Backend ca Web API scris în C#;</p></li>
+										<li><p>Interfațam cu baza de date prin Entity Framework;</p></li>
+										<li><p>Cream baze de date pentru proiecte;</p></li>
+										<li><p>Scriam queries și proceduri stocate în T-SQL;</p></li>
+										<li><p>Lucram la mentenanța unui proiect ASP.NET WebForms care folosește librăria <NewTabLink url="https://www.devexpress.com">DevExpress</NewTabLink>;</p></li>
+										<li><p>Lucrat cu PHP pentru a crea o tema Wordpress pentru un site;</p></li>
+									</ul>
 								</div>
 
 								<div className="apps">
-									<h3>Aplicați</h3>
+									<h3 className="subtitle">Aplicați</h3>
+									<div className="app-list">
+										<div className="app">
+											<h3>Document Management</h3>
+											<p>Făceam dezvoltare la o aplicație de management a documentelor dintr-o instituție publică.</p>
+											<p>În cadrul aplicației se puteau defini diagrame compuse din noduri și arce, nodurile reprezentau utilizatori iar arcele dintre noduri controlau cum va parcurge un dosar de la un utilizator la altul.</p>
+											<p>Fiecare dosar creat primea un număr unic de înregistrare.</p>
+										</div>
 
-									<div className="app">
-										<h3>Document Management</h3>
-										<p>Făceam dezvoltare la o aplicație de management a documentelor dintr-o instituție publică.</p>
-										<p>În cadrul aplicației se puteau defini diagrame compuse din noduri și arce, nodurile reprezentau utilizatori iar arcele dintre noduri controlau cum va parcurge un dosar de la un utilizator la altul.</p>
-										<p>Fiecare dosar creat primea un număr unic de înregistrare.</p>
+										<div className="app">
+											<h3>Backup App</h3>
+											<p>Am lucrat la crearea unei aplicați de backup remote care rulează pe Linux, aplicația permitea programarea calendaristică a unor task-uri prin care se transfera conținutul serverului remote în serverul local unde era instalată aplicația.</p>
+											<p>Transferul de fișiere de la locația de montare la locația destinație se făcea folosind comanda <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> invocată pe un process separat. Pentru fiecare fișier transferat se mențineau mai multe versiuni.</p>
+										</div>
+
+										<div className="app">
+											<h3>Autorizați de transport</h3>
+											<p>Am făcut o aplicație de evidență a autorizațiilor de transport.</p>
+										</div>
+
+										<div className="app">
+											<h3>WebInvest</h3>
+											<p>Reasamblat o aplicație de management a investițiilor, achizițiilor și contractelor dintr-o instituție publică.</p>
+										</div>
 									</div>
-
-									<div className="app">
-										<h3>Backup App</h3>
-										<p>Am lucrat la crearea unei aplicați de backup remote care rulează pe Linux, aplicația permitea programarea calendaristică a unor task-uri prin care se transfera conținutul serverului remote în serverul local unde era instalată aplicația.</p>
-										<p>Transferul de fișiere de la locația de montare la locația destinație se făcea folosind comanda <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> invocată pe un process separat. Pentru fiecare fișier transferat se mențineau mai multe versiuni.</p>
-									</div>
-
-									<div className="app">
-										<h3>Autorizați de transport</h3>
-										<p>Am făcut o aplicație de management .</p>
-									</div>
-
-									<p></p>
-									<p>Am făcut o aplicație de uz intern pentru managementul Autorizațiilor de Transport pentru Primăria Lugoj.</p>
-									<p>Reasamblat o aplicație de management a investițiilor, achizițiilor și contractelor dintr-o instituție publică.</p>
 								</div>
 							</TimelineItem>
 

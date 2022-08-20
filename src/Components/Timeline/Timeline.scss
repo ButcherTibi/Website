@@ -109,6 +109,9 @@
 		.more {
 			max-height: 0px;
 			overflow: hidden;
+
+			transition-property: max-height;
+			transition-duration: var(--scale_duration);
 		}
 	}
 
