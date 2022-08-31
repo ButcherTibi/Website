@@ -1,0 +1,43 @@
+
+.SolarSystem {
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	justify-content: center;
+
+	background-color: gray;
+
+	.spinner {
+		position: relative;
+		box-sizing: border-box;
+
+		// border: 2px solid red;	
+
+		.main-orbit {
+			position: absolute;
+			box-sizing: border-box;
+			border-radius: 100%;
+
+			border: 2px solid green;
+		}
+
+		.orbit {
+			position: absolute;
+			box-sizing: border-box;
+			border-radius: 100%;
+
+			border: 2px solid blue;
+		}
+
+		.planet {
+			position: absolute;
+			box-sizing: border-box;
+		}
+
+		.sun {
+			position: absolute;
+			box-sizing: border-box;
+		}
+	}
+}

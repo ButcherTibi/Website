@@ -8,9 +8,21 @@ import Rain from '../../Components/Rain/Rain'
 import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
+import SolarSystem, { Orbit } from "../../Components/Orbit/Orbits"
 
 import portret from '../../Resources/Me.jpeg'
 // import portret2 from '../../Resources/bigger_me.jpg'
+
+// Planets
+import typescript_icon from '../../Resources/icons8-typescript-96.svg'
+import javascript_icon from '../../Resources/icons8-javascript-96.svg'
+import react_icon from '../../Resources/icons8-react-160.png'
+import html_icon from '../../Resources/icons8-html-5-96.svg'
+import css_icon from '../../Resources/icons8-css3-96.svg'
+import csharp_icon from '../../Resources/C_sharp.svg'
+import ef_core_icon from '../../Resources/ef_core.png'
+
+// Timeline Icons
 import ats_logo from '../../Resources/ats_logo.png'
 import ats_office from '../../Resources/not_ats_office.jpg'
 import tomtom_logo from '../../Resources/tomtom_logo.png'
@@ -67,7 +79,7 @@ function FrontPage()
 
 			</main>
 
-			<section className="about-me content-wrap">
+			{/* <section className="about-me content-wrap">
 				<div className="content">
 					<div className="title">
 						<h3>Despre mine</h3>
@@ -76,6 +88,25 @@ function FrontPage()
 						<p>Lucrez ca programator full-stack la Advanced Technology Systems dar aș dori să mă specializez pe backend sau pe frontend.</p>
 					</div>
 				</div>
+			</section> */}
+
+			<section className="new-skills content-wrap">
+				<SolarSystem
+					sun_icon={portret}
+					sun_size={70}
+					name='Măcelaru Tiberiu'
+					size={600}
+					planet_size={50}
+					planets={[
+						{ title: "TypeScript", icon: typescript_icon },
+						{ title: "JavaScript", icon: javascript_icon },
+						{ title: "React", icon: react_icon },
+						{ title: "HTML", icon: html_icon },
+						{ title: "CSS", icon: css_icon },
+						{ title: "C# Web API", icon: csharp_icon },
+						{ title: "Entity Framework", icon: ef_core_icon },
+					]}
+				/>
 			</section>
 
 			<section className="experience content-wrap">
