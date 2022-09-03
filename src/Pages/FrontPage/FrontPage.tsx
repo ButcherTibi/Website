@@ -95,7 +95,7 @@ function FrontPage()
 					sun_icon={portret}
 					sun_size={70}
 					name='Măcelaru Tiberiu'
-					size={600}
+					diameter={600}
 					planet_size={50}
 					planets={[
 						{ title: "TypeScript", icon: typescript_icon },

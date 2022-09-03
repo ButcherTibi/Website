@@ -9,38 +9,106 @@ class Vec2D {
 }
 
 interface OrbitProps {
-	title?: string
+	title: string
 	icon: string
-	radius: number
+
+	scale: number
+	offset: Vec2D
+
+	solar_system_center: Vec2D
+	solar_system_size: number
+
+	main_orbit_diameter: number
+
+	selected_planet: number
+	planet_index: number
+	planet_count: number
 	planet_size: number
 	
-	inner_x: number
-	inner_y: number
-	outer_x: number
-	outer_y: number
+	selectPlanet: (selected_planet: number, planet_pos: Vec2D) => void
 }
 
 export function Orbit(props: OrbitProps)
 {
-	let orbit_style: CSSProperties = {
-		top: `${props.inner_y}px`,
-		left: `${props.inner_x}px`,
-		width: `${props.radius}px`,
-		height: `${props.radius}px`
+	const planet_pos = useRef(new Vec2D())
+
+
+	const selectPlanet = () => {
+		if (props.selected_planet !== -1 && props.selected_planet !== props.planet_index) {
+			return
+		}
+
+		props.selectPlanet(props.planet_index, {
+			x: -(planet_pos.current.x - props.solar_system_center.x),
+			y: -(planet_pos.current.y - props.solar_system_center.y)
+		})
+	}
+	
+	// Render
+	const angle_step = (Math.PI * 2) / props.planet_count
+	const angle = angle_step * props.planet_index
+
+	// Planet
+	let planet_style: CSSProperties
+	{
+		const main_orbit_diameter = props.main_orbit_diameter / 2 * props.scale;
+
+		let x = Math.sin(angle) * main_orbit_diameter
+		let y = Math.cos(angle) * main_orbit_diameter
+		x += props.solar_system_center.x
+		y += props.solar_system_center.y
+		x += props.offset.x * props.scale
+		y += props.offset.y * props.scale
+
+		planet_pos.current = { x: x, y: y}
+
+		planet_style = {
+			width: `${props.planet_size}px`,
+			height: `${props.planet_size}`,
+			transform: `
+				translate(${x - props.planet_size / 2}px, ${y - props.planet_size / 2}px)
+				scale(${props.scale})
+			`
+		}
 	}
 
-	let planet_style: CSSProperties = {
-		top: `${props.outer_y - (props.planet_size / 2)}px`,
-		left: `${props.outer_x - (props.planet_size / 2)}px`,
-		width: `${props.planet_size}px`,
-		height: `${props.planet_size}px`,
-		borderRadius: `${props.planet_size / 2}px`
+	let orbit_style: CSSProperties
+	{
+		let main_orbit_radius: number; 
+		
+		if (props.selected_planet === props.planet_index) {
+			main_orbit_radius = props.main_orbit_diameter * props.scale
+		}
+		else {
+			main_orbit_radius = props.main_orbit_diameter / 2 * props.scale
+		}
+
+		const main_orbit_half_radius = main_orbit_radius / 2
+
+		let x = Math.sin(angle) * main_orbit_half_radius
+		let y = Math.cos(angle) * main_orbit_half_radius
+		x += props.solar_system_center.x
+		y += props.solar_system_center.y
+		x += props.offset.x * props.scale
+		y += props.offset.y * props.scale
+
+		const orbit_diameter = props.main_orbit_diameter / 2
+
+		orbit_style = {
+			width: `${props.main_orbit_diameter / 2}px`,
+			height: `${props.main_orbit_diameter / 2}px`,
+			transform: `
+				translate(${x - orbit_diameter / 2}px, ${y - orbit_diameter / 2}px)
+				scale(${props.scale})
+			`
+		}
 	}
 
 	return <>
 		<div className="orbit" style={orbit_style} />
 		<img className="planet"
 			src={props.icon} alt=""
+			onClick={selectPlanet}
 			style={planet_style} />
 	</>
 }
@@ -55,156 +123,146 @@ interface SolarSystemProps {
 	sun_icon: string
 	sun_size: number
 	name: string
-	size: number
+	diameter: number
 	planet_size: number
+	
 	planets: Planet[]
-}
-
-class PlanetPosition {
-	inner_x: number = 0
-	inner_y: number = 0
-
-	outer_x: number = 0
-	outer_y: number = 0
 }
 
 function SolarSystem(props: SolarSystemProps)
 {
-	const [sun_position, setSunPosition] = useState<Vec2D>()
-	const [orbit_position, setOrbitPosition] = useState<Vec2D>()
-	const [planet_positions, setPlanetPositions] = useState<PlanetPosition[]>([])
+	/** How much time one revolution should take in miliseconds. */
+	const spin_speed = 60_000
+	const zoom_scale = 2
 
-
-	let orbit_ref = useRef<HTMLDivElement>(null)
-	let spinner_ref = useRef<HTMLDivElement>(null)
+	const [selected_planet, setSelectedPlanet] = useState(-2)
+	const [offset, setOffset] = useState(new Vec2D())
+	const [scale, setScale] = useState(1)
 	
+	const spinner_size_ref = useRef(0)
+	const spinner_animation_ref = useRef<Animation>();
 
-	const positionPlanets = () => {
-		if (orbit_ref.current === null || spinner_ref.current === null) {
-			return;
-		}
-
-		let orbit_rect = orbit_ref.current?.getBoundingClientRect()!
-
-		let size = 0
-		if (orbit_rect.width > orbit_rect.height) {
-			size = orbit_rect.height
-		}
-		else {
-			size = orbit_rect.width
-		}
-
-		let circum = props.size;
-		let radius = circum / 2;
-
-		// Spinner
-		let spinner = spinner_ref.current!
-		spinner.style.width = `${size}px`
-		spinner.style.height = `${size}px`
-
-		// Sun
-		setSunPosition({
-			x: (size - props.sun_size) / 2,
-			y: (size - props.sun_size) / 2
-		})
-
-		// Orbit
-		setOrbitPosition({
-			x: (size - circum) / 2,
-			y: (size - circum) / 2,
-		})
-
-		let count = props.planets.length
-		let angle_rad = 0
-		let new_planet_positions: PlanetPosition[] = []
-		
-		for (let i = 0; i < count; i++) {
-
-			let new_planet_position = new PlanetPosition()
-
-			// Outer
-			{
-				let x = Math.sin(angle_rad) * radius;
-				let y = Math.cos(angle_rad) * radius;
+	const orbit_elem = useRef<HTMLDivElement>(null)
+	const spinner_elem = useRef<HTMLDivElement>(null)
 	
-				// Normalize to top left origin
-				x += size / 2
-				y += size / 2
-	
-				new_planet_position.outer_x = x;
-				new_planet_position.outer_y = y;
-			}
-
-			// Inner
-			{
-				let x = Math.sin(angle_rad) * (radius / 2);
-				let y = Math.cos(angle_rad) * (radius / 2);
-				x += size / 2
-				y += size / 2
-
-				new_planet_position.inner_x = x - radius / 2;
-				new_planet_position.inner_y = y - radius / 2;
-			}
-			
-			new_planet_positions.push(new_planet_position)
-
-			// Advance
-			angle_rad += (2 * Math.PI) / count;
-		}
-
-		setPlanetPositions(new_planet_positions)
-	}
-
 
 	useEffect(() => {
-		positionPlanets();
+		// Spinner
+		{
+			// Set spinner size to minimum of width or height
+			let orbit_rect = orbit_elem.current?.getBoundingClientRect()!
+			let size = 0;
 
-		window.addEventListener('resize', positionPlanets)
-		return () => {
-			window.removeEventListener('resize', positionPlanets)
+			if (orbit_rect.width > orbit_rect.height) {
+				size = orbit_rect.height
+			}
+			else {
+				size = orbit_rect.width
+			}
+
+			let spinner = spinner_elem.current!
+			spinner.style.width = `${size}px`
+			spinner.style.height = `${size}px`
+
+			spinner_size_ref.current = size
+
+			// Rotate spinner
+			if (spinner.getAnimations().length === 0) {
+				spinner_animation_ref.current = spinner.animate([
+					{
+						transform: 'rotate(0deg)'
+					},
+					{
+						transform: 'rotate(360deg)'
+					}
+				], {
+					duration: spin_speed,
+					iterations: Infinity
+				})
+			}
 		}
+
+		setSelectedPlanet(-1)
+		// calculate();
+
+		// window.addEventListener('resize', calculate)
+		// return () => {
+		// 	window.removeEventListener('resize', calculate)
+		// }
 	}, [])
 
 
-	// Render
-	let main_orbit_style: CSSProperties = {
-		top: `${orbit_position?.x}px`,
-		left: `${orbit_position?.y}px`,
-		width: `${props.size}px`,
-		height: `${props.size}px`
+	const selectPlanet = (index: number, planet_pos: Vec2D) => {
+		if (selected_planet !== index) {
+			spinner_animation_ref.current?.pause()
+			setScale(zoom_scale)
+			setOffset(planet_pos)
+			setSelectedPlanet(index)
+		}
+		else {
+			spinner_animation_ref.current?.play()
+			setScale(1)
+			setOffset({x: 0, y: 0})
+			setSelectedPlanet(-1)
+		}
 	}
 
-	let orbits: React.ReactNode = null
-	if (planet_positions.length > 0) {
-		orbits = <>
-			{props.planets.map((planet, index) => {
-				let planet_position = planet_positions[index]
-				return <Orbit key={index}
+
+	// Render
+	console.log("render")
+
+	const size = spinner_size_ref.current
+	const main_orbit_center = (size - props.diameter) / 2;
+	let main_orbit_style: CSSProperties = {
+		width: `${props.diameter}px`,
+		height: `${props.diameter}px`,
+		transform: `
+		translate(${main_orbit_center + offset.x * scale}px, ${main_orbit_center + offset.y * scale}px)
+		scale(${scale})
+		`,
+	}
+	
+	const solar_system_center = size / 2
+	let orbits: React.ReactNode = <>
+		{props.planets.map((planet, index) => {
+			return (
+				<Orbit key={index}
 					title={planet.title}
 					icon={planet.icon}
-					radius={props.size / 2}
+
+					scale={scale}
+					offset={offset}
+
+					solar_system_center={{x: solar_system_center, y: solar_system_center}}
+					solar_system_size={size}
+
+					main_orbit_diameter={props.diameter}
+
+					selected_planet={selected_planet}
+					planet_index={index}
+					planet_count={props.planets.length}
 					planet_size={props.planet_size}
 
-					inner_x={planet_position.inner_x}
-					inner_y={planet_position.inner_y}
-					outer_x={planet_position.outer_x}
-					outer_y={planet_position.outer_y}
+					selectPlanet={selectPlanet}
 				/>
-			})}
-		</>
-	}
+			)
+		})}
+	</>
 
+	const sun_center = (size - props.sun_size) / 2
 	let sun_style: CSSProperties = {
-		top: `${sun_position?.x}px`,
-		left: `${sun_position?.y}px`,
 		width: `${props.sun_size}px`,
 		height: `${props.sun_size}px`,
-		borderRadius: `${props.sun_size / 2}px`
+		borderRadius: `${props.sun_size / 2}px`,
+		transform: `
+			translate(${sun_center + offset.x * scale}px, ${sun_center + offset.y * scale}px)
+			scale(${scale})
+		`,
 	}
 
 	return (
-		<div className="SolarSystem" ref={orbit_ref}>
-			<div className="spinner" ref={spinner_ref}>
+		<div className="SolarSystem" ref={orbit_elem}>
+			<div className="spinner" ref={spinner_elem}>
 				<div className="main-orbit" style={main_orbit_style} />
 				{orbits}
 				<img className="sun"

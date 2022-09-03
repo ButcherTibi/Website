@@ -6,20 +6,27 @@
 	display: flex;
 	justify-content: center;
 
-	background-color: gray;
+	background-color: hsl(192, 100%, 50%);
+	overflow: hidden;
 
 	.spinner {
 		position: relative;
 		box-sizing: border-box;
 
-		// border: 2px solid red;	
+		// border: 2px solid red;
+
+		> * {
+			transition-property: transform;
+			transition-duration: 2s;
+			transition-timing-function: ease-in-out;
+		}
 
 		.main-orbit {
 			position: absolute;
 			box-sizing: border-box;
 			border-radius: 100%;
 
-			border: 2px solid green;
+			border: 2px solid black;
 		}
 
 		.orbit {
@@ -27,7 +34,7 @@
 			box-sizing: border-box;
 			border-radius: 100%;
 
-			border: 2px solid blue;
+			border: 2px solid white;
 		}
 
 		.planet {
