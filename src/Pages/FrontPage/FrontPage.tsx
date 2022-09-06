@@ -98,7 +98,7 @@ function FrontPage()
 					diameter={600}
 					planet_size={50}
 					planets={[
-						{ title: "TypeScript", icon: typescript_icon },
+						{ title: "TypeScript", icon: typescript_icon, labels: [ 'Description 1', 'Description 2', 'Description 3' ] },
 						{ title: "JavaScript", icon: javascript_icon },
 						{ title: "React", icon: react_icon },
 						{ title: "HTML", icon: html_icon },

@@ -11,12 +11,14 @@ class Vec2D {
 interface OrbitProps {
 	title: string
 	icon: string
+	labels: string[]
 
 	scale: number
 	offset: Vec2D
 
 	solar_system_center: Vec2D
 	solar_system_size: number
+	solor_system_revolution_duration: number
 
 	main_orbit_diameter: number
 
@@ -30,8 +32,30 @@ interface OrbitProps {
 
 export function Orbit(props: OrbitProps)
 {
+	const label_padding = 10;
+
 	const planet_pos = useRef(new Vec2D())
 
+	const orbit_elem = useRef<HTMLDivElement>(null)
+	const planet_elem = useRef<HTMLImageElement>(null)
+
+	
+	useEffect(() => {
+		let planet = planet_elem.current!
+		if (planet.getAnimations().length === 0) {
+			planet.animate([
+				{
+					transform: 'rotate(0deg)'
+				},
+				{
+					transform: 'rotate(-360deg)'
+				}
+			], {
+				duration: props.solor_system_revolution_duration,
+				iterations: Infinity
+			})
+		}
+	}, [])
 
 	const selectPlanet = () => {
 		if (props.selected_planet !== -1 && props.selected_planet !== props.planet_index) {
@@ -45,6 +69,8 @@ export function Orbit(props: OrbitProps)
 	}
 	
 	// Render
+	//const is_any_planet_selected = props.selected_planet !== -1
+	const is_this_planet_selected = props.selected_planet === props.planet_index
 	const angle_step = (Math.PI * 2) / props.planet_count
 	const angle = angle_step * props.planet_index
 
@@ -64,7 +90,7 @@ export function Orbit(props: OrbitProps)
 
 		planet_style = {
 			width: `${props.planet_size}px`,
-			height: `${props.planet_size}`,
+			height: `${props.planet_size}px`,
 			transform: `
 				translate(${x - props.planet_size / 2}px, ${y - props.planet_size / 2}px)
 				scale(${props.scale})
@@ -74,9 +100,9 @@ export function Orbit(props: OrbitProps)
 
 	let orbit_style: CSSProperties
 	{
-		let main_orbit_radius: number; 
+		let main_orbit_radius: number;
 		
-		if (props.selected_planet === props.planet_index) {
+		if (is_this_planet_selected) {
 			main_orbit_radius = props.main_orbit_diameter * props.scale
 		}
 		else {
@@ -104,12 +130,54 @@ export function Orbit(props: OrbitProps)
 		}
 	}
 
+	// Labels
+	let label_styles: CSSProperties[] = []
+	{
+		const label_count = props.labels.length
+		const label_length = props.main_orbit_diameter / 2 * props.scale
+		let angle = 0
+		let angle_step = 360 / label_count
+
+		for (let i = 0; i < label_count; i++) {
+
+			let transform: string | undefined = is_this_planet_selected ? `rotate(${angle}deg)` : `rotate(-90deg)`
+			let opacity: number = is_this_planet_selected ? 1 : 0
+
+			let new_label_style: CSSProperties = {
+				top: '50%',
+				left: `50%`,
+				paddingLeft: `${props.planet_size / 2 + label_padding}px`,
+				paddingRight: `${label_padding}px`,
+				width: `${label_length}px`,
+				transform: transform,
+				opacity: opacity
+			}
+
+			label_styles.push(new_label_style);
+
+			// Advance
+			angle += angle_step
+		}
+	}
+
 	return <>
-		<div className="orbit" style={orbit_style} />
-		<img className="planet"
-			src={props.icon} alt=""
-			onClick={selectPlanet}
-			style={planet_style} />
+		<div className="orbit" ref={orbit_elem} style={orbit_style}>
+			<div className="spining">
+				{label_styles.map((label_style, index) => {
+					return (
+						<label style={label_style} key={index}>
+							{props.labels[index]}
+						</label>
+					)
+				})}
+			</div>
+		</div>
+		<div className="planet" style={planet_style}>
+			<img ref={planet_elem}
+				src={props.icon} alt=""
+				onClick={selectPlanet}
+			/>
+		</div>
 	</>
 }
 
@@ -117,6 +185,7 @@ export function Orbit(props: OrbitProps)
 class Planet {
 	title: string = ''
 	icon: string = ''
+	labels?: string[] = []
 }
 
 interface SolarSystemProps {
@@ -132,7 +201,7 @@ interface SolarSystemProps {
 function SolarSystem(props: SolarSystemProps)
 {
 	/** How much time one revolution should take in miliseconds. */
-	const spin_speed = 60_000
+	const solar_system_spin_time = 60_000
 	const zoom_scale = 2
 
 	const [selected_planet, setSelectedPlanet] = useState(-2)
@@ -142,15 +211,16 @@ function SolarSystem(props: SolarSystemProps)
 	const spinner_size_ref = useRef(0)
 	const spinner_animation_ref = useRef<Animation>();
 
-	const orbit_elem = useRef<HTMLDivElement>(null)
+	const solar_system_elem = useRef<HTMLDivElement>(null)
 	const spinner_elem = useRef<HTMLDivElement>(null)
-	
+	const sun_img_elem = useRef<HTMLImageElement>(null)
+
 
 	useEffect(() => {
 		// Spinner
 		{
 			// Set spinner size to minimum of width or height
-			let orbit_rect = orbit_elem.current?.getBoundingClientRect()!
+			let orbit_rect = solar_system_elem.current?.getBoundingClientRect()!
 			let size = 0;
 
 			if (orbit_rect.width > orbit_rect.height) {
@@ -176,14 +246,32 @@ function SolarSystem(props: SolarSystemProps)
 						transform: 'rotate(360deg)'
 					}
 				], {
-					duration: spin_speed,
+					duration: solar_system_spin_time,
+					iterations: Infinity
+				})
+			}	
+		}
+
+		// Sun
+		{
+			const sun = sun_img_elem.current!
+			if (sun.getAnimations().length === 0) {
+				sun.animate([
+					{
+						transform: 'rotate(0deg)'
+					},
+					{
+						transform: 'rotate(-360deg)'
+					}
+				], {
+					duration: solar_system_spin_time,
 					iterations: Infinity
 				})
 			}
 		}
 
+		// Trigger rendering
 		setSelectedPlanet(-1)
-		// calculate();
 
 		// window.addEventListener('resize', calculate)
 		// return () => {
@@ -229,12 +317,14 @@ function SolarSystem(props: SolarSystemProps)
 				<Orbit key={index}
 					title={planet.title}
 					icon={planet.icon}
+					labels={planet.labels ?? []}
 
 					scale={scale}
 					offset={offset}
 
 					solar_system_center={{x: solar_system_center, y: solar_system_center}}
 					solar_system_size={size}
+					solor_system_revolution_duration={solar_system_spin_time}
 
 					main_orbit_diameter={props.diameter}
 
@@ -250,25 +340,29 @@ function SolarSystem(props: SolarSystemProps)
 	</>
 
 	const sun_center = (size - props.sun_size) / 2
-	let sun_style: CSSProperties = {
+	const sun_style: CSSProperties = {
 		width: `${props.sun_size}px`,
 		height: `${props.sun_size}px`,
-		borderRadius: `${props.sun_size / 2}px`,
 		transform: `
 			translate(${sun_center + offset.x * scale}px, ${sun_center + offset.y * scale}px)
 			scale(${scale})
 		`,
 	}
+	const sun_img_style: CSSProperties = {
+		borderRadius: `${props.sun_size / 2}px`,
+	}
 
 	return (
-		<div className="SolarSystem" ref={orbit_elem}>
+		<div className="SolarSystem" ref={solar_system_elem}>
 			<div className="spinner" ref={spinner_elem}>
 				<div className="main-orbit" style={main_orbit_style} />
 				{orbits}
-				<img className="sun"
-					src={props.sun_icon} alt=""
-					style={sun_style}
-				/>
+				<div className="sun" style={sun_style}>
+					<img ref={sun_img_elem}
+						src={props.sun_icon} alt=""
+						style={sun_img_style}
+					/>
+				</div>
 			</div>
 		</div>
 	)

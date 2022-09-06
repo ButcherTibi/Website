@@ -9,6 +9,8 @@
 	background-color: hsl(192, 100%, 50%);
 	overflow: hidden;
 
+	--zoom_in_duration: 2s;
+
 	.spinner {
 		position: relative;
 		box-sizing: border-box;
@@ -17,7 +19,7 @@
 
 		> * {
 			transition-property: transform;
-			transition-duration: 2s;
+			transition-duration: var(--zoom_in_duration);
 			transition-timing-function: ease-in-out;
 		}
 
@@ -35,16 +37,54 @@
 			border-radius: 100%;
 
 			border: 2px solid white;
+
+			.spining {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				animation: orbit_revolution 60s linear var(--zoom_in_duration) infinite;
+			}
+
+			@keyframes orbit_revolution {
+				to {
+					transform: rotate(360deg); 
+				}
+			}
+
+			label {
+				box-sizing: border-box;
+				position: absolute;
+				transform-origin: left top;
+
+				transition:
+					transform 2s var(--zoom_in_duration) ease-in-out,
+					opacity 2s var(--zoom_in_duration) ease-in-out
+				;
+			}
 		}
 
 		.planet {
 			position: absolute;
 			box-sizing: border-box;
+
+			img {
+				box-sizing: border-box;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
 		}
 
 		.sun {
 			position: absolute;
 			box-sizing: border-box;
+			
+			img {
+				box-sizing: border-box;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
 		}
 	}
 }
