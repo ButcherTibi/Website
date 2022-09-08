@@ -18,7 +18,7 @@ interface OrbitProps {
 
 	solar_system_center: Vec2D
 	solar_system_size: number
-	solor_system_revolution_duration: number
+	solar_system_revolution_duration: number
 
 	main_orbit_diameter: number
 
@@ -27,7 +27,7 @@ interface OrbitProps {
 	planet_count: number
 	planet_size: number
 	
-	selectPlanet: (selected_planet: number, planet_pos: Vec2D) => void
+	zoomToPlanet: (selected_planet: number, planet_pos: Vec2D) => void
 }
 
 export function Orbit(props: OrbitProps)
@@ -39,8 +39,13 @@ export function Orbit(props: OrbitProps)
 	const orbit_elem = useRef<HTMLDivElement>(null)
 	const planet_elem = useRef<HTMLImageElement>(null)
 
-	
+
+	const is_any_planet_selected = props.selected_planet !== -1
+	const is_this_planet_selected = props.selected_planet === props.planet_index
+
+
 	useEffect(() => {
+		// Start orbit counter rotation 
 		let planet = planet_elem.current!
 		if (planet.getAnimations().length === 0) {
 			planet.animate([
@@ -51,26 +56,47 @@ export function Orbit(props: OrbitProps)
 					transform: 'rotate(-360deg)'
 				}
 			], {
-				duration: props.solor_system_revolution_duration,
+				duration: props.solar_system_revolution_duration,
 				iterations: Infinity
 			})
 		}
-	}, [])
+	}, [props.solar_system_revolution_duration])
 
-	const selectPlanet = () => {
-		if (props.selected_planet !== -1 && props.selected_planet !== props.planet_index) {
+
+	// Pause planet counter rotation if any selected.
+	useEffect(() =>{
+		if (planet_elem.current !== null && planet_elem.current.getAnimations().length > 0) {
+
+			let animation = planet_elem.current.getAnimations()[0]
+			if (is_any_planet_selected) {
+				animation.pause()
+			}
+			else {
+				animation.play()
+			}
+		}
+	}, [is_any_planet_selected])
+
+
+	const zoomToPlanet = () => {
+		if (is_any_planet_selected && is_this_planet_selected === false) {
 			return
 		}
 
-		props.selectPlanet(props.planet_index, {
-			x: -(planet_pos.current.x - props.solar_system_center.x),
-			y: -(planet_pos.current.y - props.solar_system_center.y)
-		})
+		if (is_this_planet_selected) {		
+			props.zoomToPlanet(-1, new Vec2D())
+		}
+		else {
+			props.zoomToPlanet(props.planet_index, {
+				x: -(planet_pos.current.x - props.solar_system_center.x),
+				y: -(planet_pos.current.y - props.solar_system_center.y)
+			})
+		}
 	}
 	
+
 	// Render
-	//const is_any_planet_selected = props.selected_planet !== -1
-	const is_this_planet_selected = props.selected_planet === props.planet_index
+	// console.log('orbit render')
 	const angle_step = (Math.PI * 2) / props.planet_count
 	const angle = angle_step * props.planet_index
 
@@ -134,7 +160,7 @@ export function Orbit(props: OrbitProps)
 	let label_styles: CSSProperties[] = []
 	{
 		const label_count = props.labels.length
-		const label_length = props.main_orbit_diameter / 2 * props.scale
+		const label_length = props.main_orbit_diameter / 4
 		let angle = 0
 		let angle_step = 360 / label_count
 
@@ -161,7 +187,8 @@ export function Orbit(props: OrbitProps)
 	}
 
 	return <>
-		<div className="orbit" ref={orbit_elem} style={orbit_style}>
+		<div className={'orbit'} ref={orbit_elem} style={orbit_style}
+			onClick={zoomToPlanet}>
 			<div className="spining">
 				{label_styles.map((label_style, index) => {
 					return (
@@ -175,7 +202,7 @@ export function Orbit(props: OrbitProps)
 		<div className="planet" style={planet_style}>
 			<img ref={planet_elem}
 				src={props.icon} alt=""
-				onClick={selectPlanet}
+				onClick={zoomToPlanet}
 			/>
 		</div>
 	</>
@@ -209,7 +236,6 @@ function SolarSystem(props: SolarSystemProps)
 	const [scale, setScale] = useState(1)
 	
 	const spinner_size_ref = useRef(0)
-	const spinner_animation_ref = useRef<Animation>();
 
 	const solar_system_elem = useRef<HTMLDivElement>(null)
 	const spinner_elem = useRef<HTMLDivElement>(null)
@@ -238,7 +264,7 @@ function SolarSystem(props: SolarSystemProps)
 
 			// Rotate spinner
 			if (spinner.getAnimations().length === 0) {
-				spinner_animation_ref.current = spinner.animate([
+				spinner.animate([
 					{
 						transform: 'rotate(0deg)'
 					},
@@ -270,7 +296,7 @@ function SolarSystem(props: SolarSystemProps)
 			}
 		}
 
-		// Trigger rendering
+		// Trigger re-rendering
 		setSelectedPlanet(-1)
 
 		// window.addEventListener('resize', calculate)
@@ -280,24 +306,32 @@ function SolarSystem(props: SolarSystemProps)
 	}, [])
 
 
-	const selectPlanet = (index: number, planet_pos: Vec2D) => {
-		if (selected_planet !== index) {
-			spinner_animation_ref.current?.pause()
-			setScale(zoom_scale)
-			setOffset(planet_pos)
-			setSelectedPlanet(index)
-		}
-		else {
-			spinner_animation_ref.current?.play()
+	const zoomToPlanet = (new_selected_planet: number, planet_pos: Vec2D) => {
+		let spinner_animation = spinner_elem.current!.getAnimations()[0]
+		let sun_animation = sun_img_elem.current!.getAnimations()[0]
+
+		if (new_selected_planet === -1 || selected_planet === new_selected_planet) {
+
 			setScale(1)
 			setOffset({x: 0, y: 0})
 			setSelectedPlanet(-1)
+
+			spinner_animation.play()
+			sun_animation.play()
+		}
+		else {
+			setScale(zoom_scale)
+			setOffset(planet_pos)
+			setSelectedPlanet(new_selected_planet)
+
+			spinner_animation.pause()
+			sun_animation.pause()
 		}
 	}
 
 
 	// Render
-	console.log("render")
+	// console.log("render")
 
 	const size = spinner_size_ref.current
 	const main_orbit_center = (size - props.diameter) / 2;
@@ -324,7 +358,7 @@ function SolarSystem(props: SolarSystemProps)
 
 					solar_system_center={{x: solar_system_center, y: solar_system_center}}
 					solar_system_size={size}
-					solor_system_revolution_duration={solar_system_spin_time}
+					solar_system_revolution_duration={solar_system_spin_time}
 
 					main_orbit_diameter={props.diameter}
 
@@ -333,7 +367,7 @@ function SolarSystem(props: SolarSystemProps)
 					planet_count={props.planets.length}
 					planet_size={props.planet_size}
 
-					selectPlanet={selectPlanet}
+					zoomToPlanet={zoomToPlanet}
 				/>
 			)
 		})}
