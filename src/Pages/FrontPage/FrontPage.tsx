@@ -1,5 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from "react"
-import { factory, JsxAttribute, JsxElement } from "typescript"
+import React from "react"
 
 // import { GiSmartphone } from 'react-icons/gi'
 // import { AiOutlineMail } from 'react-icons/ai'
@@ -8,7 +7,7 @@ import Rain from '../../Components/Rain/Rain'
 import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
-import SolarSystem, { Orbit } from "../../Components/Orbit/Orbits"
+import SolarSystem from "../../Components/Orbit/Orbits"
 
 import portret from '../../Resources/Me.jpeg'
 // import portret2 from '../../Resources/bigger_me.jpg'
@@ -21,6 +20,8 @@ import html_icon from '../../Resources/icons8-html-5-96.svg'
 import css_icon from '../../Resources/icons8-css3-96.svg'
 import csharp_icon from '../../Resources/C_sharp.svg'
 import ef_core_icon from '../../Resources/ef_core.png'
+
+// Moons
 
 // Timeline Icons
 import ats_logo from '../../Resources/ats_logo.png'
@@ -94,11 +95,16 @@ function FrontPage()
 				<SolarSystem
 					sun_icon={portret}
 					sun_size={70}
-					name='Măcelaru Tiberiu'
-					diameter={600}
+					sun_name='Măcelaru Tiberiu'
+					solar_system_diameter={600}
+
 					planet_size={50}
 					planets={[
-						{ title: "TypeScript", icon: typescript_icon, labels: [ 'Description 1', 'Description 2', 'Description 3' ] },
+						{ title: "TypeScript", icon: typescript_icon, moons: [ 
+							{ text: 'Description 1', icon: typescript_icon, icon_size: 50}, 
+							{ text: 'Description 2'},
+							{ text: 'Description 3'}]
+						},
 						{ title: "JavaScript", icon: javascript_icon },
 						{ title: "React", icon: react_icon },
 						{ title: "HTML", icon: html_icon },
@@ -106,6 +112,10 @@ function FrontPage()
 						{ title: "C# Web API", icon: csharp_icon },
 						{ title: "Entity Framework", icon: ef_core_icon },
 					]}
+
+					deco_rings_count={3}
+					deco_rings_revolution_duration_start={30_000}
+					deco_rings_revolution_duration_end={60_000}
 				/>
 			</section>
 

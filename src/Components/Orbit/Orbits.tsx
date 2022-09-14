@@ -8,10 +8,141 @@ class Vec2D {
 	y: number = 0
 }
 
+class DecoRingLine {
+	wrap_style: CSSProperties = {}
+	line_style: CSSProperties = {}
+}
+
+interface DecoRingProps {
+	scale: number
+	offset: Vec2D
+
+	wrapper_size: number
+
+	diameter: number
+	/** The offset used to shift the ring from it's center. */
+	offset_to_center: number
+	revolution_duration: number
+	start_angle: number
+
+	// Lines
+	line_count: number
+	line_length: number
+	line_thickness: number
+}
+
+function DecoRing(props: DecoRingProps)
+{
+	const spinning_elem = useRef<HTMLDivElement>(null)
+	const ring_elem = useRef<HTMLDivElement>(null)
+
+	// E necesar ?
+	// useEffect(() => {
+	// 	line_elems.current = Array(props.line_count).fill(null)
+	// }, [props.line_count])
+
+	useEffect(() => {
+		let spinning = spinning_elem.current!
+		let ring = ring_elem.current!
+
+		if (spinning.getAnimations().length >= 1) {
+			spinning.getAnimations()[0].cancel()
+		}
+		if (ring.getAnimations().length >= 1) {
+			ring.getAnimations()[0].cancel()
+		}
+
+		// ensure you return to start_agle in a smooth way
+		spinning.animate([
+			{ transform: `rotate(-${props.start_angle}deg)` },
+			{ transform: `rotate(-${360 + props.start_angle}deg)` }
+		], {
+			duration: props.revolution_duration,
+			iterations: Infinity
+		})
+	}, [props.revolution_duration, props.start_angle])
+
+
+	// Render
+	const center = (props.wrapper_size - props.diameter) / 2
+
+	let deco_ring_style: CSSProperties = {
+		width: props.diameter,
+		height: props.diameter,		
+		transform: `
+			translate(
+				${center + props.offset.x * props.scale}px,
+				${center + props.offset.y * props.scale}px
+			)
+			scale(${props.scale})
+		`
+	}
+	
+	let ring_style: CSSProperties = {
+		width: props.diameter,
+		height: props.diameter,
+		transform: `
+			translate(${props.offset_to_center}px)
+		`
+	}
+
+	// Lines
+	let lines: DecoRingLine[] = []
+	{
+		const angle_step = 360 / props.line_count
+		let angle = 0
+	
+		for (let i = 0; i < props.line_count; i++) {
+	
+			let new_line = new DecoRingLine()
+	
+			new_line.wrap_style = {
+				top: props.diameter / 2,
+				left: props.diameter / 2,	
+				transform: `
+					rotate(${angle}deg)
+				`
+			}
+			new_line.line_style = {
+				marginLeft: props.diameter / 2,
+				width: props.line_length,
+				height: props.line_thickness,
+			}
+	
+			lines.push(new_line)
+	
+			// Advance
+			angle += angle_step
+		}
+	}
+
+	return <>
+		<div className="deco-ring"  style={deco_ring_style}>
+			<div className="spinning" ref={spinning_elem} style={{transform: `rotate(-${props.start_angle}deg)`}}>
+				<div className="ring" ref={ring_elem} style={ring_style}>
+					{lines.map((line, index) => {
+						return <div className="line-wrap" key={index}
+							style={line.wrap_style}>
+							<div className="line" style={line.line_style} />
+						</div>
+					})}
+				</div>
+			</div>
+		</div>
+	</>
+}
+
+
+class Moon {
+	text = ''
+	icon? = ''
+	icon_size? = 50
+}
+
 interface OrbitProps {
 	title: string
 	icon: string
-	labels: string[]
+	moons: Moon[]
 
 	scale: number
 	offset: Vec2D
@@ -30,7 +161,8 @@ interface OrbitProps {
 	zoomToPlanet: (selected_planet: number, planet_pos: Vec2D) => void
 }
 
-export function Orbit(props: OrbitProps)
+
+function Orbit(props: OrbitProps)
 {
 	const label_padding = 10;
 
@@ -124,6 +256,7 @@ export function Orbit(props: OrbitProps)
 		}
 	}
 
+	// Orbit
 	let orbit_style: CSSProperties
 	{
 		let main_orbit_radius: number;
@@ -156,30 +289,47 @@ export function Orbit(props: OrbitProps)
 		}
 	}
 
-	// Labels
-	let label_styles: CSSProperties[] = []
+	class MoonStyle {
+		div_style: CSSProperties = {}
+		label_style: CSSProperties = {}
+		moon_style: CSSProperties = {}
+	}
+
+	// Moon
+	const moon_orbit_styles: MoonStyle[] = []
 	{
-		const label_count = props.labels.length
+		const label_count = props.moons.length
 		const label_length = props.main_orbit_diameter / 4
 		let angle = 0
-		let angle_step = 360 / label_count
+		const angle_step = 360 / label_count
 
 		for (let i = 0; i < label_count; i++) {
 
-			let transform: string | undefined = is_this_planet_selected ? `rotate(${angle}deg)` : `rotate(-90deg)`
-			let opacity: number = is_this_planet_selected ? 1 : 0
+			let moon = props.moons[i]
+			moon.icon_size ??= 0
 
-			let new_label_style: CSSProperties = {
-				top: '50%',
-				left: `50%`,
-				paddingLeft: `${props.planet_size / 2 + label_padding}px`,
-				paddingRight: `${label_padding}px`,
-				width: `${label_length}px`,
+			let new_style = new MoonStyle()
+
+			const transform: string | undefined = is_this_planet_selected ? `rotate(${angle}deg)` : `rotate(-90deg)`
+			const opacity: number = is_this_planet_selected ? 1 : 0
+
+			new_style.div_style = {
+				width: label_length,
 				transform: transform,
 				opacity: opacity
 			}
+			new_style.label_style = {
+				marginLeft: props.planet_size / 2 + label_padding,
+				marginRight: label_padding + moon.icon_size / 2,
+				width: label_length
+			}
+			new_style.moon_style = {
+				marginLeft: -moon.icon_size / 2,
+				width: moon.icon_size,
+				height: moon.icon_size
+			}
 
-			label_styles.push(new_label_style);
+			moon_orbit_styles.push(new_style)
 
 			// Advance
 			angle += angle_step
@@ -190,11 +340,16 @@ export function Orbit(props: OrbitProps)
 		<div className={'orbit'} ref={orbit_elem} style={orbit_style}
 			onClick={zoomToPlanet}>
 			<div className="spining">
-				{label_styles.map((label_style, index) => {
+				{moon_orbit_styles.map((style, index) => {
+					let moon = props.moons[index]
 					return (
-						<label style={label_style} key={index}>
-							{props.labels[index]}
-						</label>
+						<div className="moon" key={index}
+							style={style.div_style}>
+							<label style={style.label_style}>
+								{props.moons[index].text}
+							</label>
+							<img src={moon.icon} style={style.moon_style} alt='' />
+						</div>
 					)
 				})}
 			</div>
@@ -208,21 +363,25 @@ export function Orbit(props: OrbitProps)
 	</>
 }
 
-
 class Planet {
 	title: string = ''
 	icon: string = ''
-	labels?: string[] = []
+	moons?: Moon[] = []
 }
 
 interface SolarSystemProps {
 	sun_icon: string
 	sun_size: number
-	name: string
-	diameter: number
+	sun_name: string
+
+	solar_system_diameter: number
+
 	planet_size: number
-	
 	planets: Planet[]
+
+	deco_rings_count: number
+	deco_rings_revolution_duration_start: number
+	deco_rings_revolution_duration_end: number
 }
 
 function SolarSystem(props: SolarSystemProps)
@@ -265,12 +424,7 @@ function SolarSystem(props: SolarSystemProps)
 			// Rotate spinner
 			if (spinner.getAnimations().length === 0) {
 				spinner.animate([
-					{
-						transform: 'rotate(0deg)'
-					},
-					{
-						transform: 'rotate(360deg)'
-					}
+					{ transform: 'rotate(360deg)' }
 				], {
 					duration: solar_system_spin_time,
 					iterations: Infinity
@@ -332,26 +486,48 @@ function SolarSystem(props: SolarSystemProps)
 
 	// Render
 	// console.log("render")
-
 	const size = spinner_size_ref.current
-	const main_orbit_center = (size - props.diameter) / 2;
+	const solar_system_center = size / 2
+
+	// Deco Rings
+	let deco_rings: React.ReactNode[] = []
+	for (let i = 0; i < props.deco_rings_count; i++) {
+		deco_rings.push(<DecoRing key={i}
+			scale={scale}
+			offset={offset}
+
+			wrapper_size={size}
+
+			diameter={800}
+			offset_to_center={70}
+			revolution_duration={10_000 * (i + 1)}
+			start_angle={360 / props.deco_rings_count * i}
+
+			line_count={3}
+			line_length={30}
+			line_thickness={7}
+		/>)
+	}
+
+	// Main Orbit
+	const main_orbit_center = (size - props.solar_system_diameter) / 2;
 	let main_orbit_style: CSSProperties = {
-		width: `${props.diameter}px`,
-		height: `${props.diameter}px`,
+		width: `${props.solar_system_diameter}px`,
+		height: `${props.solar_system_diameter}px`,
 		transform: `
-		translate(${main_orbit_center + offset.x * scale}px, ${main_orbit_center + offset.y * scale}px)
-		scale(${scale})
+			translate(${main_orbit_center + offset.x * scale}px, ${main_orbit_center + offset.y * scale}px)
+			scale(${scale})
 		`,
 	}
 	
-	const solar_system_center = size / 2
+	// Orbits
 	let orbits: React.ReactNode = <>
 		{props.planets.map((planet, index) => {
 			return (
 				<Orbit key={index}
 					title={planet.title}
 					icon={planet.icon}
-					labels={planet.labels ?? []}
+					moons={planet.moons ?? []}
 
 					scale={scale}
 					offset={offset}
@@ -360,7 +536,7 @@ function SolarSystem(props: SolarSystemProps)
 					solar_system_size={size}
 					solar_system_revolution_duration={solar_system_spin_time}
 
-					main_orbit_diameter={props.diameter}
+					main_orbit_diameter={props.solar_system_diameter}
 
 					selected_planet={selected_planet}
 					planet_index={index}
@@ -373,6 +549,7 @@ function SolarSystem(props: SolarSystemProps)
 		})}
 	</>
 
+	// Sun
 	const sun_center = (size - props.sun_size) / 2
 	const sun_style: CSSProperties = {
 		width: `${props.sun_size}px`,
@@ -386,9 +563,15 @@ function SolarSystem(props: SolarSystemProps)
 		borderRadius: `${props.sun_size / 2}px`,
 	}
 
+	// Solar System Name
+	// const label_style: CSSProperties = {
+		
+	// }
+
 	return (
 		<div className="SolarSystem" ref={solar_system_elem}>
 			<div className="spinner" ref={spinner_elem}>
+				{deco_rings}
 				<div className="main-orbit" style={main_orbit_style} />
 				{orbits}
 				<div className="sun" style={sun_style}>
