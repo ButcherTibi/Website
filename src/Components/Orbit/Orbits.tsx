@@ -8,6 +8,12 @@ class Vec2D {
 	y: number = 0
 }
 
+function clearAnimations(elem: Element)
+{
+	elem.getAnimations().forEach(anim => anim.cancel())
+}
+
+
 class DecoRingLine {
 	wrap_style: CSSProperties = {}
 	line_style: CSSProperties = {}
@@ -20,8 +26,9 @@ interface DecoRingProps {
 	wrapper_size: number
 
 	diameter: number
+	thickness: number
 	/** The offset used to shift the ring from it's center. */
-	offset_to_center: number
+	offset_from_center: number
 	revolution_duration: number
 	start_angle: number
 
@@ -29,28 +36,31 @@ interface DecoRingProps {
 	line_count: number
 	line_length: number
 	line_thickness: number
+	line_spacing: number
+
+	// Inner circle
+	inner_circle_diameter: number
+	inner_circle_dash_length: number
+	inner_circle_dash_gap: number
+	inner_circle_thickness: number
+	inner_circle_revolution_duration_ms: number
 }
 
 function DecoRing(props: DecoRingProps)
 {
 	const spinning_elem = useRef<HTMLDivElement>(null)
 	const ring_elem = useRef<HTMLDivElement>(null)
+	const svg_elem = useRef<SVGSVGElement>(null)
 
-	// E necesar ?
-	// useEffect(() => {
-	// 	line_elems.current = Array(props.line_count).fill(null)
-	// }, [props.line_count])
 
 	useEffect(() => {
 		let spinning = spinning_elem.current!
 		let ring = ring_elem.current!
+		let svg = svg_elem.current!
 
-		if (spinning.getAnimations().length >= 1) {
-			spinning.getAnimations()[0].cancel()
-		}
-		if (ring.getAnimations().length >= 1) {
-			ring.getAnimations()[0].cancel()
-		}
+		clearAnimations(spinning)
+		clearAnimations(ring)
+		clearAnimations(svg)
 
 		// ensure you return to start_agle in a smooth way
 		spinning.animate([
@@ -60,7 +70,18 @@ function DecoRing(props: DecoRingProps)
 			duration: props.revolution_duration,
 			iterations: Infinity
 		})
-	}, [props.revolution_duration, props.start_angle])
+
+		svg.animate([
+			{ transform: `rotate(-360deg)` }
+		], {
+			duration: props.inner_circle_revolution_duration_ms,
+			iterations: Infinity
+		})
+	}, [
+		props.revolution_duration,
+		props.start_angle,
+		props.inner_circle_revolution_duration_ms
+	])
 
 
 	// Render
@@ -81,8 +102,9 @@ function DecoRing(props: DecoRingProps)
 	let ring_style: CSSProperties = {
 		width: props.diameter,
 		height: props.diameter,
+		borderWidth: props.thickness,
 		transform: `
-			translate(${props.offset_to_center}px)
+			translate(${props.offset_from_center}px)
 		`
 	}
 
@@ -97,14 +119,14 @@ function DecoRing(props: DecoRingProps)
 			let new_line = new DecoRingLine()
 	
 			new_line.wrap_style = {
-				top: props.diameter / 2,
-				left: props.diameter / 2,	
+				top: props.diameter / 2 - props.thickness,
+				left: props.diameter / 2 - props.thickness,	
 				transform: `
 					rotate(${angle}deg)
 				`
 			}
 			new_line.line_style = {
-				marginLeft: props.diameter / 2,
+				marginLeft: props.diameter / 2 + props.line_spacing,
 				width: props.line_length,
 				height: props.line_thickness,
 			}
@@ -126,6 +148,22 @@ function DecoRing(props: DecoRingProps)
 							<div className="line" style={line.line_style} />
 						</div>
 					})}
+					<svg ref={svg_elem}
+						version="1.1"
+						xmlns="http://www.w3.org/2000/svg"
+						style={{overflow: 'visible'}}>
+						<circle
+							cx={props.diameter / 2}
+							cy={props.diameter / 2}
+							r={props.inner_circle_diameter / 2}
+							
+							strokeWidth={props.inner_circle_thickness}
+							strokeDasharray={`
+								${props.inner_circle_dash_length},
+								${props.inner_circle_dash_gap}
+							`}
+						/>
+					</svg>
 				</div>
 			</div>
 		</div>
@@ -363,10 +401,29 @@ function Orbit(props: OrbitProps)
 	</>
 }
 
-class Planet {
+export class PlanetSettings {
 	title: string = ''
 	icon: string = ''
 	moons?: Moon[] = []
+}
+
+export class DecoRingSettings {
+	diameter: number = 800
+	thickness: number = 2
+	offset_from_center: number = 70
+	revolution_duration_ms: number = 30_000
+	start_angle: number = 0
+
+	line_count: number = 4
+	line_length: number = 30
+	line_thickness: number = 7
+	line_spacing: number = 0
+
+	inner_circle_diameter: number = 700
+	inner_circle_dash_length: number = 50
+	inner_circle_dash_gap: number = 50
+	inner_circle_thickness: number = 2
+	inner_circle_revolution_duration_ms: number = 30_000
 }
 
 interface SolarSystemProps {
@@ -377,11 +434,9 @@ interface SolarSystemProps {
 	solar_system_diameter: number
 
 	planet_size: number
-	planets: Planet[]
+	planets: PlanetSettings[]
 
-	deco_rings_count: number
-	deco_rings_revolution_duration_start: number
-	deco_rings_revolution_duration_end: number
+	deco_rings: DecoRingSettings[]
 }
 
 function SolarSystem(props: SolarSystemProps)
@@ -490,24 +545,31 @@ function SolarSystem(props: SolarSystemProps)
 	const solar_system_center = size / 2
 
 	// Deco Rings
-	let deco_rings: React.ReactNode[] = []
-	for (let i = 0; i < props.deco_rings_count; i++) {
-		deco_rings.push(<DecoRing key={i}
+	let deco_rings: React.ReactNode[] = props.deco_rings.map((settings, index) => {
+		return <DecoRing key={index}
 			scale={scale}
 			offset={offset}
 
 			wrapper_size={size}
 
-			diameter={800}
-			offset_to_center={70}
-			revolution_duration={10_000 * (i + 1)}
-			start_angle={360 / props.deco_rings_count * i}
+			diameter={settings.diameter}
+			thickness={settings.thickness}
+			offset_from_center={settings.offset_from_center}
+			revolution_duration={settings.revolution_duration_ms}
+			start_angle={settings.start_angle}
 
-			line_count={3}
-			line_length={30}
-			line_thickness={7}
-		/>)
-	}
+			line_count={settings.line_count}
+			line_length={settings.line_length}
+			line_thickness={settings.line_thickness}
+			line_spacing={settings.line_spacing}
+
+			inner_circle_diameter={settings.inner_circle_diameter}
+			inner_circle_dash_length={settings.inner_circle_dash_length}
+			inner_circle_dash_gap={settings.inner_circle_dash_gap}
+			inner_circle_thickness={settings.inner_circle_thickness}
+			inner_circle_revolution_duration_ms={settings.inner_circle_revolution_duration_ms}
+		/>
+	})
 
 	// Main Orbit
 	const main_orbit_center = (size - props.solar_system_diameter) / 2;

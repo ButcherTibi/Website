@@ -7,8 +7,10 @@ import Rain from '../../Components/Rain/Rain'
 import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
-import SolarSystem from "../../Components/Orbit/Orbits"
+import SolarSystem, { DecoRingSettings } from "../../Components/Orbit/Orbits"
+import { blend } from "../../Common"
 
+// Portret
 import portret from '../../Resources/Me.jpeg'
 // import portret2 from '../../Resources/bigger_me.jpg'
 
@@ -34,6 +36,33 @@ import './FrontPage.scss'
 
 function FrontPage()
 {
+	// Render
+	let deco_rings_settings: DecoRingSettings[] = Array(3)
+
+	for (let i = 0; i < deco_rings_settings.length; i++) {
+
+		const alpha = i / (deco_rings_settings.length - 1)
+
+		deco_rings_settings[i] = {
+			diameter: 800,
+			thickness: 2,
+			offset_from_center: 70,
+			revolution_duration_ms: blend(20_000, 40_000, alpha),
+			start_angle: blend(0, 360, alpha),
+			
+			line_count: 4,
+			line_length: 30,
+			line_thickness: 7,
+			line_spacing: 7,
+
+			inner_circle_diameter: 750,
+			inner_circle_dash_length: 200,
+			inner_circle_dash_gap: 400,
+			inner_circle_thickness: 2,
+			inner_circle_revolution_duration_ms: 60_000
+		}
+	}
+
 	return <>
 		<div className="front-page">
 			<main className="content-wrap">
@@ -113,9 +142,7 @@ function FrontPage()
 						{ title: "Entity Framework", icon: ef_core_icon },
 					]}
 
-					deco_rings_count={3}
-					deco_rings_revolution_duration_start={30_000}
-					deco_rings_revolution_duration_end={60_000}
+					deco_rings={deco_rings_settings}
 				/>
 			</section>
 

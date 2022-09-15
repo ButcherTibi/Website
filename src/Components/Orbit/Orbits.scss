@@ -42,8 +42,19 @@
 					position: absolute;
 					box-sizing: border-box;
 	
-					border: 2px solid hsl(0, 0%, 98%);
+					border-style: solid;
+					border-color: hsla(0, 0%, 98%, 1);
+
 					border-radius: 9999px;
+
+					svg {
+						width: 100%;
+						height: 100%;
+
+						stroke: hsla(0, 0%, 100%, 1);
+						stroke-linecap: round;
+						fill: none;
+					}
 				}
 
 				.line-wrap {
@@ -55,6 +66,7 @@
 					// border: 2px solid violet;
 
 					.line {
+						border-radius: 9999px;
 						background-color: white;
 					}
 				}
