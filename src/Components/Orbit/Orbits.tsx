@@ -195,8 +195,9 @@ interface OrbitProps {
 	planet_index: number
 	planet_count: number
 	planet_size: number
-	
 	zoomToPlanet: (selected_planet: number, planet_pos: Vec2D) => void
+
+	z_index: number
 }
 
 
@@ -217,19 +218,17 @@ function Orbit(props: OrbitProps)
 	useEffect(() => {
 		// Start orbit counter rotation 
 		let planet = planet_elem.current!
-		if (planet.getAnimations().length === 0) {
-			planet.animate([
-				{
-					transform: 'rotate(0deg)'
-				},
-				{
-					transform: 'rotate(-360deg)'
-				}
-			], {
-				duration: props.solar_system_revolution_duration,
-				iterations: Infinity
-			})
-		}
+
+		clearAnimations(planet)
+
+		planet.animate([
+			{
+				transform: 'rotate(-360deg)'
+			}
+		], {
+			duration: props.solar_system_revolution_duration,
+			iterations: Infinity
+		})
 	}, [props.solar_system_revolution_duration])
 
 
@@ -318,6 +317,7 @@ function Orbit(props: OrbitProps)
 		const orbit_diameter = props.main_orbit_diameter / 2
 
 		orbit_style = {
+			zIndex: is_this_planet_selected ? props.z_index + 1 : undefined,
 			width: `${props.main_orbit_diameter / 2}px`,
 			height: `${props.main_orbit_diameter / 2}px`,
 			transform: `
@@ -401,6 +401,58 @@ function Orbit(props: OrbitProps)
 	</>
 }
 
+
+interface CoronaRayProps {
+	offset: Vec2D
+	scale: number
+
+	wrapper_size: number
+	solar_system_diameter: number
+
+	ray_count: number
+	ray_index: number
+}
+
+function CoronaRay(props: CoronaRayProps)
+{
+	const center = props.wrapper_size / 2
+	const angle_step = 360 / props.ray_count
+	let angle = angle_step * props.ray_index
+
+	const long_style: CSSProperties = {
+		width: props.solar_system_diameter / 2,
+		transform: `
+			translate(
+				${center + props.offset.x * props.scale}px,
+				${center + props.offset.y * props.scale}px
+			)
+			rotate(${angle - angle_step / 4}deg)
+			scale(${props.scale})
+		`
+	}
+	const short_style: CSSProperties = {
+		width: props.solar_system_diameter / 2,
+		transform: `
+			translate(
+				${center + props.offset.x * props.scale}px,
+				${center + props.offset.y * props.scale}px
+			)
+			rotate(${angle + angle_step / 4}deg)
+			scale(${props.scale})
+		`
+	}
+
+	return <>
+		<div className="corona-long-line" style={long_style}>
+			<div />
+		</div>
+		<div className="corona-short-line" style={short_style}>
+			<div />
+		</div>
+	</>
+}
+
+
 export class PlanetSettings {
 	title: string = ''
 	icon: string = ''
@@ -430,6 +482,7 @@ interface SolarSystemProps {
 	sun_icon: string
 	sun_size: number
 	sun_name: string
+	corona_diameter: number
 
 	solar_system_diameter: number
 
@@ -437,6 +490,8 @@ interface SolarSystemProps {
 	planets: PlanetSettings[]
 
 	deco_rings: DecoRingSettings[]
+
+	z_index: number
 }
 
 function SolarSystem(props: SolarSystemProps)
@@ -541,12 +596,13 @@ function SolarSystem(props: SolarSystemProps)
 
 	// Render
 	// console.log("render")
+	// let key_index = 0;
 	const size = spinner_size_ref.current
 	const solar_system_center = size / 2
 
 	// Deco Rings
 	let deco_rings: React.ReactNode[] = props.deco_rings.map((settings, index) => {
-		return <DecoRing key={index}
+		return <DecoRing key={'deco_ring_' + index}
 			scale={scale}
 			offset={offset}
 
@@ -586,7 +642,7 @@ function SolarSystem(props: SolarSystemProps)
 	let orbits: React.ReactNode = <>
 		{props.planets.map((planet, index) => {
 			return (
-				<Orbit key={index}
+				<Orbit key={'orbit_' + index}
 					title={planet.title}
 					icon={planet.icon}
 					moons={planet.moons ?? []}
@@ -604,12 +660,42 @@ function SolarSystem(props: SolarSystemProps)
 					planet_index={index}
 					planet_count={props.planets.length}
 					planet_size={props.planet_size}
-
 					zoomToPlanet={zoomToPlanet}
+
+					z_index={props.z_index}
 				/>
 			)
 		})}
 	</>
+
+	// Corona	Rays
+	let corona_lines: React.ReactNode = props.planets.map((_, index) => {
+		return <CoronaRay
+			key={index}
+
+			offset={offset}
+			scale={scale}
+
+			wrapper_size={size}
+			solar_system_diameter={props.solar_system_diameter}
+
+			ray_count={props.planets.length}
+			ray_index={index}
+		/>
+	})
+
+	// Corona Circle
+	let corona_circle_style: CSSProperties = {
+		width: props.corona_diameter,
+		height: props.corona_diameter,
+		transform: `
+			translate(
+				${(size - props.corona_diameter) / 2 + offset.x * scale}px,
+				${(size - props.corona_diameter) / 2 + offset.y * scale}px
+			)
+			scale(${scale})
+		`,
+	}
 
 	// Sun
 	const sun_center = (size - props.sun_size) / 2
@@ -625,17 +711,14 @@ function SolarSystem(props: SolarSystemProps)
 		borderRadius: `${props.sun_size / 2}px`,
 	}
 
-	// Solar System Name
-	// const label_style: CSSProperties = {
-		
-	// }
-
 	return (
 		<div className="SolarSystem" ref={solar_system_elem}>
 			<div className="spinner" ref={spinner_elem}>
 				{deco_rings}
 				<div className="main-orbit" style={main_orbit_style} />
+				{corona_lines}
 				{orbits}
+				<div className="corona-circle" style={corona_circle_style} />
 				<div className="sun" style={sun_style}>
 					<img ref={sun_img_elem}
 						src={props.sun_icon} alt=""

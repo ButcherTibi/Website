@@ -125,6 +125,7 @@ function FrontPage()
 					sun_icon={portret}
 					sun_size={70}
 					sun_name='Măcelaru Tiberiu'
+					corona_diameter={120}
 					solar_system_diameter={600}
 
 					planet_size={50}
@@ -143,6 +144,8 @@ function FrontPage()
 					]}
 
 					deco_rings={deco_rings_settings}
+
+					z_index={1}
 				/>
 			</section>
 
