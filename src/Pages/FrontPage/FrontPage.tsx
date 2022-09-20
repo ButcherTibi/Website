@@ -8,7 +8,8 @@ import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
 import SolarSystem, { DecoRingSettings } from "../../Components/Orbit/Orbits"
-import { blend } from "../../Common"
+import Stars from "../../Components/Stars/Stars"
+import { blend, Interval } from "../../Common"
 
 // Portret
 import portret from '../../Resources/Me.jpeg'
@@ -37,25 +38,25 @@ import './FrontPage.scss'
 function FrontPage()
 {
 	// Render
-	let deco_rings_settings: DecoRingSettings[] = Array(3)
+	let deco_rings_settings: DecoRingSettings[] = Array(4)
 
 	for (let i = 0; i < deco_rings_settings.length; i++) {
 
 		const alpha = i / (deco_rings_settings.length - 1)
 
 		deco_rings_settings[i] = {
-			diameter: 800,
+			diameter: 1100,
 			thickness: 2,
-			offset_from_center: 70,
+			offset_from_center: 150,
 			revolution_duration_ms: blend(20_000, 40_000, alpha),
 			start_angle: blend(0, 360, alpha),
 			
-			line_count: 4,
-			line_length: 30,
-			line_thickness: 7,
-			line_spacing: 7,
+			line_count: 8,
+			line_length: 35,
+			line_thickness: 5,
+			line_spacing: 15,
 
-			inner_circle_diameter: 750,
+			inner_circle_diameter: 1050,
 			inner_circle_dash_length: 200,
 			inner_circle_dash_gap: 400,
 			inner_circle_thickness: 2,
@@ -109,26 +110,25 @@ function FrontPage()
 
 			</main>
 
-			{/* <section className="about-me content-wrap">
-				<div className="content">
-					<div className="title">
-						<h3>Despre mine</h3>
-					</div>
-					<div>
-						<p>Lucrez ca programator full-stack la Advanced Technology Systems dar aș dori să mă specializez pe backend sau pe frontend.</p>
-					</div>
-				</div>
-			</section> */}
-
-			<section className="new-skills content-wrap">
+			<section className="new-skills">
+				<Stars
+					count={100}
+					scale={new Interval(0.1, 0.4)}
+					opacity={new Interval(0.2, 1)}
+					glow_duration_ms={new Interval(3000, 6000)}
+				/>
 				<SolarSystem
+					zoom_scale={2}
+					
 					sun_icon={portret}
-					sun_size={70}
+					sun_size={100}
 					sun_name='Măcelaru Tiberiu'
-					corona_diameter={120}
+					corona_diameter={150}
+					
 					solar_system_diameter={600}
+					solar_system_spin_time={60_000}
 
-					planet_size={50}
+					planet_size={75}
 					planets={[
 						{ title: "TypeScript", icon: typescript_icon, moons: [ 
 							{ text: 'Description 1', icon: typescript_icon, icon_size: 50}, 
@@ -146,6 +146,7 @@ function FrontPage()
 					deco_rings={deco_rings_settings}
 
 					z_index={1}
+					class_name={'solar-system'}
 				/>
 			</section>
 

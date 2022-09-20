@@ -1,4 +1,8 @@
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import React, {
+	CSSProperties, useEffect, useRef, useState
+} from "react";
+
+import { clearAnimations } from '../../Common'
 
 import './Orbits.scss'
 
@@ -6,11 +10,6 @@ import './Orbits.scss'
 class Vec2D {
 	x: number = 0
 	y: number = 0
-}
-
-function clearAnimations(elem: Element)
-{
-	elem.getAnimations().forEach(anim => anim.cancel())
 }
 
 
@@ -203,8 +202,6 @@ interface OrbitProps {
 
 function Orbit(props: OrbitProps)
 {
-	const label_padding = 10;
-
 	const planet_pos = useRef(new Vec2D())
 
 	const orbit_elem = useRef<HTMLDivElement>(null)
@@ -337,7 +334,7 @@ function Orbit(props: OrbitProps)
 	const moon_orbit_styles: MoonStyle[] = []
 	{
 		const label_count = props.moons.length
-		const label_length = props.main_orbit_diameter / 4
+		const orbit_radius = props.main_orbit_diameter / 4
 		let angle = 0
 		const angle_step = 360 / label_count
 
@@ -352,17 +349,16 @@ function Orbit(props: OrbitProps)
 			const opacity: number = is_this_planet_selected ? 1 : 0
 
 			new_style.div_style = {
-				width: label_length,
+				paddingLeft: props.planet_size / 2,
+				width: orbit_radius + moon.icon_size / 2,
 				transform: transform,
 				opacity: opacity
 			}
 			new_style.label_style = {
-				marginLeft: props.planet_size / 2 + label_padding,
-				marginRight: label_padding + moon.icon_size / 2,
-				width: label_length
+				marginTop: -moon.icon_size / 2
 			}
 			new_style.moon_style = {
-				marginLeft: -moon.icon_size / 2,
+				marginTop: -moon.icon_size / 2,
 				width: moon.icon_size,
 				height: moon.icon_size
 			}
@@ -383,9 +379,9 @@ function Orbit(props: OrbitProps)
 					return (
 						<div className="moon" key={index}
 							style={style.div_style}>
-							<label style={style.label_style}>
+							<div className="label" style={style.label_style}>
 								{props.moons[index].text}
-							</label>
+							</div>
 							<img src={moon.icon} style={style.moon_style} alt='' />
 						</div>
 					)
@@ -479,12 +475,16 @@ export class DecoRingSettings {
 }
 
 interface SolarSystemProps {
+	zoom_scale: number
+	
 	sun_icon: string
 	sun_size: number
 	sun_name: string
 	corona_diameter: number
 
 	solar_system_diameter: number
+	/** How much time one revolution should take in miliseconds. */
+	solar_system_spin_time: number
 
 	planet_size: number
 	planets: PlanetSettings[]
@@ -492,14 +492,11 @@ interface SolarSystemProps {
 	deco_rings: DecoRingSettings[]
 
 	z_index: number
+	class_name?: string
 }
 
 function SolarSystem(props: SolarSystemProps)
 {
-	/** How much time one revolution should take in miliseconds. */
-	const solar_system_spin_time = 60_000
-	const zoom_scale = 2
-
 	const [selected_planet, setSelectedPlanet] = useState(-2)
 	const [offset, setOffset] = useState(new Vec2D())
 	const [scale, setScale] = useState(1)
@@ -532,32 +529,32 @@ function SolarSystem(props: SolarSystemProps)
 			spinner_size_ref.current = size
 
 			// Rotate spinner
-			if (spinner.getAnimations().length === 0) {
-				spinner.animate([
-					{ transform: 'rotate(360deg)' }
-				], {
-					duration: solar_system_spin_time,
-					iterations: Infinity
-				})
-			}	
+			clearAnimations(spinner)
+			
+			spinner.animate([
+				{ transform: 'rotate(360deg)' }
+			], {
+				duration: props.solar_system_spin_time,
+				iterations: Infinity
+			})
 		}
 
 		// Sun
 		{
 			const sun = sun_img_elem.current!
-			if (sun.getAnimations().length === 0) {
-				sun.animate([
-					{
-						transform: 'rotate(0deg)'
-					},
-					{
-						transform: 'rotate(-360deg)'
-					}
-				], {
-					duration: solar_system_spin_time,
-					iterations: Infinity
-				})
-			}
+			clearAnimations(sun)
+
+			sun.animate([
+				{
+					transform: 'rotate(0deg)'
+				},
+				{
+					transform: 'rotate(-360deg)'
+				}
+			], {
+				duration: props.solar_system_spin_time,
+				iterations: Infinity
+			})
 		}
 
 		// Trigger re-rendering
@@ -567,7 +564,7 @@ function SolarSystem(props: SolarSystemProps)
 		// return () => {
 		// 	window.removeEventListener('resize', calculate)
 		// }
-	}, [])
+	}, [props.zoom_scale, props.solar_system_spin_time])
 
 
 	const zoomToPlanet = (new_selected_planet: number, planet_pos: Vec2D) => {
@@ -584,7 +581,7 @@ function SolarSystem(props: SolarSystemProps)
 			sun_animation.play()
 		}
 		else {
-			setScale(zoom_scale)
+			setScale(props.zoom_scale)
 			setOffset(planet_pos)
 			setSelectedPlanet(new_selected_planet)
 
@@ -652,7 +649,7 @@ function SolarSystem(props: SolarSystemProps)
 
 					solar_system_center={{x: solar_system_center, y: solar_system_center}}
 					solar_system_size={size}
-					solar_system_revolution_duration={solar_system_spin_time}
+					solar_system_revolution_duration={props.solar_system_spin_time}
 
 					main_orbit_diameter={props.solar_system_diameter}
 
@@ -712,7 +709,7 @@ function SolarSystem(props: SolarSystemProps)
 	}
 
 	return (
-		<div className="SolarSystem" ref={solar_system_elem}>
+		<div className={`SolarSystem ${props.class_name ?? ''}`} ref={solar_system_elem}>
 			<div className="spinner" ref={spinner_elem}>
 				{deco_rings}
 				<div className="main-orbit" style={main_orbit_style} />
