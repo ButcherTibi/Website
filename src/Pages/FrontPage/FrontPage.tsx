@@ -6,6 +6,7 @@ import React from "react"
 import Rain from '../../Components/Rain/Rain'
 import Ripple from "../../Components/Ripple/Ripple"
 import Timeline, { Item as TimelineItem} from "../../Components/Timeline/Timeline"
+import TimelinePlanets, { Item as TimelinePlanet} from "../../Components/TimelinePlanets/TimelinePlanets"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
 import SolarSystem, { DecoRingSettings } from "../../Components/Orbit/Orbits"
 import Stars from "../../Components/Stars/Stars"
@@ -66,7 +67,7 @@ function FrontPage()
 
 	return <>
 		<div className="front-page">
-			<main className="content-wrap">
+			{/* <main className="content-wrap">
 				<Rain
 					z_index={1}
 					drop_color="hsl(202, 69%, 50%, 0.8)"
@@ -86,7 +87,6 @@ function FrontPage()
 					drop_height_max={50}
 				/>
 
-				{/* TODO: activează la tranziție */}
 				<Ripple
 					z_index={2}
 					color='hsl(202, 69%, 50%)'
@@ -108,7 +108,7 @@ function FrontPage()
 					</div>
 				</div>
 
-			</main>
+			</main> */}
 
 			<section className="new-skills">
 				<Stars
@@ -156,6 +156,32 @@ function FrontPage()
 						<h3>Experiență</h3>
 					</div>
 					<div className="exp">
+						<TimelinePlanets
+							planet_diameter={300}
+							core_diameter={150}
+							spiral_diameter={400}
+							spiral_border_thickness={4}
+							background_spiral_diameter={800}
+						>
+							<TimelinePlanet
+								company="Advanced Technology Systems"
+								job="Full-stack developer"
+								start_date={new Date(2020, 7)}
+								logo={ats_logo}
+								background={ats_office}
+								class_name='ats-activity work-activity'
+							/>
+							<TimelinePlanet
+								company="Bloom Data Solutions"
+								job="Mapper / GPS Route Checker"
+								start_date={new Date(2019, 3)}
+								end_date={new Date(2020, 3)}
+								logo={tomtom_logo}
+								background={infrared_map}
+								class_name='work-activity'
+							/>
+						</TimelinePlanets>
+
 						<Timeline>
 							<TimelineItem
 								company="Advanced Technology Systems"
