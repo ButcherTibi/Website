@@ -132,7 +132,36 @@
 		}
 	}
 
+	.experience-title {
+		// background: radial-gradient(hsl(209, 43%, 34%), hsl(209, 43%, 18%));
+		background-color: hsl(209, 43%, 18%);
+		
+		.title {
+			padding: 25px 0px;
+
+			h3 {
+				font-family: Montserrat;
+				font-size: 24px;
+				font-weight: normal;
+				color: white;
+			}
+		}
+	}
+
 	.experience {
+		box-sizing: border-box;
+		padding: 0px 15px;
+		background: radial-gradient(hsl(209, 43%, 34%), hsl(209, 43%, 18%));
+		
+		.title {
+			padding: 30px 0px;
+
+			h3 {
+				font-family: Montserrat;
+				font-weight: normal;
+				color: white;
+			}
+		}
 
 		.work-activity {
 			padding-top: 10px;

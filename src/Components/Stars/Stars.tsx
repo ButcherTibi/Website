@@ -104,8 +104,8 @@ function Stars(props: StarsProps) {
 			const size = 50 * scale
 
 			new_computed_stars.push({
-				x: jitter(rect.left, rect.right - size * 2),  // size * 2 e aproximativ
-				y: jitter(rect.top, rect.bottom),
+				x: jitter(0, rect.width - size * 2),  // size * 2 e aproximativ
+				y: jitter(0, rect.height),
 				angle: 360 * Math.random(),
 				scale: scale,
 				opacity: new Interval(props.opacity.min, props.opacity.max),

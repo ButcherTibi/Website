@@ -150,18 +150,24 @@ function FrontPage()
 				/>
 			</section>
 
+			<section className="experience-title content-wrap">
+				<div className="title content">
+					<h3>Experiență</h3>
+				</div>
+			</section>
+
 			<section className="experience content-wrap">
-				<div className="content">
-					<div className="title">
-						<h3>Experiență</h3>
-					</div>
+				<div className="content">			
 					<div className="exp">
 						<TimelinePlanets
 							planet_diameter={300}
 							core_diameter={150}
+
 							spiral_diameter={400}
 							spiral_border_thickness={4}
-							background_spiral_diameter={800}
+
+							background_spiral_diameter={600}
+							background_border_thickness={8}
 						>
 							<TimelinePlanet
 								company="Advanced Technology Systems"
@@ -182,7 +188,7 @@ function FrontPage()
 							/>
 						</TimelinePlanets>
 
-						<Timeline>
+						{/* <Timeline>
 							<TimelineItem
 								company="Advanced Technology Systems"
 								job="Full-stack developer"
@@ -250,7 +256,7 @@ function FrontPage()
 								background={infrared_map}
 								more_classname='work-activity'
 							/>
-						</Timeline>
+						</Timeline> */}
 					</div>
 				</div>
 			</section>
