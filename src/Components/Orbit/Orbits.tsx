@@ -478,8 +478,9 @@ interface SolarSystemProps {
 	zoom_scale: number
 	
 	sun_icon: string
-	sun_size: number
+	sun_diameter: number
 	sun_name: string
+	sun_name_gap: number
 	corona_diameter: number
 
 	solar_system_diameter: number
@@ -505,7 +506,7 @@ function SolarSystem(props: SolarSystemProps)
 
 	const solar_system_elem = useRef<HTMLDivElement>(null)
 	const spinner_elem = useRef<HTMLDivElement>(null)
-	const sun_img_elem = useRef<HTMLImageElement>(null)
+	const sun_div_elem = useRef<HTMLImageElement>(null)
 
 
 	useEffect(() => {
@@ -541,7 +542,7 @@ function SolarSystem(props: SolarSystemProps)
 
 		// Sun
 		{
-			const sun = sun_img_elem.current!
+			const sun = sun_div_elem.current!
 			clearAnimations(sun)
 
 			sun.animate([
@@ -569,7 +570,7 @@ function SolarSystem(props: SolarSystemProps)
 
 	const zoomToPlanet = (new_selected_planet: number, planet_pos: Vec2D) => {
 		let spinner_animation = spinner_elem.current!.getAnimations()[0]
-		let sun_animation = sun_img_elem.current!.getAnimations()[0]
+		let sun_animation = sun_div_elem.current!.getAnimations()[0]
 
 		if (new_selected_planet === -1 || selected_planet === new_selected_planet) {
 
@@ -695,17 +696,23 @@ function SolarSystem(props: SolarSystemProps)
 	}
 
 	// Sun
-	const sun_center = (size - props.sun_size) / 2
+	const sun_center = (size - props.sun_diameter) / 2
 	const sun_style: CSSProperties = {
-		width: `${props.sun_size}px`,
-		height: `${props.sun_size}px`,
+		width: `${props.sun_diameter}px`,
+		height: `${props.sun_diameter}px`,
 		transform: `
 			translate(${sun_center + offset.x * scale}px, ${sun_center + offset.y * scale}px)
 			scale(${scale})
 		`,
 	}
 	const sun_img_style: CSSProperties = {
-		borderRadius: `${props.sun_size / 2}px`,
+		borderRadius: `${props.sun_diameter / 2}px`,
+	}
+	const sun_name_length = props.solar_system_diameter / 2
+	const sun_name_style: CSSProperties = {
+		top: props.sun_diameter + props.sun_name_gap,
+		left: (props.sun_diameter / 2 - sun_name_length / 2),
+		width: sun_name_length
 	}
 
 	return (
@@ -717,10 +724,13 @@ function SolarSystem(props: SolarSystemProps)
 				{orbits}
 				<div className="corona-circle" style={corona_circle_style} />
 				<div className="sun" style={sun_style}>
-					<img ref={sun_img_elem}
-						src={props.sun_icon} alt=""
-						style={sun_img_style}
-					/>
+					<div ref={sun_div_elem}>
+						<img
+							src={props.sun_icon} alt=""
+							style={sun_img_style}
+						/>
+						<h3 style={sun_name_style}>{props.sun_name}</h3>
+					</div>
 				</div>
 			</div>
 		</div>

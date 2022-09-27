@@ -133,10 +133,12 @@
 	}
 
 	.experience-title {
-		// background: radial-gradient(hsl(209, 43%, 34%), hsl(209, 43%, 18%));
+		box-sizing: border-box;
+		padding: 0px 15px;
 		background-color: hsl(209, 43%, 18%);
 		
 		.title {
+			box-sizing: border-box;
 			padding: 25px 0px;
 
 			h3 {
@@ -152,20 +154,8 @@
 		box-sizing: border-box;
 		padding: 0px 15px;
 		background: radial-gradient(hsl(209, 43%, 34%), hsl(209, 43%, 18%));
-		
-		.title {
-			padding: 30px 0px;
-
-			h3 {
-				font-family: Montserrat;
-				font-weight: normal;
-				color: white;
-			}
-		}
 
 		.work-activity {
-			padding-top: 10px;
-
 			display: flex;
 			flex-direction: column;
 			gap: 20px;
@@ -175,9 +165,14 @@
 			--subtitle_margin: 5px;
 			--content_indent: 15px;
 
-			.subtitle {
+			h3 {
 				margin-bottom: var(--subtitle_margin);
 				font-size: 19px;
+			}
+
+			h4 {
+				margin-bottom: var(--subtitle_margin);
+				font-size: 16px;
 			}
 
 			p {
@@ -198,6 +193,19 @@
 
 				ul {
 					padding-left: var(--content_indent);
+				}
+
+				li {
+					margin-left: 30px;
+					list-style-type: circle;
+				}
+
+				.stages {
+					display: flex;
+					flex-direction: column;
+					gap: 7px;
+
+					margin-left: var(--content_indent);
 				}
 			}
 
@@ -224,13 +232,6 @@
 						}
 					}
 				}
-			}
-		}
-
-		.ats-activity {
-			li {
-				margin-left: 30px;
-				list-style-type: circle;
 			}
 		}
 	}

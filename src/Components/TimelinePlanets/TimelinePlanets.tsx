@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef } from "react"
+import React, { Children, CSSProperties, useEffect, useRef, useState } from "react"
 
 import { clearAnimations } from '../../Common'
 
@@ -29,11 +29,17 @@ interface ItemProps {
 	planet_diameter?: number
 	core_diameter?: number
 	spiral_diameter?: number
+	selectPlanet?: (planet_index: number) => void
 	children?: any
 }
 
 export function Item(props: ItemProps)
 {
+	const selectPlanet = () => {
+		props.selectPlanet!(props.item_index!)
+	}
+
+	// Render
 	let start = extractMonthYear(props.start_date)
 	let end = props.end_date !== undefined ? extractMonthYear(props.end_date) : 'Prezent';
 
@@ -60,7 +66,8 @@ export function Item(props: ItemProps)
 				<time>{end}</time>
 			</div>
 			<div className="center">
-				<div className="planet" style={planet_style}>
+				<div className="planet" style={planet_style}
+					onClick={selectPlanet}>
 					<div className="core" style={core_style}>
 						<img src={props.logo} alt='' />
 						<h3>{props.company}</h3>
@@ -89,6 +96,8 @@ interface Props {
 
 function TimelinePlanets(props: Props)
 {
+	const [selected_planet, setSelectedPlanet] = useState(-1)
+
 	const front_spiral_svg = useRef<SVGSVGElement>(null)
 	const back_spiral_svg = useRef<SVGSVGElement>(null)
 
@@ -116,7 +125,17 @@ function TimelinePlanets(props: Props)
 	}, [props.spiral_diameter, props.background_spiral_diameter])
 	
 
+	const selectPlanet = (index: number) => {
+		setSelectedPlanet(selected_planet !== index ? index : -1)
+	}
+
+	const deselectPlanet = () => {
+		setSelectedPlanet(-1)
+	}
+
+
 	// Render
+	//console.log(selected_planet)
 	const count = React.Children.count(props.children)
 
 	let style: CSSProperties = {
@@ -204,6 +223,66 @@ function TimelinePlanets(props: Props)
 		}
 	}
 
+	// Activity
+	let activity: React.ReactNode | undefined
+	// {
+	// 	if (selected_planet !== -1) {
+	// 		const child: React.ReactElement = props.children[selected_planet]
+	// 		const class_name: string = child.props['class_name']
+	// 		const content = child.props['children']
+
+	// 		if (content !== undefined) {
+	// 			activity = (
+	// 				<div className={'activity'}>				
+	// 					<div className={class_name === undefined ? 'content' : `content ${class_name}`}>
+	// 						{content}
+	// 					</div>
+	// 					<div className="close-btn">
+	// 						<button onClick={deselectPlanet}>X</button>
+	// 					</div>
+	// 				</div>
+	// 			)
+	// 		}
+	// 	}
+	// 	else {
+			
+	// 	}
+	// }
+	activity = props.children.map((child, index) => {
+		const class_name: string = child.props['class_name']
+		const content = child.props['children']
+
+		let style: CSSProperties
+		if (index === selected_planet) {
+			style = {
+				height: '100%',
+				opacity: 1
+			}
+		}
+		else {
+			style = {
+				height: '0px',
+				opacity: 0
+			}
+		}
+
+		if (content !== undefined) {
+			return (
+				<div className={'activity'} style={style}>				
+					<div className={class_name === undefined ? 'content' : `content ${class_name}`}>
+						{content}
+					</div>
+					<div className="close-btn">
+						<button onClick={deselectPlanet}>X</button>
+					</div>
+				</div>
+			)
+		}
+		else {
+			return null
+		}
+	})
+
 	return (
 		<div className="TimelinePlanets" style={style}>
 			<div className="backgrd-curve">
@@ -244,11 +323,14 @@ function TimelinePlanets(props: Props)
 							item_index: index,
 							planet_diameter: props.planet_diameter,
 							core_diameter: props.core_diameter,
-							spiral_diameter: props.spiral_diameter
+							spiral_diameter: props.spiral_diameter,
+							selectPlanet: selectPlanet
 						})}
 					</>;
 				})}
 			</div>
+
+			{activity}
 		</div>
 	)
 }

@@ -121,8 +121,9 @@ function FrontPage()
 					zoom_scale={2}
 					
 					sun_icon={portret}
-					sun_size={100}
+					sun_diameter={100}
 					sun_name='Măcelaru Tiberiu'
+					sun_name_gap={40}
 					corona_diameter={150}
 					
 					solar_system_diameter={600}
@@ -173,29 +174,10 @@ function FrontPage()
 								company="Advanced Technology Systems"
 								job="Full-stack developer"
 								start_date={new Date(2020, 7)}
+								end_date={new Date(2022, 8)}
 								logo={ats_logo}
 								background={ats_office}
-								class_name='ats-activity work-activity'
-							/>
-							<TimelinePlanet
-								company="Bloom Data Solutions"
-								job="Mapper / GPS Route Checker"
-								start_date={new Date(2019, 3)}
-								end_date={new Date(2020, 3)}
-								logo={tomtom_logo}
-								background={infrared_map}
 								class_name='work-activity'
-							/>
-						</TimelinePlanets>
-
-						{/* <Timeline>
-							<TimelineItem
-								company="Advanced Technology Systems"
-								job="Full-stack developer"
-								start_date={new Date(2020, 7)}
-								logo={ats_logo}
-								background={ats_office}
-								more_classname='ats-activity work-activity'
 							>
 								<div className="company-desc">
 									<h3 className="subtitle">Descrierea firmei</h3>
@@ -209,8 +191,8 @@ function FrontPage()
 										<li><p>Cream partea de Frontend la aplicați în React cu Typescript;</p></li>
 										<li><p>Foloseam o librărie JavaScript <NewTabLink url="https://js.devexpress.com" >DevExtreme</NewTabLink> pentru datagriduri, inputuri de date, popups, tabele și exportare de date în Excel;</p></li>
 										<li><p>Foloseam <NewTabLink url="https://axios-http.com"><code>Axios</code></NewTabLink> sau <NewTabLink url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch API</code></NewTabLink> pentru requesturi către server;</p></li>
-										<li><p>Cream partea de Backend ca Web API scris în C#;</p></li>
-										<li><p>Interfațam cu baza de date prin Entity Framework;</p></li>
+										<li><p>Cream partea de Backend ca <NewTabLink url="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/routing?WT.mc_id=dotnet-35129-website&view=aspnetcore-6.0">Web API</NewTabLink> scris în C#;</p></li>
+										<li><p>Interfațam cu baza de date prin <NewTabLink url="https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli">Entity Framework</NewTabLink>;</p></li>
 										<li><p>Cream baze de date pentru proiecte;</p></li>
 										<li><p>Scriam queries și proceduri stocate în T-SQL;</p></li>
 										<li><p>Lucram la mentenanța unui proiect ASP.NET WebForms care folosește librăria <NewTabLink url="https://www.devexpress.com">DevExpress</NewTabLink>;</p></li>
@@ -219,7 +201,7 @@ function FrontPage()
 								</div>
 
 								<div className="apps">
-									<h3 className="subtitle">Aplicați</h3>
+									<h3 className="subtitle">Aplicații</h3>
 									<div className="app-list">
 										<div className="app">
 											<h3>Document Management</h3>
@@ -245,18 +227,41 @@ function FrontPage()
 										</div>
 									</div>
 								</div>
-							</TimelineItem>
+							</TimelinePlanet>
 
-							<TimelineItem
+							<TimelinePlanet
 								company="Bloom Data Solutions"
 								job="Mapper / GPS Route Checker"
 								start_date={new Date(2019, 3)}
 								end_date={new Date(2020, 3)}
 								logo={tomtom_logo}
 								background={infrared_map}
-								more_classname='work-activity'
-							/>
-						</Timeline> */}
+								class_name='work-activity'
+							>
+								<div className="company-desc">
+									<h3>Descrierea firmei</h3>
+									<p>Firma era cunoscută ca realizând hărți și machete pentru zone geografice și clădiri.</p>
+								</div>
+
+								<div className="work-desc">
+									<h3>Activitate</h3>
+									
+									<div className="stages">
+										<div className="stage">
+											<h4>Armata franceză</h4>
+											<p>Pentru primele 6 luni am lucrat pentru armata franceză.</p>
+											<p>Aproximativ la începutul fiecărei luni primeam o imagine capturată de un satelit în spectru de culoare uman + infraroșu și trebuia să marchez/conturez digital fiecare structură/clădire/stradă într-o zonă definită.</p>
+										</div>
+										
+										<div className="stage">
+											<h4>TomTom</h4>
+											<p>Pentru ultimele 6 luni am lucrat pentru TomTom.</p>
+											<p>În fiecare zi primeam un set de rute GPS și trebuia să verific dacă traseul putea fi parcurs de către o mașină. Foloseam ceva similar cu Google Street View și Google Earth pentru a realiza verificările.</p>
+										</div>
+									</div>
+								</div>
+							</TimelinePlanet>
+						</TimelinePlanets>
 					</div>
 				</div>
 			</section>
