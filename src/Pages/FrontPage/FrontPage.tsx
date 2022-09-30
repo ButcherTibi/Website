@@ -123,25 +123,26 @@ function FrontPage()
 					sun_icon={portret}
 					sun_diameter={100}
 					sun_name='Măcelaru Tiberiu'
-					sun_name_gap={40}
+					sun_name_spacing={40}
 					corona_diameter={150}
 					
 					solar_system_diameter={600}
 					solar_system_spin_time={60_000}
 
-					planet_size={75}
+					planet_diameter={75}
+					planet_name_spacing={10}
 					planets={[
-						{ title: "TypeScript", icon: typescript_icon, moons: [ 
+						{ name: "TypeScript", icon: typescript_icon, moons: [ 
 							{ text: 'Description 1', icon: typescript_icon, icon_size: 50}, 
 							{ text: 'Description 2'},
 							{ text: 'Description 3'}]
 						},
-						{ title: "JavaScript", icon: javascript_icon },
-						{ title: "React", icon: react_icon },
-						{ title: "HTML", icon: html_icon },
-						{ title: "CSS", icon: css_icon },
-						{ title: "C# Web API", icon: csharp_icon },
-						{ title: "Entity Framework", icon: ef_core_icon },
+						{ name: "JavaScript", icon: javascript_icon },
+						{ name: "React", icon: react_icon },
+						{ name: "HTML", icon: html_icon },
+						{ name: "CSS", icon: css_icon },
+						{ name: "C# Web API", icon: csharp_icon },
+						{ name: "Entity Framework", icon: ef_core_icon },
 					]}
 
 					deco_rings={deco_rings_settings}
