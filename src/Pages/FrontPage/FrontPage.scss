@@ -1,4 +1,5 @@
-@use '../../index.scss';
+@use '../../Common.scss';
+
 
 #root {
 	height: 100%;
@@ -15,108 +16,7 @@
 
 	// background-color: hsl(212, 100%, 27%);
 
-	.content-wrap {
-		width: 100%;
-
-		display: flex;
-		justify-content: center;
-
-		> .content {
-			flex-basis: 1200px;
-		}
-	}
-
-	main {
-		position: relative;
-		height: 600px;
-
-		display: none !important;
-	}
-
-	main > .content {
-		z-index: 3;
-
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		gap: 70px;
-
-		.left {
-			height: 100%;
-
-			display: flex;
-			align-items: center;
-
-			--text_color: hsl(212, 100%, 27%);
-
-			.intro {
-				display: flex;
-				flex-direction: column;
-				gap: 15px;
-
-				.fullname {
-					font-family: "Montserrat";
-					font-size: 41px;
-					color: var(--text_color);
-				}
-
-				.profesion {
-					font-family: "Montserrat";
-					font-size: 22px;
-					font-weight: 500;
-					color: var(--text_color);
-				}
-
-				.about-me {
-					border: 2px solid var(--text_color);
-					border-radius: 5px;
-					padding: 10px 40px;
-					width: fit-content;
-
-					background-color: white;
-
-					font-family: "Montserrat";
-					font-size: 16px;
-					font-weight: 500;
-					color: var(--text_color);
-					line-height: 1;
-
-					cursor: pointer;
-
-					transition-property: background color border-color transform;
-					transition-duration: .2s;
-				}
-
-				.about-me:hover {
-					color: white;
-					background-color: var(--text_color);
-					transform: scale(1.1);
-				}
-			}
-		}
-
-		.right {
-			height: 100%;
-
-			display: flex;
-			align-items: center;
-
-			img {
-				--size: 300px;
-				width: var(--size);
-				height: var(--size);
-				border-radius: 50%;
-
-				// box-shadow: 0px 0px 50px 22px hsl(0, 100%, 100%, 0.99);
-				// box-shadow: 0px 0px 10px 0px hsl(0, 100%, 100%, 0.99);
-				// box-shadow: 0px 0px 10px 0px hsl(0, 100%, 0%, 0.99);
-			}
-		}
-	}
-
-	.skills > .content {
-		
-	}
+	
 
 	.new-skills {
 		position: relative;
@@ -134,14 +34,12 @@
 
 	.experience-title {
 		box-sizing: border-box;
-		padding: 0px 15px;
 		background-color: hsl(209, 43%, 18%);
 		
-		.title {
-			box-sizing: border-box;
-			padding: 25px 0px;
-
+		.content {
 			h3 {
+				padding: 25px 0px;
+
 				font-family: Montserrat;
 				font-size: 24px;
 				font-weight: normal;
@@ -152,7 +50,6 @@
 
 	.experience {
 		box-sizing: border-box;
-		padding: 0px 15px;
 		background: radial-gradient(hsl(209, 43%, 34%), hsl(209, 43%, 18%));
 
 		.work-activity {
@@ -236,7 +133,33 @@
 		}
 	}
 
-	footer {
-		height: 100px;
+	.demos-title {
+		box-sizing: border-box;
+		background-color: hsl(209, 43%, 18%);
+		
+		.content {
+			h3 {
+				padding: 25px 0px;
+
+				font-family: Montserrat;
+				font-size: 24px;
+				font-weight: normal;
+				color: white;
+			}
+		}
+	}
+
+	.demo-list {
+		// background-color: hsl(209, 43%, 25%);
+		background: linear-gradient(
+			to bottom,
+			hsl(209, 43%, 18%),
+			hsl(209, 43%, 29%)
+		);
+
+		.content > div {
+			// padding: 15px 0px;
+			padding-bottom: 30px;
+		}
 	}
 }

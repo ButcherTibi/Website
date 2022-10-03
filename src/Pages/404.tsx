@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 
-export default () => {
+function NotFoundPage()
+{
 	return <>
 		<h1>404 Rută negăsită</h1>
 		<h3>Rute existente</h3>
@@ -15,3 +16,5 @@ export default () => {
 		</ul>
 	</>;
 };
+
+export default NotFoundPage

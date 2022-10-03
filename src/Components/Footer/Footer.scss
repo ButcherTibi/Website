@@ -1,0 +1,31 @@
+footer {
+	height: 100px;
+
+	background-color: hsl(209, 43%, 29%);
+
+	.content {
+		display: flex;
+		justify-content: space-between;
+
+		.repo-link {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 15px;
+
+			svg {
+				--icon_size: 40px;
+				width: var(--icon_size);
+				height: var(--icon_size);
+				fill: hsl(0, 0%, 100%);
+			}
+
+			a {
+				font-family: Montserrat;
+				font-size: 20px;
+				font-weight: normal;
+				color: hsl(0, 0%, 100%);
+			}
+		}
+	}
+}

@@ -19,8 +19,8 @@
 		// border: 2px solid red;
 
 		> * {
-			transition-property: transform;
-			transition-duration: var(--zoom_in_duration);
+			transition-property: transform, filter;
+			transition-duration: var(--zoom_in_duration), .3s;
 			transition-timing-function: ease-in-out;
 		}
 
@@ -152,6 +152,8 @@
 			position: absolute;
 			box-sizing: border-box;
 
+			cursor: pointer;
+
 			> div {
 				position: relative;
 				width: 100%;
@@ -187,6 +189,10 @@
 					}
 				}
 			}
+		}
+
+		.planet:hover {
+			filter: brightness(1.4);
 		}
 
 		.sun {

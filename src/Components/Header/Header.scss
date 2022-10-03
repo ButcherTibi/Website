@@ -1,0 +1,71 @@
+@use '../../Theme.scss';
+
+
+header {
+	@include Theme.theme;
+
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+
+	height: 50px;
+
+	// background-color: hsla(var(--theme_backgrd_hue), 43%, 18%, 0.75);
+	background: linear-gradient(
+		hsla(var(--theme_backgrd_hue), 43%, 18%, 0.75),
+		transparent
+	);
+
+	.content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		h3 {
+			font-family: var(--theme_font);
+			font-size: 18px;
+			font-weight: normal;
+			color: hsl(0, 0%, 100%);
+		}
+
+		.name {
+			height: 100%;
+
+			display: flex;
+			align-items: center;
+
+			cursor: pointer;
+		}
+
+		.name:hover h3 {
+			font-weight: bold;
+		}
+
+		.work-in-progress {
+			box-sizing: border-box;
+			border-radius: 7px;
+			padding: 0px 50px;
+			height: 100%;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			--stripe_thickness: 30px;
+			--half_thickness: calc(var(--stripe_thickness) / 2);
+			background: repeating-linear-gradient(
+				-45deg,
+				hsla(60, 100%, 50%, 1) 0 var(--half_thickness),
+				hsla(0, 0%, 0%, 0) var(--half_thickness) var(--stripe_thickness)
+			);
+
+			h3 {
+				box-sizing: border-box;
+				border-radius: 5px;
+				padding: 5px 10px;
+				background-color: hsla(0, 0%, 0%, .75);
+			}
+		}
+	}
+}

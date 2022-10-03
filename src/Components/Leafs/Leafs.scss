@@ -1,7 +1,4 @@
-@use '../../index.scss';
-
-
-.leafs-wrap {
+.Leafs {
 	width: 100%;
 
 	flex-shrink: 0;
@@ -10,51 +7,48 @@
 	justify-content: center;
 
 	overflow: hidden;
-}
+	cursor: pointer;
 
-.leafs {
-	position: relative;
-}
-
-.leafs .leaf {
-	position: absolute;
-
-	transition-duration: 3s;
-
-	overflow: hidden;
-}
-
-.leafs .leaf > div {
-	position: absolute;
-	top: -50%;
-	left: -50%;
+	.leafs {
+		position: relative;
+	}
 	
-	width: 200%;
-	height: 200%;
-
-	transform: rotate(45deg);
-	background-repeat: repeat;
-	background-position: center;
-	background-size: contain;
+	.leafs .leaf {
+		position: absolute;
+	
+		transition-duration: 3s;
+	
+		overflow: hidden;
+	}
+	
+	.leafs .leaf > div {
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		
+		width: 200%;
+		height: 200%;
+	
+		transform: rotate(45deg);
+		background-repeat: repeat;
+		background-position: center;
+		background-size: contain;
+	}
 }
 
 
 .leafs-demo {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 
 	.editor {
-		margin-top: 10px;
-		width: 700px;
+		margin: 15px 0px;
 
 		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-template-rows: auto;
 		grid-template-areas:
 			"description description"
 			"general general"
-			"ring leaf";
+			"ring leaf"
+			"btns btns"
+		;
 		gap: 15px;
 
 		.params {
@@ -86,6 +80,35 @@
 
 		.leaf-params {
 			grid-area: leaf;
+		}
+
+		.btns-cell {
+			grid-area: btns;
+
+			display: flex;
+			justify-content: center;
+
+			--color_a: hsl(99deg, 51%, 47%);
+			--color_b: hsl(99deg, 51%, 100%);
+			$color_b: hsl(99deg, 51%, 47%);
+
+			button {
+				border-radius: 7px;
+				border: 2px solid var(--color_a);
+				padding: 7px 30px;
+
+				font-size: 16px;
+				color: var(--color_b);
+
+				background-color: var(--color_a);
+				transition-property: color, background;
+				transition-duration: .3s;
+			}
+
+			button:hover {
+				color: var(--color_a);
+				background-color: var(--color_b);
+			}
 		}
 	}
 }

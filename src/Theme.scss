@@ -1,0 +1,35 @@
+@mixin theme {
+	/* Background */
+	--theme_backgrd_hue: 209deg;
+	--theme_backgrd_sat: 43%;
+	--theme_backgrd_lum: 81%;
+	--theme_backgrd_color: hsl(
+		var(--theme_backgrd_hue)
+		var(--theme_backgrd_sat)
+		var(--theme_backgrd_lum)
+	);
+
+	--theme_backgrd_hover_color: hsl(
+		var(--theme_backgrd_hue)
+		var(--theme_backgrd_sat)
+		78%
+	);
+
+	--theme_backgrd_hard_hover_color: hsl(
+		var(--theme_backgrd_hue)
+		var(--theme_backgrd_sat)
+		71%
+	);
+
+	--theme_backgrd_edit_lum: 94%;
+	--theme_backgrd_edit_color: hsl(
+		var(--theme_backgrd_hue)
+		var(--theme_backgrd_sat)
+		var(--theme_backgrd_edit_lum)
+	);
+
+	/* Text */
+	--theme_font: Montserrat;
+	--theme_text_color: hsla(0deg, 0%, 100%, 0.75);
+	--theme_text_hover_color: hsla(0deg, 0%, 100%, 1);
+}

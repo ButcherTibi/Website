@@ -1,4 +1,9 @@
-import React, {  } from "react";
+import React from "react";
+
+import Header from '../Header/Header';
+import Footer from "../Footer/Footer";
+
+import './PageWrapper.scss';
 
 
 interface PageWrapperProps {
@@ -8,16 +13,12 @@ interface PageWrapperProps {
 function PageWrapper(props: PageWrapperProps)
 {
 	return <>
-		<div className="page-wrapper">
-			<header>
-
-			</header>
+		<div className="page">
+			<Header />
 
 			{props.children}
 
-			<footer>
-				
-			</footer>
+			<Footer />
 		</div>
 	</>
 }

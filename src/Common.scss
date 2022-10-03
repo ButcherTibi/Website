@@ -1,0 +1,17 @@
+
+.page {
+
+	> .content-wrap {
+		width: 100%;
+	
+		display: flex;
+		justify-content: center;
+	
+		> .content {
+			box-sizing: border-box;
+			padding-left: 15px;
+			padding-right: 15px;
+			flex-basis: 1200px;
+		}
+	}
+}

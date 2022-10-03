@@ -224,31 +224,7 @@ function TimelinePlanets(props: Props)
 	}
 
 	// Activity
-	let activity: React.ReactNode | undefined
-	// {
-	// 	if (selected_planet !== -1) {
-	// 		const child: React.ReactElement = props.children[selected_planet]
-	// 		const class_name: string = child.props['class_name']
-	// 		const content = child.props['children']
-
-	// 		if (content !== undefined) {
-	// 			activity = (
-	// 				<div className={'activity'}>				
-	// 					<div className={class_name === undefined ? 'content' : `content ${class_name}`}>
-	// 						{content}
-	// 					</div>
-	// 					<div className="close-btn">
-	// 						<button onClick={deselectPlanet}>X</button>
-	// 					</div>
-	// 				</div>
-	// 			)
-	// 		}
-	// 	}
-	// 	else {
-			
-	// 	}
-	// }
-	activity = props.children.map((child, index) => {
+	let activity: React.ReactNode | undefined = props.children.map((child, index) => {
 		const class_name: string = child.props['class_name']
 		const content = child.props['children']
 
@@ -268,7 +244,7 @@ function TimelinePlanets(props: Props)
 
 		if (content !== undefined) {
 			return (
-				<div className={'activity'} style={style}>				
+				<div className={'activity'} key={index} style={style}>				
 					<div className={class_name === undefined ? 'content' : `content ${class_name}`}>
 						{content}
 					</div>
