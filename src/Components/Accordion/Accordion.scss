@@ -1,4 +1,5 @@
-@use '../../index.scss';
+@use '../../Theme.scss';
+
 
 .accordion {
 	display: flex;
@@ -7,6 +8,8 @@
 
 	--border_radius: 5px;
 	--padding: 10px;
+
+	@include Theme.theme;
 }
 
 .accordion > li {

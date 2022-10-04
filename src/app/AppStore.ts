@@ -1,4 +1,4 @@
-import { configureStore, createSlice, current } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 
 const appSlice = createSlice({

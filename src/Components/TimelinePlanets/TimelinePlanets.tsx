@@ -1,4 +1,4 @@
-import React, { Children, CSSProperties, useEffect, useRef, useState } from "react"
+import React, { CSSProperties, useEffect, useRef, useState } from "react"
 
 import { clearAnimations } from '../../Common'
 

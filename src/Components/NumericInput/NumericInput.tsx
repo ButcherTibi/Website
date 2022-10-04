@@ -11,16 +11,14 @@ interface NumericInputProps {
 
 function NumericInput(props: NumericInputProps)
 {
-	const [inited, setInited] = useState(false);
 	const [display_value, setDisplayValue] = useState('');
 
-	useEffect(() => {
-		if (inited === false) {
-			setDisplayValue(props.value.toString());
-			setInited(true);
-		}
-	}, [inited]);
 
+	useEffect(() => {
+		setDisplayValue(props.value.toString());
+	}, [props.value]);
+
+	
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		let value_str = e.currentTarget.value;
 

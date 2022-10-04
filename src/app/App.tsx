@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './App.scss';
 
 import FrontPage from '../Pages/FrontPage/FrontPage';
 

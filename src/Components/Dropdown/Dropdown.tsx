@@ -15,7 +15,7 @@ export default function Dropdown(props: DropdownProps)
 	const closeOnOutsideClick = (e: MouseEvent) => {
 		if (open &&
 			dropdown_elem !== undefined &&
-			e.composedPath().includes(dropdown_elem) == false) {
+			e.composedPath().includes(dropdown_elem) === false) {
 			setOpen(false);
 		}
 	};

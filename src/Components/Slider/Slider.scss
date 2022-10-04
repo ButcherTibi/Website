@@ -1,4 +1,5 @@
-@use '../../index.scss';
+@use '../../Theme.scss';
+
 
 $height: 30px;
 $track_thickness: 5px;
@@ -8,6 +9,8 @@ $max_highlight_size: 100px;
 .slider {
 	display: flex;
 	align-items: center;
+
+	@include Theme.theme;
 }
 
 .slider .track-wrap {
