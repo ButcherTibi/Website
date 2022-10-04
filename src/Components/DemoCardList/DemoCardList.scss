@@ -26,8 +26,7 @@
 		// box-shadow: 0px 0px 5px 4px hsla(0, 0%, 100%, .8);
 		box-shadow: 10px 10px 5px 4px hsl(0deg 0% 0% / 80%);
 
-		transition-property: transform, box-shadow;
-		transition-duration: .3s;
+		transition: transform .3s, box-shadow .3s;
 
 		img {
 			width: 100%;

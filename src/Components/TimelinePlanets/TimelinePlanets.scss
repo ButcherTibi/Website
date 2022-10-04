@@ -129,8 +129,10 @@
 
 					box-shadow: 0px 0px 15px 7px hsla(0, 0%, 100%, .8);
 					cursor: pointer;
-					transition-property: filter, box-shadow;
-					transition-duration: .3s;
+					transition:
+						filter .3s,
+						box-shadow .3s
+					;
 
 					.core {
 						border-radius: 9999px;

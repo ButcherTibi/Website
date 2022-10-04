@@ -13,8 +13,7 @@
 		flex-shrink: 1;
 
 		--scale_duration: .5s;
-		transition-property: flex-grow;
-		transition-duration: var(--scale_duration);
+		transition: flex-grow var(--scale_duration);
 
 		overflow: hidden;
 
@@ -44,8 +43,7 @@
 				background-size: cover;
 				filter: brightness(75%);
 
-				transition-property: filter;
-				transition-duration: var(--scale_duration);
+				transition: filter var(--scale_duration);
 			}
 
 			.inner {
@@ -63,8 +61,7 @@
 
 				background-color: hsla(0, 0%, 100%, 0.8);
 
-				transition: all;
-				transition-duration: var(--scale_duration);
+				transition: all var(--scale_duration);
 
 				.logo {
 					border-radius: 10px;
@@ -110,8 +107,7 @@
 			max-height: 0px;
 			overflow: hidden;
 
-			transition-property: max-height;
-			transition-duration: var(--scale_duration);
+			transition: max-height var(--scale_duration);
 		}
 	}
 

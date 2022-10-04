@@ -19,9 +19,10 @@
 		// border: 2px solid red;
 
 		> * {
-			transition-property: transform, filter;
-			transition-duration: var(--zoom_in_duration), .3s;
-			transition-timing-function: ease-in-out;
+			transition: 
+				transform var(--zoom_in_duration) ease-in-out,
+				filter .3s ease-in-out
+			;
 		}
 
 		.deco-ring {

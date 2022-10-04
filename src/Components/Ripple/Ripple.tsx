@@ -15,7 +15,6 @@ interface RippleProps {
 
 function Ripple(props: RippleProps)
 {
-	const class_name = props.class_name ?? ''
 	const z_index = props.z_index ?? 'initial'
 	const color = props.color ?? 'black'
 	const inner_radius = props.inner_radius ?? 93
@@ -53,7 +52,7 @@ function Ripple(props: RippleProps)
 			${color} 99%,
 			transparent
 		)`,
-		transitionDuration: `${duration}ms`
+		transition: `transform ${duration}ms`
 	}
 
 	return (
