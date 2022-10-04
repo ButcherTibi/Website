@@ -11,7 +11,7 @@
 		--corner_radius: 32px;
 		--card_height: 270px;
 		--text_height: 55px;
-		--text_offset: calc(var(--card_height) -);
+		--text_offset: calc(var(--card_height));
 
 		border-radius: var(--corner_radius);
 		width: 212px;
