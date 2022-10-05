@@ -1,5 +1,5 @@
 import React, {
-	CSSProperties, useEffect, useRef, useState
+	CSSProperties, useEffect, useRef, useState, useCallback
 } from "react";
 
 import { clearAnimations } from '../../Common'
@@ -173,14 +173,12 @@ function DecoRing(props: DecoRingProps)
 class Moon {
 	text = ''
 	icon? = ''
-	icon_size? = 50
 }
 
 interface OrbitProps {
 	title: string
 	icon: string
-	moons: Moon[]
-
+	
 	scale: number
 	offset: Vec2D
 
@@ -195,8 +193,12 @@ interface OrbitProps {
 	planet_count: number
 	planet_diameter: number
 	planet_name: string
+	planet_font_size: number
 	planet_name_spacing: number
 	zoomToPlanet: (selected_planet: number, planet_pos: Vec2D) => void
+
+	moons: Moon[]
+	moon_diameter: number
 
 	z_index: number
 }
@@ -292,7 +294,7 @@ function Orbit(props: OrbitProps)
 			`
 		}
 
-		const label_length = props.main_orbit_diameter / 4
+		const label_length = props.main_orbit_diameter / 2
 		planet_div_style = {
 			top: props.planet_diameter + props.planet_name_spacing,
 			left: props.planet_diameter / 2 - label_length / 2,
@@ -350,9 +352,6 @@ function Orbit(props: OrbitProps)
 
 		for (let i = 0; i < label_count; i++) {
 
-			let moon = props.moons[i]
-			moon.icon_size ??= 0
-
 			let new_style = new MoonStyle()
 
 			const transform: string | undefined = is_this_planet_selected ? `rotate(${angle}deg)` : `rotate(-90deg)`
@@ -360,17 +359,17 @@ function Orbit(props: OrbitProps)
 
 			new_style.div_style = {
 				paddingLeft: props.planet_diameter / 2,
-				width: orbit_radius + moon.icon_size / 2,
+				width: orbit_radius + props.moon_diameter / 2,
 				transform: transform,
 				opacity: opacity
 			}
 			new_style.label_style = {
-				marginTop: -moon.icon_size / 2
+				marginTop: -props.moon_diameter / 2
 			}
 			new_style.moon_style = {
-				marginTop: -moon.icon_size / 2,
-				width: moon.icon_size,
-				height: moon.icon_size
+				marginTop: -props.moon_diameter / 2,
+				width: props.moon_diameter,
+				height: props.moon_diameter
 			}
 
 			moon_orbit_styles.push(new_style)
@@ -405,7 +404,7 @@ function Orbit(props: OrbitProps)
 					onClick={zoomToPlanet}
 				/>
 				<div style={planet_div_style}>
-					<h3>{props.planet_name}</h3>
+					<h3 style={{fontSize: props.planet_font_size}}>{props.planet_name}</h3>
 				</div>
 			</div>
 		</div>
@@ -489,65 +488,73 @@ export class DecoRingSettings {
 	inner_circle_revolution_duration_ms: number = 30_000
 }
 
-interface SolarSystemProps {
-	zoom_scale: number
+export class SolarSystemProps {
+	zoom_scale: number = 2
 	
-	sun_icon: string
-	sun_diameter: number
-	sun_name: string
-	sun_name_spacing: number
-	corona_diameter: number
+	sun_icon: string = ''
+	sun_diameter: number = 100
+	sun_name: string = ''
+	sun_name_size: number = 22
+	sun_name_spacing: number = 40
+	corona_diameter: number = 150
 
-	solar_system_diameter: number
+	solar_system_diameter: number = 600
 	/** How much time one revolution should take in miliseconds. */
-	solar_system_spin_time: number
+	solar_system_spin_time: number = 60_000
 
-	planet_diameter: number
-	planet_name_spacing: number
-	planets: PlanetSettings[]
+	planet_diameter: number = 75
+	planet_name_size: number = 16
+	planet_name_spacing: number = 10
+	planets: PlanetSettings[] = []
+	moon_diameter: number = 50
 
-	deco_rings: DecoRingSettings[]
+	deco_rings: DecoRingSettings[] = []
 
-	z_index: number
+	z_index: number = 1
 	class_name?: string
 }
 
 function SolarSystem(props: SolarSystemProps)
 {
+	const [spinner_size, setSpinnerSize] = useState(0)
 	const [selected_planet, setSelectedPlanet] = useState(-2)
 	const [offset, setOffset] = useState(new Vec2D())
 	const [scale, setScale] = useState(1)
-	
-	const spinner_size_ref = useRef(0)
 
 	const solar_system_elem = useRef<HTMLDivElement>(null)
 	const spinner_elem = useRef<HTMLDivElement>(null)
 	const sun_div_elem = useRef<HTMLImageElement>(null)
 
 
+	// Set spinner size to minimum of width or height
+	const setSpinnerElementSize = useCallback(() => {
+		let orbit_rect = solar_system_elem.current?.getBoundingClientRect()!
+		const new_size = Math.min(orbit_rect.width, orbit_rect.height)
+
+		let spinner = spinner_elem.current!
+		spinner.style.width = `${new_size}px`
+		spinner.style.height = `${new_size}px`
+
+		setSpinnerSize(new_size)
+	}, [])
+
+	
+	useEffect(() => {
+		window.addEventListener('resize', setSpinnerElementSize)
+
+		return () => {
+			window.removeEventListener('resize', setSpinnerElementSize)
+		}
+	}, [setSpinnerElementSize])
+
+
 	useEffect(() => {
 		// Spinner
 		{
-			// Set spinner size to minimum of width or height
-			let orbit_rect = solar_system_elem.current?.getBoundingClientRect()!
-			let size = 0;
-
-			if (orbit_rect.width > orbit_rect.height) {
-				size = orbit_rect.height
-			}
-			else {
-				size = orbit_rect.width
-			}
+			setSpinnerElementSize()
 
 			let spinner = spinner_elem.current!
-			spinner.style.width = `${size}px`
-			spinner.style.height = `${size}px`
-
-			spinner_size_ref.current = size
-
-			// Rotate spinner
-			clearAnimations(spinner)
-			
+			clearAnimations(spinner)			
 			spinner.animate([
 				{ transform: 'rotate(360deg)' }
 			], {
@@ -560,7 +567,6 @@ function SolarSystem(props: SolarSystemProps)
 		{
 			const sun = sun_div_elem.current!
 			clearAnimations(sun)
-
 			sun.animate([
 				{
 					transform: 'rotate(0deg)'
@@ -581,7 +587,11 @@ function SolarSystem(props: SolarSystemProps)
 		// return () => {
 		// 	window.removeEventListener('resize', calculate)
 		// }
-	}, [props.zoom_scale, props.solar_system_spin_time])
+	}, [
+		props.zoom_scale,
+		props.solar_system_spin_time,
+		setSpinnerElementSize
+	])
 
 
 	const zoomToPlanet = (new_selected_planet: number, planet_pos: Vec2D) => {
@@ -608,10 +618,9 @@ function SolarSystem(props: SolarSystemProps)
 	}
 
 
-	// Render
+	// Render ///////////////////////////////////////////////////////////////////
 	// console.log("render")
-	// let key_index = 0;
-	const size = spinner_size_ref.current
+	const size = spinner_size
 	const solar_system_center = size / 2
 
 	// Deco Rings
@@ -659,7 +668,6 @@ function SolarSystem(props: SolarSystemProps)
 				<Orbit key={'orbit_' + index}
 					title={planet.name}
 					icon={planet.icon}
-					moons={planet.moons ?? []}
 
 					scale={scale}
 					offset={offset}
@@ -675,8 +683,12 @@ function SolarSystem(props: SolarSystemProps)
 					planet_count={props.planets.length}
 					planet_diameter={props.planet_diameter}
 					planet_name={planet.name}
+					planet_font_size={props.planet_name_size}
 					planet_name_spacing={props.planet_name_spacing}
 					zoomToPlanet={zoomToPlanet}
+
+					moons={planet.moons ?? []}
+					moon_diameter={props.moon_diameter}
 
 					z_index={props.z_index}
 				/>
@@ -726,7 +738,7 @@ function SolarSystem(props: SolarSystemProps)
 	const sun_img_style: CSSProperties = {
 		borderRadius: `${props.sun_diameter / 2}px`,
 	}
-	const sun_name_length = props.solar_system_diameter / 2
+	const sun_name_length = props.solar_system_diameter
 	const sun_name_style: CSSProperties = {
 		top: props.sun_diameter + props.sun_name_spacing,
 		left: (props.sun_diameter / 2 - sun_name_length / 2),
@@ -748,7 +760,9 @@ function SolarSystem(props: SolarSystemProps)
 							style={sun_img_style}
 						/>
 						<div style={sun_name_style}>
-							<h3>{props.sun_name}</h3>
+							<h3 style={{fontSize: props.sun_name_size}}>
+								{props.sun_name}
+							</h3>
 						</div>
 					</div>
 				</div>

@@ -1,4 +1,9 @@
 
+export enum DisplayFormat {
+	desktop,
+	mobile
+}
+
 export class Interval {
 	min: number
 	max: number

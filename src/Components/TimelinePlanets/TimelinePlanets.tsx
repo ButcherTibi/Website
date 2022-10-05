@@ -29,6 +29,7 @@ interface ItemProps {
 	planet_diameter?: number
 	core_diameter?: number
 	spiral_diameter?: number
+	use_column_layout?: boolean
 	selectPlanet?: (planet_index: number) => void
 	children?: any
 }
@@ -44,7 +45,8 @@ export function Item(props: ItemProps)
 	let end = props.end_date !== undefined ? extractMonthYear(props.end_date) : 'Prezent';
 
 	const item_style: CSSProperties = {
-		height: props.spiral_diameter
+		height: props.spiral_diameter,
+		flexDirection: props.use_column_layout ? 'column' : 'row'
 	}
 
 	const planet_style: CSSProperties = {
@@ -60,7 +62,7 @@ export function Item(props: ItemProps)
 
 	return (
 		<div className='item' key={props.item_index} style={item_style}>
-			<div className="timespan">
+			<div className="timespan" style={{alignItems: props.use_column_layout ? 'start' : 'center'}}>
 				<time>{start}</time>
 				<p className="separator">-</p>
 				<time>{end}</time>
@@ -74,24 +76,27 @@ export function Item(props: ItemProps)
 					</div>
 				</div>
 			</div>
-			<div className="job">
+			<div className="job" style={{alignItems: props.use_column_layout ? 'end' : 'center'}}>
 				<h3>{props.job}</h3>
 			</div>
 		</div>
 	)
 }
 
-interface Props {
-	planet_diameter: number
-	core_diameter: number
+
+export class Props {
+	planet_diameter: number = 300
+	core_diameter: number = 150
 	
-	spiral_diameter: number
-	spiral_border_thickness: number
+	spiral_diameter: number = 400
+	spiral_border_thickness: number = 4
 
-	background_spiral_diameter: number
-	background_border_thickness: number
+	background_spiral_diameter: number = 600
+	background_border_thickness: number = 8
 
-	children: JSX.Element[]
+	use_column_layout?: boolean
+
+	children: JSX.Element[] = []
 }
 
 function TimelinePlanets(props: Props)
@@ -300,6 +305,7 @@ function TimelinePlanets(props: Props)
 							planet_diameter: props.planet_diameter,
 							core_diameter: props.core_diameter,
 							spiral_diameter: props.spiral_diameter,
+							use_column_layout: props.use_column_layout ?? false,
 							selectPlanet: selectPlanet
 						})}
 					</>;

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 // import { GiSmartphone } from 'react-icons/gi'
 // import { AiOutlineMail } from 'react-icons/ai'
@@ -6,11 +6,11 @@ import React from "react"
 import Header from "../../Components/Header/Header"
 import NewTabLink from "../../Components/NewTabLink/NewTabLink"
 import Stars from "../../Components/Stars/Stars"
-import SolarSystem, { DecoRingSettings } from "../../Components/Orbit/Orbits"
-import TimelinePlanets, { Item as TimelinePlanet} from "../../Components/TimelinePlanets/TimelinePlanets"
+import SolarSystem, { DecoRingSettings, SolarSystemProps } from "../../Components/Orbit/Orbits"
+import TimelinePlanets, { Item as TimelinePlanet, Props as TimelinePlanetsProps} from "../../Components/TimelinePlanets/TimelinePlanets"
 import DemoCardList, { Card as DemoCard } from "../../Components/DemoCardList/DemoCardList"
 import Footer from "../../Components/Footer/Footer"
-import { blend, Interval } from "../../Common"
+import { blend, Interval, DisplayFormat } from "../../Common"
 
 // Portret
 import portret from '../../Resources/Me.jpeg'
@@ -39,30 +39,143 @@ import './FrontPage.scss'
 
 function FrontPage()
 {
+	const [, setMode] = useState<DisplayFormat>()
+
+
+	const decideMode = () => {
+		if (window.innerWidth < 700 || window.innerHeight < 700) {
+			return DisplayFormat.mobile
+		}
+		else {
+			return DisplayFormat.desktop
+		}
+	}
+
+	useEffect(() => {
+		const checkWindowSize = () => {
+			setMode(decideMode())
+		}
+
+		checkWindowSize()
+		window.addEventListener('resize', checkWindowSize)
+
+		return () => {
+			window.removeEventListener('resize', checkWindowSize)
+		}
+	}, [])
+
+
 	// Render
-	let deco_rings_settings: DecoRingSettings[] = Array(4)
+	let solsys_props = new SolarSystemProps()
+	let timeline_props = new TimelinePlanetsProps()
 
-	for (let i = 0; i < deco_rings_settings.length; i++) {
+	switch (decideMode()) {
+		case DisplayFormat.desktop: {
+			// console.log('desktop')
 
-		const alpha = i / (deco_rings_settings.length - 1)
+			// Solar System Props
+			solsys_props.sun_diameter = 100
+			solsys_props.sun_name_size = 22
+			solsys_props.sun_name_spacing = 40
+			solsys_props.corona_diameter = 150
 
-		deco_rings_settings[i] = {
-			diameter: 1100,
-			thickness: 2,
-			offset_from_center: 150,
-			revolution_duration_ms: blend(20_000, 40_000, alpha),
-			start_angle: blend(0, 360, alpha),
-			
-			line_count: 8,
-			line_length: 35,
-			line_thickness: 5,
-			line_spacing: 15,
+			solsys_props.solar_system_diameter = 600
 
-			inner_circle_diameter: 1050,
-			inner_circle_dash_length: 200,
-			inner_circle_dash_gap: 400,
-			inner_circle_thickness: 2,
-			inner_circle_revolution_duration_ms: 60_000
+			solsys_props.planet_diameter = 75
+			solsys_props.planet_name_size = 16;
+			solsys_props.planet_name_spacing = 10
+
+			solsys_props.moon_diameter = 50
+
+			let deco_rings: DecoRingSettings[] = Array(4)
+			for (let i = 0; i < deco_rings.length; i++) {
+
+				const alpha = i / (deco_rings.length - 1)
+
+				deco_rings[i] = {
+					diameter: 1100,
+					thickness: 2,
+					offset_from_center: 150,
+					revolution_duration_ms: blend(20_000, 40_000, alpha),
+					start_angle: blend(0, 360, alpha),
+					
+					line_count: 8,
+					line_length: 35,
+					line_thickness: 5,
+					line_spacing: 15,
+
+					inner_circle_diameter: 1050,
+					inner_circle_dash_length: 200,
+					inner_circle_dash_gap: 400,
+					inner_circle_thickness: 2,
+					inner_circle_revolution_duration_ms: 60_000
+				}
+			}
+
+			solsys_props.deco_rings = deco_rings
+
+			// Timeline Props
+			timeline_props.planet_diameter = 300
+			timeline_props.core_diameter = 150
+
+			timeline_props.spiral_diameter = 400
+			timeline_props.spiral_border_thickness = 4
+			break
+		}
+
+		case DisplayFormat.mobile: {
+			// console.log('mobile')
+
+			// Solar System Props
+			solsys_props.sun_diameter = 65
+			solsys_props.sun_name_size = 16
+			solsys_props.corona_diameter = 100
+			solsys_props.sun_name_spacing = 25
+
+			solsys_props.solar_system_diameter = 300
+
+			solsys_props.planet_diameter = 50
+			solsys_props.planet_name_size = 14
+			solsys_props.planet_name_spacing = 5
+
+			solsys_props.moon_diameter = 50
+
+			let deco_rings: DecoRingSettings[] = Array(4)
+			for (let i = 0; i < deco_rings.length; i++) {
+
+				const alpha = i / (deco_rings.length - 1)
+
+				deco_rings[i] = {
+					diameter: 500,
+					thickness: 2,
+					offset_from_center: 50,
+					revolution_duration_ms: blend(20_000, 40_000, alpha),
+					start_angle: blend(0, 360, alpha),
+					
+					line_count: 8,
+					line_length: 35,
+					line_thickness: 5,
+					line_spacing: 15,
+
+					inner_circle_diameter: 1050,
+					inner_circle_dash_length: 200,
+					inner_circle_dash_gap: 400,
+					inner_circle_thickness: 2,
+					inner_circle_revolution_duration_ms: 60_000
+				}
+			}
+
+			solsys_props.deco_rings = deco_rings
+
+			// Timeline Props
+			timeline_props.planet_diameter = 250
+			timeline_props.core_diameter = 125
+
+			timeline_props.spiral_diameter = 400
+			timeline_props.spiral_border_thickness = 4
+
+			timeline_props.use_column_layout = true
+			break;
 		}
 	}
 
@@ -70,49 +183,6 @@ function FrontPage()
 		<div className="front-page page">
 			<Header />
 			
-			{/* <main className="content-wrap">
-				<Rain
-					z_index={1}
-					drop_color="hsl(202, 69%, 50%, 0.8)"
-					drop_count={100}
-					layer_angle={15}
-
-					drop_max_delay={700}
-					drop_duration_min={700}
-					drop_duration_max={1500}
-
-					drop_x_deviation_min={0}
-					drop_x_deviation_max={5}
-
-					drop_thickness_min={3}
-					drop_thickness_max={4}
-					drop_height_min={10}
-					drop_height_max={50}
-				/>
-
-				<Ripple
-					z_index={2}
-					color='hsl(202, 69%, 50%)'
-					duration={2000}
-				/>
-
-				<div className="content">
-					<div className="left">
-						<div className="intro">
-							<h1 className="fullname">Măcelaru Tiberiu</h1>
-							<h1 className="profesion">Front-end Developer</h1>
-							<button className="about-me">Despre mine</button>
-						</div>					
-					</div>
-					
-					<div className="right">
-						<img src={portret} alt="" />
-						<div></div>
-					</div>
-				</div>
-
-			</main> */}
-
 			<section className="new-skills">
 				<Stars
 					count={100}
@@ -121,22 +191,14 @@ function FrontPage()
 					glow_duration_ms={new Interval(3000, 6000)}
 				/>
 				<SolarSystem
-					zoom_scale={2}
+					{...solsys_props}
 					
 					sun_icon={portret}
-					sun_diameter={100}
 					sun_name='Măcelaru Tiberiu'
-					sun_name_spacing={40}
-					corona_diameter={150}
-					
-					solar_system_diameter={600}
-					solar_system_spin_time={60_000}
 
-					planet_diameter={75}
-					planet_name_spacing={10}
 					planets={[
 						{ name: "TypeScript", icon: typescript_icon, moons: [ 
-							{ text: 'Description 1', icon: typescript_icon, icon_size: 50}, 
+							{ text: 'Description 1', icon: typescript_icon}, 
 							{ text: 'Description 2'},
 							{ text: 'Description 3'}]
 						},
@@ -147,8 +209,6 @@ function FrontPage()
 						{ name: "C# Web API", icon: csharp_icon },
 						{ name: "Entity Framework", icon: ef_core_icon },
 					]}
-
-					deco_rings={deco_rings_settings}
 
 					z_index={1}
 					class_name={'solar-system'}
@@ -164,11 +224,7 @@ function FrontPage()
 			<section className="experience content-wrap">
 				<div className="content">			
 					<TimelinePlanets
-						planet_diameter={300}
-						core_diameter={150}
-
-						spiral_diameter={400}
-						spiral_border_thickness={4}
+						{...timeline_props}
 
 						background_spiral_diameter={600}
 						background_border_thickness={8}

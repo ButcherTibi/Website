@@ -98,12 +98,15 @@
 
 			--side_font_color: white;
 			--side_font_size: 18px;
-
+			--vertical_padding: 15px;
 
 			.timespan {
+				box-sizing: border-box;
+				padding: var(--vertical_padding) 0px;
 				flex-basis: var(--side_basis);
 
 				display: flex;
+				align-items: center;
 				gap: 4px;
 
 				time, .separator {
@@ -169,7 +172,12 @@
 			}
 
 			.job {
+				box-sizing: border-box;
+				padding: var(--vertical_padding) 0px;
 				flex-basis: var(--side_basis);
+
+				display: flex;
+				justify-content: flex-end;
 
 				h3 {
 					font-family: Montserrat;
