@@ -120,6 +120,9 @@ function FrontPage()
 
 			timeline_props.spiral_diameter = 400
 			timeline_props.spiral_border_thickness = 4
+
+			timeline_props.background_spiral_diameter = 600
+			timeline_props.background_border_thickness = 8
 			break
 		}
 
@@ -146,18 +149,18 @@ function FrontPage()
 				const alpha = i / (deco_rings.length - 1)
 
 				deco_rings[i] = {
-					diameter: 500,
+					diameter: 550,
 					thickness: 2,
 					offset_from_center: 50,
 					revolution_duration_ms: blend(20_000, 40_000, alpha),
 					start_angle: blend(0, 360, alpha),
 					
 					line_count: 8,
-					line_length: 35,
-					line_thickness: 5,
+					line_length: 20,
+					line_thickness: 3,
 					line_spacing: 15,
 
-					inner_circle_diameter: 1050,
+					inner_circle_diameter: 500,
 					inner_circle_dash_length: 200,
 					inner_circle_dash_gap: 400,
 					inner_circle_thickness: 2,
@@ -168,11 +171,14 @@ function FrontPage()
 			solsys_props.deco_rings = deco_rings
 
 			// Timeline Props
-			timeline_props.planet_diameter = 250
+			timeline_props.planet_diameter = 200
 			timeline_props.core_diameter = 125
 
-			timeline_props.spiral_diameter = 400
-			timeline_props.spiral_border_thickness = 4
+			timeline_props.spiral_diameter = 310
+			timeline_props.spiral_border_thickness = 3
+
+			timeline_props.background_spiral_diameter = 300
+			timeline_props.background_border_thickness = 8
 
 			timeline_props.use_column_layout = true
 			break;
@@ -198,16 +204,40 @@ function FrontPage()
 
 					planets={[
 						{ name: "TypeScript", icon: typescript_icon, moons: [ 
-							{ text: 'Description 1', icon: typescript_icon}, 
-							{ text: 'Description 2'},
-							{ text: 'Description 3'}]
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
 						},
-						{ name: "JavaScript", icon: javascript_icon },
-						{ name: "React", icon: react_icon },
-						{ name: "HTML", icon: html_icon },
-						{ name: "CSS", icon: css_icon },
-						{ name: "C# Web API", icon: csharp_icon },
-						{ name: "Entity Framework", icon: ef_core_icon },
+						{ name: "JavaScript", icon: javascript_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
+						{ name: "React", icon: react_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
+						{ name: "HTML", icon: html_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
+						{ name: "CSS", icon: css_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
+						{ name: "C# Web API", icon: csharp_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
+						{ name: "Entity Framework", icon: ef_core_icon, moons: [ 
+							{ text: 'Descripție 1', icon: typescript_icon}, 
+							{ text: 'Descripție 2', icon: typescript_icon},
+							{ text: 'Descripție 3', icon: typescript_icon}]
+						},
 					]}
 
 					z_index={1}
@@ -223,12 +253,7 @@ function FrontPage()
 
 			<section className="experience content-wrap">
 				<div className="content">			
-					<TimelinePlanets
-						{...timeline_props}
-
-						background_spiral_diameter={600}
-						background_border_thickness={8}
-					>
+					<TimelinePlanets {...timeline_props}>
 						<TimelinePlanet
 							company="Advanced Technology Systems"
 							job="Full-stack developer"

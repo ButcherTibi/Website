@@ -13,6 +13,8 @@ footer {
 			align-items: center;
 			gap: 15px;
 
+			text-decoration: none;
+
 			svg {
 				--icon_size: 40px;
 				width: var(--icon_size);
@@ -20,10 +22,12 @@ footer {
 				fill: hsl(0, 0%, 100%);
 			}
 
-			a {
+			label {
 				font-family: Montserrat;
 				font-size: 20px;
 				font-weight: normal;
+				text-decoration: underline;
+				text-underline-offset: 5px;
 				color: hsl(0, 0%, 100%);
 			}
 		}

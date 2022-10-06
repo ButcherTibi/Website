@@ -1,6 +1,8 @@
 import React, { CSSProperties, ReactNode,
-	useEffect, useState, useCallback
+	useEffect, useState, useCallback, useRef
 } from "react";
+
+import { jitter } from "../../Common";
 
 import './Leafs.scss';
 import leaf_tex_1 from '../../Resources/Leaf_tex_1.jpg';
@@ -12,8 +14,6 @@ import NumericInput from "../NumericInput/NumericInput";
 
 
 class LeafsProps {
-	height?: number;
-
 	ring_count?: number;
 	ring_open_overlap?: number;
 	ring_close_overlap?: number;
@@ -56,8 +56,13 @@ class ComputedRing {
 
 export function Leafs(props: LeafsProps)
 {
+	// const [width, setWidth] = useState(0)
+	// const [height, setHeight] = useState(0)
+
+	const wrapper_elem = useRef<HTMLDivElement>(null)
+
 	// Configuration
-	const height = props.height ?? 700;
+	// const height = props.height ?? 700;
 
 	// Ring Params
 	const ring_count = props.ring_count ?? 14;
@@ -82,9 +87,17 @@ export function Leafs(props: LeafsProps)
 
 	const recompute = useCallback(() => {
 
-		const jitter = (min: number, max: number) => {
-			return min + ((max - min) * Math.random());
+		// Extrage dimensiunea
+		let width: number
+		let height: number
+		{
+			let wrapper = wrapper_elem.current!
+			const rect = wrapper.getBoundingClientRect()
+			width = rect.width
+			height = rect.height
 		}
+
+		console.log(`size = {${width}, ${height}}`)
 
 		// Compute closed leafs
 		let new_close_rings: ComputedRing[] = [];
@@ -111,9 +124,9 @@ export function Leafs(props: LeafsProps)
 					let leaf_x = Math.sin(angle_rad) * ring_radius;
 					let leaf_y = Math.cos(angle_rad) * ring_radius;
 			
-					// Normalize to top left origin
-					leaf_x += height / 2 - leaf_size / 2;
-					leaf_y += height / 2 - leaf_size / 2;
+					// Center leaf
+					leaf_x -= leaf_size / 2;
+					leaf_y -= leaf_size / 2;
 			
 					// Rotation
 					let leaf_rotation = (Math.PI / 4) - angle_rad;
@@ -167,7 +180,7 @@ export function Leafs(props: LeafsProps)
 			let angle_offset = ring_open_angle_offset;
 			let z_index = 0;
 			let leaf_size = leaf_init_size;
-			let ring_radius = window.screen.width;
+			let ring_radius = width > height ? width : height
 
 			for (let r = 0; r < ring_count; r++) {
 
@@ -187,9 +200,9 @@ export function Leafs(props: LeafsProps)
 					let leaf_x = Math.sin(angle_rad) * ring_radius;
 					let leaf_y = Math.cos(angle_rad) * ring_radius;
 			
-					// Normalize to top left origin
-					leaf_x += height / 2 - leaf_size / 2;
-					leaf_y += height / 2 - leaf_size / 2;
+					// Center leaf
+					leaf_x -= leaf_size / 2;
+					leaf_y -= leaf_size / 2;
 			
 					// Size
 			
@@ -229,8 +242,6 @@ export function Leafs(props: LeafsProps)
 			setOpenRings(new_begin_rings);
 		}
 	}, [
-		height,
-
 		ring_count,
 		ring_open_overlap,
 		ring_close_overlap,
@@ -244,6 +255,7 @@ export function Leafs(props: LeafsProps)
 		leaf_overlap
 	])
 
+	
 	// First time animation
 	useEffect(() => {
 		if (inited === false) {
@@ -256,21 +268,12 @@ export function Leafs(props: LeafsProps)
 	}, [inited, recompute]);
 
 
-	useEffect(() => {
-	 	recompute();
-	}, [recompute]);
-
-
 	const toggle = () => {
 		setIsOpen(!is_open);
 	}
 	
 	// Render
 	// console.log(props)
-	if (inited === false) {
-		return null;
-	}
-
 	let leafs: ReactNode[] = [];
 	let rings: ComputedRing[] = [];
 
@@ -322,12 +325,14 @@ export function Leafs(props: LeafsProps)
 	}
 
 	let leafs_style: CSSProperties = {
-		width: `${height}px`,
-		height: `${height}px`
+		width: 1,
+		height: 1
 	};
 
 	return (
-		<div className="Leafs" style={{height: `${height}px`}} onClick={toggle}>
+		<div className="Leafs" ref={wrapper_elem}
+			onClick={toggle}
+		>
 			<div className="leafs" style={leafs_style}>
 				{leafs}
 			</div>
@@ -348,17 +353,18 @@ function LeafsDemo()
 
 	return <>
 		{/* <React.StrictMode> */}
-		<Leafs
-			height={active_props.height}
 
-			ring_count={active_props.ring_count}
-			ring_close_size={active_props.ring_close_size}
-			ring_open_angle_offset={active_props.ring_open_angle_offset}
+		<div className="leafs-container">
+			<Leafs
+				ring_count={active_props.ring_count}
+				ring_close_size={active_props.ring_close_size}
+				ring_open_angle_offset={active_props.ring_open_angle_offset}
 
-			leaf_init_size={active_props.leaf_init_size}
-			leaf_growth_factor={active_props.leaf_growth_factor}
-			leaf_overlap={active_props.leaf_overlap}
-		/>
+				leaf_init_size={active_props.leaf_init_size}
+				leaf_growth_factor={active_props.leaf_growth_factor}
+				leaf_overlap={active_props.leaf_overlap}
+			/>
+		</div>
 
 		<main className="leafs-demo content-wrap">
 			<div className="editor content">
@@ -369,14 +375,6 @@ function LeafsDemo()
 					<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
 				</div>
 
-				<div className="params general-params">
-					<NumericInput
-						label="Înălțimea containerului"
-						value={editor_props.height ?? 700}
-						onValueChange={value => setEditorProps({ ...editor_props, height: value})}
-					/>
-				</div>
-
 				<div className="params ring-params">	
 					<NumericInput
 						label="Numărul de inele"
@@ -384,12 +382,12 @@ function LeafsDemo()
 						onValueChange={value => setEditorProps({ ...editor_props, ring_count: value})}
 					/>
 					<NumericInput
-						label="Ring close size"
+						label="Dimensiunea inelului central"
 						value={editor_props.ring_close_size ?? 100}
 						onValueChange={value => setEditorProps({ ...editor_props, ring_close_size: value})}
 					/>
 					<NumericInput
-						label="Ring open angle offset"
+						label="Decalajul unghiului inelelor la deschidere"
 						value={editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
 						onValueChange={value => setEditorProps({ ...editor_props,	ring_open_angle_offset: value})}
 					/>
@@ -397,17 +395,17 @@ function LeafsDemo()
 
 				<div className="params leaf-params">
 					<NumericInput
-						label="Leaf initial size"
+						label="Dimensiunea inițială a frunzelor"
 						value={editor_props.leaf_init_size ?? 50}
 						onValueChange={value => setEditorProps({ ...editor_props, leaf_init_size: value})}
 					/>
 					<NumericInput
-						label="Leaf growth factor"
+						label="Factorul de creștere a frunzelor"
 						value={editor_props.leaf_growth_factor ?? 1.1}
 						onValueChange={value => setEditorProps({ ...editor_props, leaf_growth_factor: value})}
 					/>
 					<NumericInput
-						label="Leaf overlap"
+						label="Nivelul de suprapunere a frunzelor"
 						value={editor_props.leaf_overlap ?? .5}
 						onValueChange={value => setEditorProps({ ...editor_props, leaf_overlap: value})}
 					/>

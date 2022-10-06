@@ -39,7 +39,9 @@ function NumericInput(props: NumericInputProps)
 
 	return <div className="numeric-input">
 		{label}
-		<input type={'number'} value={display_value} onChange={onChange} />
+		<input type={'number'} value={display_value}
+			onChange={onChange}
+		/>
 	</div>;
 }
 

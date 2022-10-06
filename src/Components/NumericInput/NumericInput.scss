@@ -5,11 +5,15 @@
 	align-items: stretch;
 	gap: 4px;
 
-	label {
+	// label {
 
-	}
+	// }
 	
 	input {
+		// cu width auto e bulangiu că nu vrea să se micșoreze
+		width: 100%;
+
+		box-sizing: border-box;
 		border-radius: 5px;
 		border-width: 1px;
 		border-style: solid;

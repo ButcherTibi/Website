@@ -37,6 +37,10 @@ header {
 			align-items: center;
 
 			cursor: pointer;
+
+			a {
+				text-decoration: none;
+			}
 		}
 
 		.name:hover h3 {
