@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import FrontPage from '../Pages/FrontPage/FrontPage';
 
 import LeafsPage from '../Components/Leafs/Leafs';
+import { RainDemo } from '../Components/Rain/Rain';
 import AccordionPage from '../Pages/AccordionPage';
 import CardListPage from '../Pages/CardListPage';
 import DropdownPage from '../Pages/DropdownPage';
@@ -20,6 +21,7 @@ function App() {
 			<Route path='/' element={<FrontPage />} />
 
 			<Route path='leafs' element={<PageWrapper children={<LeafsPage />} />} />
+			<Route path='rain' element={<PageWrapper children={<RainDemo />} />} />
 
 			<Route path='Accordion' element={<AccordionPage />} />
 			<Route path='CardList' element={<CardListPage />} />

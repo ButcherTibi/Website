@@ -344,7 +344,7 @@ export function Leafs(props: LeafsProps)
 function LeafsDemo()
 {
 	const [editor_props, setEditorProps] = useState<LeafsProps>(new LeafsProps())
-	const [active_props, setActiveProps] = useState<LeafsProps>(new LeafsProps());
+	const [active_props, setActiveProps] = useState<LeafsProps>(new LeafsProps())
 
 
 	const applyEditorProps = () => {
