@@ -193,7 +193,7 @@ export function RainDemo()
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-	})
+	}, [])
 
 	const applyEditorProps = () => {
 		setActiveProps(editor_props)
