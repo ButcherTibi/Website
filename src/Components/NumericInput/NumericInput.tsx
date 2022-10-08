@@ -15,18 +15,24 @@ function NumericInput(props: NumericInputProps)
 
 
 	useEffect(() => {
-		setDisplayValue(props.value.toString());
+		if (parseFloat(display_value) !== props.value) {
+			setDisplayValue(props.value.toString())
+		}
+		// nu apela efectu după fiecare `setDisplayValue` că altfel
+		// nu merge șters scrisu de tot.
+		// Maybe display_value ca useRef cu force update ?
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.value]);
 
 	
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		let value_str = e.currentTarget.value;
+		let new_value_str = e.currentTarget.value;
 
-		// debugger;
-		setDisplayValue(value_str);
+		setDisplayValue(new_value_str);
 
 		let new_value = parseFloat(e.currentTarget.value);
 		if (isNaN(new_value) === false) {
+			console.log(`new value = ${new_value}`)
 			props.onValueChange(new_value);
 		}
 	}

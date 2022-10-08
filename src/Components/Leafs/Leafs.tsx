@@ -1,5 +1,5 @@
 import React, { CSSProperties, ReactNode,
-	useEffect, useState, useCallback, useRef
+	useEffect, useState, useRef
 } from "react";
 
 import { jitter } from "../../Common";
@@ -56,13 +56,7 @@ class ComputedRing {
 
 export function Leafs(props: LeafsProps)
 {
-	// const [width, setWidth] = useState(0)
-	// const [height, setHeight] = useState(0)
-
 	const wrapper_elem = useRef<HTMLDivElement>(null)
-
-	// Configuration
-	// const height = props.height ?? 700;
 
 	// Ring Params
 	const ring_count = props.ring_count ?? 14;
@@ -85,7 +79,9 @@ export function Leafs(props: LeafsProps)
 	const [is_open, setIsOpen] = useState(true);
 
 
-	const recompute = useCallback(() => {
+	// REACT BUG: situație identică cu componenta Rain, dar nu vrea să se recalculeze folosind
+	// dependency list.
+	const recompute = () => {
 
 		// Extrage dimensiunea
 		let width: number
@@ -96,8 +92,6 @@ export function Leafs(props: LeafsProps)
 			width = rect.width
 			height = rect.height
 		}
-
-		console.log(`size = {${width}, ${height}}`)
 
 		// Compute closed leafs
 		let new_close_rings: ComputedRing[] = [];
@@ -241,6 +235,25 @@ export function Leafs(props: LeafsProps)
 
 			setOpenRings(new_begin_rings);
 		}
+	}
+
+	
+	// First time animation
+	useEffect(() => {
+		if (inited === false) {
+			recompute()
+			setInited(true)
+		}
+		else {
+			setIsOpen(false)
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [inited])
+
+
+	useEffect(() => {
+		recompute()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		ring_count,
 		ring_open_overlap,
@@ -255,25 +268,13 @@ export function Leafs(props: LeafsProps)
 		leaf_overlap
 	])
 
-	
-	// First time animation
-	useEffect(() => {
-		if (inited === false) {
-			recompute();
-			setInited(true);
-		}
-		else {
-			setIsOpen(false);
-		}
-	}, [inited, recompute]);
-
 
 	const toggle = () => {
 		setIsOpen(!is_open);
 	}
 	
 	// Render
-	// console.log(props)
+	console.log(props)
 	let leafs: ReactNode[] = [];
 	let rings: ComputedRing[] = [];
 
@@ -346,6 +347,9 @@ function LeafsDemo()
 	const [editor_props, setEditorProps] = useState<LeafsProps>(new LeafsProps())
 	const [active_props, setActiveProps] = useState<LeafsProps>(new LeafsProps())
 
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	})
 
 	const applyEditorProps = () => {
 		setActiveProps(editor_props)
@@ -355,14 +359,7 @@ function LeafsDemo()
 		{/* <React.StrictMode> */}
 
 		<div className="leafs-container">
-			<Leafs
-				ring_count={active_props.ring_count}
-				ring_close_size={active_props.ring_close_size}
-				ring_open_angle_offset={active_props.ring_open_angle_offset}
-
-				leaf_init_size={active_props.leaf_init_size}
-				leaf_growth_factor={active_props.leaf_growth_factor}
-				leaf_overlap={active_props.leaf_overlap}
+			<Leafs {...active_props}
 			/>
 		</div>
 

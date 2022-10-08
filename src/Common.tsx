@@ -1,4 +1,9 @@
 
+// export class WebsiteURLs {
+// 	static leafs = '/leafs'
+// 	static rain = '/rain'
+// }
+
 export enum DisplayFormat {
 	desktop,
 	mobile

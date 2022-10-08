@@ -1,7 +1,5 @@
 # Portofoliu Front-End
 
-> Work in progress. Nu e gata încă mai adaug demo-uri.
-
 Site web pentru demostrarea abilităților de programare front-end.
 
 ![Sistem solar](./Screenshot.png 'Sistem solar')
@@ -13,6 +11,11 @@ Site web pentru demostrarea abilităților de programare front-end.
 - ~~Redux~~
 
 ## TODO
+- [ ] Preseturi pentru demos
+- [ ] Unitate de măsură în inputs
+- [ ] Orbit demo
+- [ ] Range input
+- [ ] Tooltips
 - [ ] Redux
 - [ ] GraphQL
 

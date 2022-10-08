@@ -15,6 +15,7 @@ import { blend, Interval, DisplayFormat } from "../../Common"
 // Portret
 import portret from '../../Resources/Me.jpeg'
 import Leafs_preview from '../../Resources/Leafs_preview.png'
+import Rain_preview from '../../Resources/Rain_preview.png'
 
 // Planets
 import typescript_icon from '../../Resources/icons8-typescript-96.svg'
@@ -360,6 +361,9 @@ function FrontPage()
 					<DemoCardList>
 						<DemoCard preview_img={Leafs_preview} title='Frunze' to="/leafs"
 							rezumat="Animație de închidere/ deschidre a unui vârtej de frunze menit să aibă rol de background."
+						/>
+						<DemoCard preview_img={Rain_preview} title='Ploaie' to="/rain"
+							rezumat="Animație de ploaie pentru background."
 						/>
 					</DemoCardList>
 				</div>

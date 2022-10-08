@@ -19,7 +19,7 @@ class RainProps {
 	drop_duration_max: number = 5000
 
 	drop_x_deviation_min: number = 0
-	drop_x_deviation_max: number = 70
+	drop_x_deviation_max: number = 100
 
 	drop_thickness_min: number = 3
 	drop_thickness_max: number = 5
@@ -62,7 +62,7 @@ export function Rain(props: RainProps)
 				
 			elem.style.borderBottomLeftRadius = `${drop_thickness}px`
 			elem.style.borderBottomRightRadius = `${drop_thickness}px`
-			elem.style.width = `${drop_thickness}px`
+			elem.style.width = `${drop_thickness}px`  // nu se merită să fie înlocuit cu transform: scale
 			elem.style.height = `${drop_length}px`
 			elem.style.background = `linear-gradient(0deg, ${drop_color}, transparent)`
 				
@@ -157,6 +157,11 @@ export function Rain(props: RainProps)
 			window.removeEventListener('resize', animateRain)
 		}
 	}, [animateRain])
+
+
+	useEffect(() => {
+		animateRain()
+	}, [props.drop_count, animateRain])
 	
 	
 	// Render
@@ -186,6 +191,9 @@ export function RainDemo()
 	const [editor_props, setEditorProps] = useState<RainProps>(new RainProps())
 	const [active_props, setActiveProps] = useState<RainProps>(new RainProps())
 
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	})
 
 	const applyEditorProps = () => {
 		setActiveProps(editor_props)
