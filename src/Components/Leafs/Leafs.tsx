@@ -73,10 +73,12 @@ export function Leafs(props: LeafsProps)
 	const leaf_overlap = props.leaf_overlap ?? 0.5;
 
 	// Internal state
-	const [inited, setInited] = useState(false);
-	const [open_rings, setOpenRings] = useState<ComputedRing[]>([]);
-	const [close_rings, setCloseRings] = useState<ComputedRing[]>([]);
-	const [is_open, setIsOpen] = useState(true);
+	const [state, setState] = useState({
+		inited: false,
+		open_rings: new Array<ComputedRing>(),
+		close_rings: new Array<ComputedRing>(),
+		is_open: true
+	})
 
 
 	// REACT BUG: situație identică cu componenta Rain, dar nu vrea să se recalculeze folosind
@@ -163,14 +165,11 @@ export function Leafs(props: LeafsProps)
 				ring_radius += leaf_diagonal * (1 - ring_close_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
-
-			setCloseRings(new_close_rings);
 		}
 
 		// Compute open leafs
+		let new_open_rings: ComputedRing[] = []
 		{
-			let new_begin_rings: ComputedRing[] = [];
-			
 			let angle_offset = ring_open_angle_offset;
 			let z_index = 0;
 			let leaf_size = leaf_init_size;
@@ -225,35 +224,45 @@ export function Leafs(props: LeafsProps)
 					angle_rad += (2 * Math.PI) / leaf_count;
 				}
 
-				new_begin_rings.push(new_computed_ring);
+				new_open_rings.push(new_computed_ring);
 
 				z_index += 1;
 				leaf_size *= leaf_growth_factor;
 				ring_radius += leaf_diagonal * (1 - ring_open_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
-
-			setOpenRings(new_begin_rings);
 		}
+
+		setState((prev) => {
+			return {
+				...prev,
+				close_rings: new_close_rings,
+				open_rings: new_open_rings
+			}
+		})
 	}
 
 	
 	// First time animation
 	useEffect(() => {
-		if (inited === false) {
-			recompute()
-			setInited(true)
-		}
-		else {
-			setIsOpen(false)
-		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [inited])
+		setState(prev => {
+			let new_state = { ...prev }
+
+			if (prev.inited === false) {
+				new_state.inited = true
+			}
+			else {
+				new_state.is_open = false
+			}
+
+			return new_state
+		})
+	}, [state.inited])
 
 
 	useEffect(() => {
 		recompute()
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		ring_count,
 		ring_open_overlap,
@@ -270,19 +279,24 @@ export function Leafs(props: LeafsProps)
 
 
 	const toggle = () => {
-		setIsOpen(!is_open);
+		setState(prev => {
+			return {
+				...prev,
+				is_open: !prev.is_open
+			}
+		})
 	}
 	
 	// Render
-	console.log(props)
+	// console.log(props)
 	let leafs: ReactNode[] = [];
 	let rings: ComputedRing[] = [];
 
-	if (is_open) {
-		rings = open_rings;
+	if (state.is_open) {
+		rings = state.open_rings;
 	}
 	else {
-		rings = close_rings;
+		rings = state.close_rings;
 	}
 
 	for (let r = 0; r < rings.length; r++) {
@@ -349,7 +363,7 @@ function LeafsDemo()
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-	})
+	}, [])
 
 	const applyEditorProps = () => {
 		setActiveProps(editor_props)

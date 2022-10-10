@@ -1,5 +1,5 @@
 import React, {
-	useEffect, useState, useRef, useCallback
+	useEffect, useReducer, useRef, useCallback
 } from 'react'
 import NumericInput from '../NumericInput/NumericInput'
 import { jitter } from '../../Common'
@@ -186,22 +186,69 @@ export function Rain(props: RainProps)
 }
 
 
+enum ActionType {
+	swap,
+	update_editor_param
+}
+
+class State {
+	editor_props: RainProps = new RainProps()
+	active_props: RainProps = new RainProps()
+}
+
+class DispatchParams {
+	type: ActionType = ActionType.swap
+	field_name?: string
+	new_value?: any
+}
+
+function reducer(state: State, action: DispatchParams) {
+	let new_state = { ...state }
+	
+	switch (action.type) {
+		case ActionType.swap: {
+			new_state.active_props = { ...state.editor_props }
+			break;
+		}
+		case ActionType.update_editor_param: {
+			if (action.field_name === undefined) {
+				throw new Error('field_name e undefined')
+			}
+			(new_state.editor_props as any)[action.field_name] = action.new_value
+			break;
+		}
+		default: console.trace()
+	}
+
+	return new_state
+}
+
+
 export function RainDemo()
 {
-	const [editor_props, setEditorProps] = useState<RainProps>(new RainProps())
-	const [active_props, setActiveProps] = useState<RainProps>(new RainProps())
+	const [state, dispatch] = useReducer(reducer, new State())
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
-	})
+	}, [])
 
 	const applyEditorProps = () => {
-		setActiveProps(editor_props)
+		dispatch(new DispatchParams())
 	}
 
+	const updateEditorParam = (field_name: string, new_value: number) => {
+		dispatch({
+			type: ActionType.update_editor_param,
+			field_name: field_name,
+			new_value: new_value
+		})
+	}
+
+	// Render
+	//console.log('render')
 	return <>
 		<div className='rain-container'>
-			<Rain {...active_props} />
+			<Rain {...state.active_props} />
 		</div>
 		<main className='rain-demo content-wrap'>
 			<div className='editor content'>
@@ -214,13 +261,13 @@ export function RainDemo()
 				<div className="general params" style={{gridArea: 'general'}}>	
 					<NumericInput
 						label="Numărul de picături"
-						value={editor_props.drop_count}
-						onValueChange={value => setEditorProps({ ...editor_props, drop_count: value})}
+						value={state.editor_props.drop_count}
+						onValueChange={value => updateEditorParam('drop_count', value)}
 					/>
 					<NumericInput
 						label="Unghiul de cădere"
-						value={editor_props.drop_angle}
-						onValueChange={value => setEditorProps({ ...editor_props, drop_angle: value})}
+						value={state.editor_props.drop_angle}
+						onValueChange={value => updateEditorParam('drop_angle', value)}
 					/>
 				</div>
 
@@ -228,25 +275,25 @@ export function RainDemo()
 					<div className='interval'>
 						<NumericInput
 							label="Timpul minim de cădere"
-							value={editor_props.drop_duration_min}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_duration_min: value})}
+							value={state.editor_props.drop_duration_min}
+							onValueChange={value => updateEditorParam('drop_duration_min', value)}
 						/>
 						<NumericInput
 							label="Timpul maxim de cădere"
-							value={editor_props.drop_duration_max}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_duration_max: value})}
+							value={state.editor_props.drop_duration_max}
+							onValueChange={value => updateEditorParam('drop_duration_max', value)}
 						/>
 					</div>
 					<div className='interval'>
 						<NumericInput
 							label="Deviație minimă de cădere"
-							value={editor_props.drop_x_deviation_min}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_x_deviation_min: value})}
+							value={state.editor_props.drop_x_deviation_min}
+							onValueChange={value => updateEditorParam('drop_x_deviation_min', value)}
 						/>
 						<NumericInput
 							label="Deviație maxim de cădere"
-							value={editor_props.drop_x_deviation_max}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_x_deviation_max: value})}
+							value={state.editor_props.drop_x_deviation_max}
+							onValueChange={value => updateEditorParam('drop_x_deviation_max', value)}
 						/>
 					</div>
 				</div>
@@ -255,26 +302,26 @@ export function RainDemo()
 					<div className='interval'>
 						<NumericInput
 							label="Grosimea minimă a picături"
-							value={editor_props.drop_thickness_min}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_thickness_min: value})}
+							value={state.editor_props.drop_thickness_min}
+							onValueChange={value => updateEditorParam('drop_thickness_min', value)}
 						/>
 						<NumericInput
 							label="Grosimea maximă a picături"
-							value={editor_props.drop_thickness_max}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_thickness_max: value})}
+							value={state.editor_props.drop_thickness_max}
+							onValueChange={value => updateEditorParam('drop_thickness_max', value)}
 						/>		
 					</div>
 
 					<div className='interval'>
 						<NumericInput
 							label="Lungimea minimă a picături"
-							value={editor_props.drop_length_min}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_length_min: value})}
+							value={state.editor_props.drop_length_min}
+							onValueChange={value => updateEditorParam('drop_length_min', value)}
 						/>
 						<NumericInput
 							label="Lungimea maximă a picături"
-							value={editor_props.drop_length_max}
-							onValueChange={value => setEditorProps({ ...editor_props, drop_length_max: value})}
+							value={state.editor_props.drop_length_max}
+							onValueChange={value => updateEditorParam('drop_length_max', value)}
 						/>
 					</div>
 				</div>
