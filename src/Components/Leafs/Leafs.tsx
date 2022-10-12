@@ -356,24 +356,70 @@ export function Leafs(props: LeafsProps)
 }
 
 
+enum ActionType {
+	swap,
+	update_editor_param
+}
+
+class State {
+	editor_props: LeafsProps = new LeafsProps()
+	active_props: LeafsProps = new LeafsProps()
+}
+
+class DispatchParams {
+	type: ActionType = ActionType.swap
+	field_name?: string
+	new_value?: any
+}
+
+function reducer(state: State, action: DispatchParams) {
+	let new_state = { ...state }
+	
+	switch (action.type) {
+		case ActionType.swap: {
+			new_state.active_props = { ...state.editor_props }
+			break;
+		}
+		case ActionType.update_editor_param: {
+			if (action.field_name === undefined) {
+				throw new Error('field_name e undefined')
+			}
+			(new_state.editor_props as any)[action.field_name] = action.new_value
+			break;
+		}
+		default: console.trace()
+	}
+
+	return new_state
+}
+
+
 function LeafsDemo()
 {
-	const [editor_props, setEditorProps] = useState<LeafsProps>(new LeafsProps())
-	const [active_props, setActiveProps] = useState<LeafsProps>(new LeafsProps())
+	const [state, dispatch] = React.useReducer(reducer, new State())
+	
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [])
 
 	const applyEditorProps = () => {
-		setActiveProps(editor_props)
+		dispatch(new DispatchParams())
+	}
+
+	const updateEditorParam = (field_name: string, new_value: number) => {
+		dispatch({
+			type: ActionType.update_editor_param,
+			field_name: field_name,
+			new_value: new_value
+		})
 	}
 
 	return <>
 		{/* <React.StrictMode> */}
 
 		<div className="leafs-container">
-			<Leafs {...active_props}
+			<Leafs {...state.active_props}
 			/>
 		</div>
 
@@ -389,36 +435,36 @@ function LeafsDemo()
 				<div className="params ring-params">	
 					<NumericInput
 						label="Numărul de inele"
-						value={editor_props.ring_count ?? 14}
-						onValueChange={value => setEditorProps({ ...editor_props, ring_count: value})}
+						value={state.editor_props.ring_count ?? 14}
+						onValueChange={value => updateEditorParam('ring_count', value)}
 					/>
 					<NumericInput
 						label="Dimensiunea inelului central"
-						value={editor_props.ring_close_size ?? 100}
-						onValueChange={value => setEditorProps({ ...editor_props, ring_close_size: value})}
+						value={state.editor_props.ring_close_size ?? 100}
+						onValueChange={value => updateEditorParam('ring_close_size', value)}
 					/>
 					<NumericInput
 						label="Decalajul unghiului inelelor la deschidere"
-						value={editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
-						onValueChange={value => setEditorProps({ ...editor_props,	ring_open_angle_offset: value})}
+						value={state.editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
+						onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
 					/>
 				</div>
 
 				<div className="params leaf-params">
 					<NumericInput
 						label="Dimensiunea inițială a frunzelor"
-						value={editor_props.leaf_init_size ?? 50}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_init_size: value})}
+						value={state.editor_props.leaf_init_size ?? 50}
+						onValueChange={value => updateEditorParam('leaf_init_size', value)}
 					/>
 					<NumericInput
 						label="Factorul de creștere a frunzelor"
-						value={editor_props.leaf_growth_factor ?? 1.1}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_growth_factor: value})}
+						value={state.editor_props.leaf_growth_factor ?? 1.1}
+						onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
 					/>
 					<NumericInput
 						label="Nivelul de suprapunere a frunzelor"
-						value={editor_props.leaf_overlap ?? .5}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_overlap: value})}
+						value={state.editor_props.leaf_overlap ?? .5}
+						onValueChange={value => updateEditorParam('leaf_overlap', value)}
 					/>
 				</div>
 
