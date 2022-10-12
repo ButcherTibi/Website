@@ -14,17 +14,17 @@ import NumericInput from "../NumericInput/NumericInput";
 
 
 class LeafsProps {
-	ring_count?: number;
-	ring_open_overlap?: number;
-	ring_close_overlap?: number;
-	ring_close_size?: number;
-	ring_closed_angle_offset?: number;
-	ring_open_angle_offset?: number;
-	ring_angle_offset_growth?: number;
+	ring_count?: number = 14
+	ring_open_overlap?: number = -2
+	ring_close_overlap?: number = 0.5
+	ring_close_size?: number = 100
+	ring_closed_angle_offset?: number = 0
+	ring_open_angle_offset?: number = Math.PI * 0.5
+	ring_angle_offset_growth?: number = Math.PI / 4
 
-	leaf_init_size?: number;
-	leaf_growth_factor?: number;
-	leaf_overlap?: number;
+	leaf_init_size?: number = 50
+	leaf_growth_factor?: number = 1.1;
+	leaf_overlap?: number = 0.5
 }
 
 class LeafData {
@@ -58,19 +58,21 @@ export function Leafs(props: LeafsProps)
 {
 	const wrapper_elem = useRef<HTMLDivElement>(null)
 
+	const initial = new LeafsProps()
+
 	// Ring Params
-	const ring_count = props.ring_count ?? 14;
-	const ring_open_overlap = props.ring_open_overlap ?? -2;
-	const ring_close_overlap = props.ring_close_overlap ?? 0.5;
-	const ring_close_size = props.ring_close_size ?? 100;
-	const ring_closed_angle_offset = props.ring_closed_angle_offset ?? 0;
-	const ring_open_angle_offset = props.ring_open_angle_offset ?? Math.PI * 0.5;
-	const ring_angle_offset_growth = props.ring_angle_offset_growth ?? Math.PI / 4;
+	const ring_count = props.ring_count ?? initial.ring_count!;
+	const ring_open_overlap = props.ring_open_overlap ?? initial.ring_open_overlap!;
+	const ring_close_overlap = props.ring_close_overlap ?? initial.ring_close_overlap!
+	const ring_close_size = props.ring_close_size ?? initial.ring_close_size!
+	const ring_closed_angle_offset = props.ring_closed_angle_offset ?? initial.ring_closed_angle_offset!
+	const ring_open_angle_offset = props.ring_open_angle_offset ?? initial.ring_open_angle_offset!
+	const ring_angle_offset_growth = props.ring_angle_offset_growth ?? initial.ring_angle_offset_growth!;
 
 	// Leaf Params
-	const leaf_init_size = props.leaf_init_size ?? 50;
-	const leaf_growth_factor = props.leaf_growth_factor ?? 1.1;
-	const leaf_overlap = props.leaf_overlap ?? 0.5;
+	const leaf_init_size = props.leaf_init_size ?? initial.leaf_init_size!
+	const leaf_growth_factor = props.leaf_growth_factor ?? initial.leaf_growth_factor!
+	const leaf_overlap = props.leaf_overlap ?? initial.leaf_overlap!
 
 	// Internal state
 	const [state, setState] = useState({
@@ -358,6 +360,9 @@ export function Leafs(props: LeafsProps)
 
 enum ActionType {
 	swap,
+	initial_preset,
+	flip_preset,
+	spin_preset,
 	update_editor_param
 }
 
@@ -378,14 +383,32 @@ function reducer(state: State, action: DispatchParams) {
 	switch (action.type) {
 		case ActionType.swap: {
 			new_state.active_props = { ...state.editor_props }
-			break;
+			break
+		}
+		case ActionType.initial_preset: {
+			const initial = new LeafsProps()
+			new_state.editor_props = { ...initial }
+			new_state.active_props = { ...initial }
+			break
+		}
+		case ActionType.flip_preset: {
+			const initial = new LeafsProps()
+			new_state.editor_props = { ...initial, ring_open_angle_offset: Math.PI }
+			new_state.active_props = { ...initial, ring_open_angle_offset: Math.PI }
+			break
+		}
+		case ActionType.spin_preset: {
+			const initial = new LeafsProps()
+			new_state.editor_props = { ...initial, ring_open_angle_offset: Math.PI * 10 }
+			new_state.active_props = { ...initial, ring_open_angle_offset: Math.PI * 10 }
+			break
 		}
 		case ActionType.update_editor_param: {
 			if (action.field_name === undefined) {
 				throw new Error('field_name e undefined')
 			}
 			(new_state.editor_props as any)[action.field_name] = action.new_value
-			break;
+			break
 		}
 		default: console.trace()
 	}
@@ -403,10 +426,6 @@ function LeafsDemo()
 		window.scrollTo(0, 0)
 	}, [])
 
-	const applyEditorProps = () => {
-		dispatch(new DispatchParams())
-	}
-
 	const updateEditorParam = (field_name: string, new_value: number) => {
 		dispatch({
 			type: ActionType.update_editor_param,
@@ -419,8 +438,7 @@ function LeafsDemo()
 		{/* <React.StrictMode> */}
 
 		<div className="leafs-container">
-			<Leafs {...state.active_props}
-			/>
+			<Leafs {...state.active_props} />
 		</div>
 
 		<main className="leafs-demo content-wrap">
@@ -432,20 +450,35 @@ function LeafsDemo()
 					<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
 				</div>
 
+				<div className="presets" style={{gridArea: 'presets'}}>
+					<h3>Presetări</h3>
+					<div className="presets-list">
+						<button onClick={() => dispatch({type: ActionType.initial_preset})}>
+							Inițial
+						</button>
+						<button onClick={() => dispatch({type: ActionType.flip_preset})}>
+							Flip
+						</button>
+						<button onClick={() => dispatch({type: ActionType.spin_preset})}>
+							Spin
+						</button>
+					</div>
+				</div>
+
 				<div className="params ring-params">	
 					<NumericInput
 						label="Numărul de inele"
-						value={state.editor_props.ring_count ?? 14}
+						value={state.editor_props.ring_count!}
 						onValueChange={value => updateEditorParam('ring_count', value)}
 					/>
 					<NumericInput
 						label="Dimensiunea inelului central"
-						value={state.editor_props.ring_close_size ?? 100}
+						value={state.editor_props.ring_close_size!}
 						onValueChange={value => updateEditorParam('ring_close_size', value)}
 					/>
 					<NumericInput
 						label="Decalajul unghiului inelelor la deschidere"
-						value={state.editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
+						value={state.editor_props.ring_open_angle_offset!}
 						onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
 					/>
 				</div>
@@ -453,23 +486,23 @@ function LeafsDemo()
 				<div className="params leaf-params">
 					<NumericInput
 						label="Dimensiunea inițială a frunzelor"
-						value={state.editor_props.leaf_init_size ?? 50}
+						value={state.editor_props.leaf_init_size!}
 						onValueChange={value => updateEditorParam('leaf_init_size', value)}
 					/>
 					<NumericInput
 						label="Factorul de creștere a frunzelor"
-						value={state.editor_props.leaf_growth_factor ?? 1.1}
+						value={state.editor_props.leaf_growth_factor!}
 						onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
 					/>
 					<NumericInput
 						label="Nivelul de suprapunere a frunzelor"
-						value={state.editor_props.leaf_overlap ?? .5}
+						value={state.editor_props.leaf_overlap!}
 						onValueChange={value => updateEditorParam('leaf_overlap', value)}
 					/>
 				</div>
 
 				<div className="btns-cell">
-					<button onClick={applyEditorProps}>Aplică</button>
+					<button onClick={() => dispatch(new DispatchParams())}>Aplică</button>
 				</div>
 			</div>
 			

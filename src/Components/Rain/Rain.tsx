@@ -188,6 +188,10 @@ export function Rain(props: RainProps)
 
 enum ActionType {
 	swap,
+	initial_preset,
+	lines_preset,
+	bars_preset,
+	ash_preset,
 	update_editor_param
 }
 
@@ -209,6 +213,61 @@ function reducer(state: State, action: DispatchParams) {
 		case ActionType.swap: {
 			new_state.active_props = { ...state.editor_props }
 			break;
+		}
+		case ActionType.initial_preset: {
+			const initial = new RainProps()
+			new_state.editor_props = { ...initial }
+			new_state.active_props = { ...initial }
+			break
+		}
+		case ActionType.lines_preset: {
+			let preset = new RainProps()
+			preset.drop_color = 'hsl(166, 100%, 43%)'
+			preset.drop_angle = 181
+			preset.drop_duration_min = 5000
+			preset.drop_duration_max = 7500
+			preset.drop_x_deviation_min = 100
+			preset.drop_x_deviation_min = 200
+			preset.drop_length_min = 500
+			preset.drop_length_max = 1000
+
+			new_state.editor_props = { ...preset }
+			new_state.active_props = { ...preset }
+			break
+		}
+		case ActionType.bars_preset: {
+			let preset = new RainProps()
+			preset.drop_color = 'hsl(256, 100%, 47%)'
+			preset.drop_angle = -60
+			preset.drop_duration_min = 7500
+			preset.drop_duration_max = 10000
+			preset.drop_thickness_min = 30
+			preset.drop_thickness_max = 50
+			preset.drop_x_deviation_min = 500
+			preset.drop_x_deviation_min = 500
+			preset.drop_length_min = 1000
+			preset.drop_length_max = 1000 
+
+			new_state.editor_props = { ...preset }
+			new_state.active_props = { ...preset }
+			break
+		}
+		case ActionType.ash_preset: {
+			let preset = new RainProps()
+			preset.drop_color = 'hsl(0, 100%, 0%)'
+			preset.drop_angle = 120
+			preset.drop_duration_min = 7500
+			preset.drop_duration_max = 10000
+			preset.drop_thickness_min = 200
+			preset.drop_thickness_max = 200
+			preset.drop_x_deviation_min = 1000
+			preset.drop_x_deviation_min = 1000
+			preset.drop_length_min = 0
+			preset.drop_length_max = 0 
+
+			new_state.editor_props = { ...preset }
+			new_state.active_props = { ...preset }
+			break
 		}
 		case ActionType.update_editor_param: {
 			if (action.field_name === undefined) {
@@ -256,6 +315,24 @@ export function RainDemo()
 					<h3>Componenta <code>Rain</code></h3>
 					<p>Crează o ploaie unde fiecare picătură este generată procedural.</p>
 					<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
+				</div>
+
+				<div className="presets" style={{gridArea: 'presets'}}>
+					<h3>Presetări</h3>
+					<div className="presets-list">
+						<button onClick={() => dispatch({type: ActionType.initial_preset})}>
+							Inițial
+						</button>
+						<button onClick={() => dispatch({type: ActionType.lines_preset})}>
+							Linii
+						</button>
+						<button onClick={() => dispatch({type: ActionType.bars_preset})}>
+							Bare
+						</button>
+						<button onClick={() => dispatch({type: ActionType.ash_preset})}>
+							Bule
+						</button>
+					</div>
 				</div>
 
 				<div className="general params" style={{gridArea: 'general'}}>	

@@ -49,6 +49,7 @@
 		display: grid;
 		grid-template-areas:
 			"description description"
+			"presets presets"
 			"ring leaf"
 			"btns btns"
 		;
@@ -56,6 +57,7 @@
 		@media (max-width: 700px), (max-height: 700px) {
 			grid-template-areas:
 				"description"
+				"presets"
 				"ring"
 				"leaf"
 				"btns"
@@ -64,10 +66,24 @@
 
 		gap: 15px;
 
-		.params {
-			display: flex;
-			flex-direction: column;
-			gap: 7px;
+		--color_a: hsl(99deg, 51%, 47%);
+		--color_b: hsl(99deg, 51%, 100%);
+
+		button {
+			border-radius: 7px;
+			border: 2px solid var(--color_a);
+			padding: 7px 30px;
+
+			font-size: 16px;
+			color: var(--color_b);
+
+			background-color: var(--color_a);
+			transition: color .3s, background .3s;
+		}
+
+		button:hover {
+			color: var(--color_a);
+			background-color: var(--color_b);
 		}
 
 		.description {			
@@ -83,6 +99,17 @@
 			}
 		}
 
+		.presets .presets-list {
+			display: flex;
+			gap: 10px;
+		}
+
+		.params {
+			display: flex;
+			flex-direction: column;
+			gap: 7px;
+		}
+
 		.ring-params {
 			grid-area: ring;
 		}
@@ -96,27 +123,6 @@
 
 			display: flex;
 			justify-content: center;
-
-			--color_a: hsl(99deg, 51%, 47%);
-			--color_b: hsl(99deg, 51%, 100%);
-			$color_b: hsl(99deg, 51%, 47%);
-
-			button {
-				border-radius: 7px;
-				border: 2px solid var(--color_a);
-				padding: 7px 30px;
-
-				font-size: 16px;
-				color: var(--color_b);
-
-				background-color: var(--color_a);
-				transition: color .3s, background .3s;
-			}
-
-			button:hover {
-				color: var(--color_a);
-				background-color: var(--color_b);
-			}
 		}
 	}
 }

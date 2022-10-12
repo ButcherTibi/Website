@@ -47,6 +47,7 @@
    	grid-auto-flow: column;
 		grid-template-areas:
 			"description description"
+			"presets presets"
 			"general general"
 			"pozitie pozitie"
 			"shape shape"
@@ -54,7 +55,33 @@
 		;
 	
 		gap: 15px;
-	
+
+		--color_a: hsla(209, 100%, 50%, 1);
+		--color_b: hsl(99deg, 51%, 100%);
+
+
+		button {
+			border-radius: 7px;
+			border: 2px solid var(--color_a);
+			padding: 7px 30px;
+
+			font-size: 16px;
+			color: var(--color_b);
+
+			background-color: var(--color_a);
+			transition: color .3s, background .3s;
+		}
+
+		button:hover {
+			color: var(--color_a);
+			background-color: var(--color_b);
+		}
+		
+		.presets .presets-list {
+			display: flex;
+			gap: 10px;
+		}
+
 		.params {
 			display: flex;
 			flex-direction: column;
@@ -92,26 +119,6 @@
 
 			display: flex;
 			justify-content: center;
-
-			--color_a: hsla(209, 100%, 50%, 1);
-			--color_b: hsl(99deg, 51%, 100%);
-
-			button {
-				border-radius: 7px;
-				border: 2px solid var(--color_a);
-				padding: 7px 30px;
-
-				font-size: 16px;
-				color: var(--color_b);
-
-				background-color: var(--color_a);
-				transition: color .3s, background .3s;
-			}
-
-			button:hover {
-				color: var(--color_a);
-				background-color: var(--color_b);
-			}
 		}
 	}
 }
