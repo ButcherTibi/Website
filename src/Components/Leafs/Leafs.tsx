@@ -73,10 +73,12 @@ export function Leafs(props: LeafsProps)
 	const leaf_overlap = props.leaf_overlap ?? 0.5;
 
 	// Internal state
-	const [inited, setInited] = useState(false);
-	const [open_rings, setOpenRings] = useState<ComputedRing[]>([]);
-	const [close_rings, setCloseRings] = useState<ComputedRing[]>([]);
-	const [is_open, setIsOpen] = useState(true);
+	const [state, setState] = useState({
+		inited: false,
+		open_rings: new Array<ComputedRing>(),
+		close_rings: new Array<ComputedRing>(),
+		is_open: true
+	})
 
 
 	// REACT BUG: situație identică cu componenta Rain, dar nu vrea să se recalculeze folosind
@@ -163,14 +165,11 @@ export function Leafs(props: LeafsProps)
 				ring_radius += leaf_diagonal * (1 - ring_close_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
-
-			setCloseRings(new_close_rings);
 		}
 
 		// Compute open leafs
+		let new_open_rings: ComputedRing[] = []
 		{
-			let new_begin_rings: ComputedRing[] = [];
-			
 			let angle_offset = ring_open_angle_offset;
 			let z_index = 0;
 			let leaf_size = leaf_init_size;
@@ -225,35 +224,45 @@ export function Leafs(props: LeafsProps)
 					angle_rad += (2 * Math.PI) / leaf_count;
 				}
 
-				new_begin_rings.push(new_computed_ring);
+				new_open_rings.push(new_computed_ring);
 
 				z_index += 1;
 				leaf_size *= leaf_growth_factor;
 				ring_radius += leaf_diagonal * (1 - ring_open_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
-
-			setOpenRings(new_begin_rings);
 		}
+
+		setState((prev) => {
+			return {
+				...prev,
+				close_rings: new_close_rings,
+				open_rings: new_open_rings
+			}
+		})
 	}
 
 	
 	// First time animation
 	useEffect(() => {
-		if (inited === false) {
-			recompute()
-			setInited(true)
-		}
-		else {
-			setIsOpen(false)
-		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [inited])
+		setState(prev => {
+			let new_state = { ...prev }
+
+			if (prev.inited === false) {
+				new_state.inited = true
+			}
+			else {
+				new_state.is_open = false
+			}
+
+			return new_state
+		})
+	}, [state.inited])
 
 
 	useEffect(() => {
 		recompute()
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		ring_count,
 		ring_open_overlap,
@@ -270,19 +279,24 @@ export function Leafs(props: LeafsProps)
 
 
 	const toggle = () => {
-		setIsOpen(!is_open);
+		setState(prev => {
+			return {
+				...prev,
+				is_open: !prev.is_open
+			}
+		})
 	}
 	
 	// Render
-	console.log(props)
+	// console.log(props)
 	let leafs: ReactNode[] = [];
 	let rings: ComputedRing[] = [];
 
-	if (is_open) {
-		rings = open_rings;
+	if (state.is_open) {
+		rings = state.open_rings;
 	}
 	else {
-		rings = close_rings;
+		rings = state.close_rings;
 	}
 
 	for (let r = 0; r < rings.length; r++) {
@@ -342,24 +356,70 @@ export function Leafs(props: LeafsProps)
 }
 
 
+enum ActionType {
+	swap,
+	update_editor_param
+}
+
+class State {
+	editor_props: LeafsProps = new LeafsProps()
+	active_props: LeafsProps = new LeafsProps()
+}
+
+class DispatchParams {
+	type: ActionType = ActionType.swap
+	field_name?: string
+	new_value?: any
+}
+
+function reducer(state: State, action: DispatchParams) {
+	let new_state = { ...state }
+	
+	switch (action.type) {
+		case ActionType.swap: {
+			new_state.active_props = { ...state.editor_props }
+			break;
+		}
+		case ActionType.update_editor_param: {
+			if (action.field_name === undefined) {
+				throw new Error('field_name e undefined')
+			}
+			(new_state.editor_props as any)[action.field_name] = action.new_value
+			break;
+		}
+		default: console.trace()
+	}
+
+	return new_state
+}
+
+
 function LeafsDemo()
 {
-	const [editor_props, setEditorProps] = useState<LeafsProps>(new LeafsProps())
-	const [active_props, setActiveProps] = useState<LeafsProps>(new LeafsProps())
+	const [state, dispatch] = React.useReducer(reducer, new State())
+	
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [])
 
 	const applyEditorProps = () => {
-		setActiveProps(editor_props)
+		dispatch(new DispatchParams())
+	}
+
+	const updateEditorParam = (field_name: string, new_value: number) => {
+		dispatch({
+			type: ActionType.update_editor_param,
+			field_name: field_name,
+			new_value: new_value
+		})
 	}
 
 	return <>
 		{/* <React.StrictMode> */}
 
 		<div className="leafs-container">
-			<Leafs {...active_props}
+			<Leafs {...state.active_props}
 			/>
 		</div>
 
@@ -375,36 +435,36 @@ function LeafsDemo()
 				<div className="params ring-params">	
 					<NumericInput
 						label="Numărul de inele"
-						value={editor_props.ring_count ?? 14}
-						onValueChange={value => setEditorProps({ ...editor_props, ring_count: value})}
+						value={state.editor_props.ring_count ?? 14}
+						onValueChange={value => updateEditorParam('ring_count', value)}
 					/>
 					<NumericInput
 						label="Dimensiunea inelului central"
-						value={editor_props.ring_close_size ?? 100}
-						onValueChange={value => setEditorProps({ ...editor_props, ring_close_size: value})}
+						value={state.editor_props.ring_close_size ?? 100}
+						onValueChange={value => updateEditorParam('ring_close_size', value)}
 					/>
 					<NumericInput
 						label="Decalajul unghiului inelelor la deschidere"
-						value={editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
-						onValueChange={value => setEditorProps({ ...editor_props,	ring_open_angle_offset: value})}
+						value={state.editor_props.ring_open_angle_offset ?? Math.PI * 0.5}
+						onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
 					/>
 				</div>
 
 				<div className="params leaf-params">
 					<NumericInput
 						label="Dimensiunea inițială a frunzelor"
-						value={editor_props.leaf_init_size ?? 50}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_init_size: value})}
+						value={state.editor_props.leaf_init_size ?? 50}
+						onValueChange={value => updateEditorParam('leaf_init_size', value)}
 					/>
 					<NumericInput
 						label="Factorul de creștere a frunzelor"
-						value={editor_props.leaf_growth_factor ?? 1.1}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_growth_factor: value})}
+						value={state.editor_props.leaf_growth_factor ?? 1.1}
+						onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
 					/>
 					<NumericInput
 						label="Nivelul de suprapunere a frunzelor"
-						value={editor_props.leaf_overlap ?? .5}
-						onValueChange={value => setEditorProps({ ...editor_props, leaf_overlap: value})}
+						value={state.editor_props.leaf_overlap ?? .5}
+						onValueChange={value => updateEditorParam('leaf_overlap', value)}
 					/>
 				</div>
 

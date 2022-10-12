@@ -32,7 +32,7 @@ function NumericInput(props: NumericInputProps)
 
 		let new_value = parseFloat(e.currentTarget.value);
 		if (isNaN(new_value) === false) {
-			console.log(`new value = ${new_value}`)
+			// console.log(`new value = ${new_value}`)
 			props.onValueChange(new_value);
 		}
 	}
