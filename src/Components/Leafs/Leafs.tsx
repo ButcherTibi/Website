@@ -10,7 +10,6 @@ import leaf_tex_2 from '../../Resources/Leaf_tex_2.jpg';
 import leaf_tex_3 from '../../Resources/Leaf_tex_3.jpg';
 import leaf_tex_4 from '../../Resources/Leaf_tex_4.jpg';
 
-import NumericInput from "../NumericInput/NumericInput";
 import Slider from "../Slider/Slider"
 
 
