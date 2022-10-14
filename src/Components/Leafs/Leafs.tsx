@@ -11,6 +11,7 @@ import leaf_tex_3 from '../../Resources/Leaf_tex_3.jpg';
 import leaf_tex_4 from '../../Resources/Leaf_tex_4.jpg';
 
 import NumericInput from "../NumericInput/NumericInput";
+import Slider from "../Slider/Slider"
 
 
 class LeafsProps {
@@ -23,7 +24,7 @@ class LeafsProps {
 	ring_angle_offset_growth?: number = Math.PI / 4
 
 	leaf_init_size?: number = 50
-	leaf_growth_factor?: number = 1.1;
+	leaf_growth_factor?: number = 0.1;
 	leaf_overlap?: number = 0.5
 }
 
@@ -163,7 +164,7 @@ export function Leafs(props: LeafsProps)
 				new_close_rings.push(new_close_ring);
 
 				z_index += 1;
-				leaf_size *= leaf_growth_factor;
+				leaf_size *= 1 + leaf_growth_factor;
 				ring_radius += leaf_diagonal * (1 - ring_close_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
@@ -229,7 +230,7 @@ export function Leafs(props: LeafsProps)
 				new_open_rings.push(new_computed_ring);
 
 				z_index += 1;
-				leaf_size *= leaf_growth_factor;
+				leaf_size *= 1 + leaf_growth_factor;
 				ring_radius += leaf_diagonal * (1 - ring_open_overlap);
 				angle_offset += ring_angle_offset_growth;
 			}
@@ -434,6 +435,12 @@ function LeafsDemo()
 		})
 	}
 
+	const common_props = {
+		show_numeric_input: true,
+		hover_btn_color: 'hsla(99deg, 51%, 47%, 0.25)',
+		pressed_btn_color: 'hsla(99deg, 51%, 47%, 0.5)'
+	}
+
 	return <>
 		{/* <React.StrictMode> */}
 
@@ -466,39 +473,70 @@ function LeafsDemo()
 				</div>
 
 				<div className="params ring-params">	
-					<NumericInput
-						label="Numărul de inele"
-						value={state.editor_props.ring_count!}
-						onValueChange={value => updateEditorParam('ring_count', value)}
-					/>
-					<NumericInput
-						label="Dimensiunea inelului central"
-						value={state.editor_props.ring_close_size!}
-						onValueChange={value => updateEditorParam('ring_close_size', value)}
-					/>
-					<NumericInput
-						label="Decalajul unghiului inelelor la deschidere"
-						value={state.editor_props.ring_open_angle_offset!}
-						onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
-					/>
+					<div>
+						<label>Numărul de inele</label>
+						<Slider
+							value={state.editor_props.ring_count!}
+							onValueChange={value => updateEditorParam('ring_count', value)}
+							min={1}
+							max={30}
+							step={1}
+							{...common_props}
+						/>
+					</div>
+					<div>
+						<label>Dimensiunea inelului central</label>
+						<Slider
+							value={state.editor_props.ring_close_size!}
+							onValueChange={value => updateEditorParam('ring_close_size', value)}
+							min={0}
+							max={700}
+							{...common_props}
+						/>
+					</div>
+					<div>
+						<label>Decalajul unghiului inelelor la deschidere</label>
+						<Slider
+							value={state.editor_props.ring_open_angle_offset!}
+							onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
+							min={-Math.PI}
+							max={Math.PI}
+							{...common_props}
+						/>
+					</div>
 				</div>
 
 				<div className="params leaf-params">
-					<NumericInput
-						label="Dimensiunea inițială a frunzelor"
-						value={state.editor_props.leaf_init_size!}
-						onValueChange={value => updateEditorParam('leaf_init_size', value)}
-					/>
-					<NumericInput
-						label="Factorul de creștere a frunzelor"
-						value={state.editor_props.leaf_growth_factor!}
-						onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
-					/>
-					<NumericInput
-						label="Nivelul de suprapunere a frunzelor"
-						value={state.editor_props.leaf_overlap!}
-						onValueChange={value => updateEditorParam('leaf_overlap', value)}
-					/>
+					<div>
+						<label>Dimensiunea inițială a frunzelor</label>
+						<Slider
+							value={state.editor_props.leaf_init_size!}
+							onValueChange={value => updateEditorParam('leaf_init_size', value)}
+							min={20}
+							max={200}
+							{...common_props}
+						/>
+					</div>
+					<div>
+						<label>Factorul de creștere a frunzelor</label>
+						<Slider
+							value={state.editor_props.leaf_growth_factor!}
+							onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
+							min={-1}
+							max={1}
+							{...common_props}
+						/>
+					</div>
+					<div>
+						<label>Nivelul de suprapunere a frunzelor</label>
+						<Slider
+							value={state.editor_props.leaf_overlap!}
+							onValueChange={value => updateEditorParam('leaf_overlap', value)}
+							min={0.125}
+							max={2}
+							{...common_props}
+						/>
+					</div>
 				</div>
 
 				<div className="btns-cell">

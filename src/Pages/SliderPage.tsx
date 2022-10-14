@@ -1,6 +1,6 @@
 import React from "react";
 
-import Slider from '../Components/Slider/Slider';
+// import Slider from '../Components/Slider/Slider';
 
 export default function SliderPage()
 {
@@ -12,7 +12,7 @@ export default function SliderPage()
 			alignItems: 'center'
 		}}>
 			<div style={{flexBasis: '500px'}}>
-				<Slider show_numeric_input />
+				{/* <Slider show_numeric_input /> */}
 			</div>
 		</div>
 	</>;

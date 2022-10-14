@@ -1,18 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { AppPage, AppPages } from "../App/App"
 
 
 function NotFoundPage()
 {
 	return <>
 		<h1>404 Rută negăsită</h1>
-		<h3>Rute existente</h3>
+		<h3>Pagini existente:</h3>
 		<ul>
-			<li><Link to='Accordion'>Accordion</Link></li>
-			<li><Link to='CardList'>CardList</Link></li>
-			<li><Link to='DropDown'>DropDown</Link></li>
-			<li><Link to='MenuPage'>MenuPage</Link></li>
-			<li><Link to='Slider'>Slider</Link></li>
+			{Object.entries(AppPages).map(([, page]: [string, AppPage]) => {
+				const url = page.url
+				return <li key={url}>
+					<Link to={url}>{url}</Link>
+				</li>
+			})}
 		</ul>
 	</>;
 };

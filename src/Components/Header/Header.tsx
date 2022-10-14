@@ -39,9 +39,7 @@ function Header()
 			return (
 				<header className="content-wrap">
 					<div className="content">
-						<div className='name'>
-							<NavLink to={'/'}><h3>Măcelaru Tiberiu</h3></NavLink>
-						</div>
+						<NavLink className={'name'} to={'/'}><h3>Măcelaru Tiberiu</h3></NavLink>
 						<div className='work-in-progress'>
 							<h3>Work in progress. Nu e gata.</h3>
 						</div>

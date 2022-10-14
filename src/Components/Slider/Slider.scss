@@ -6,116 +6,132 @@ $track_thickness: 5px;
 $thumb_size: 20px;
 $max_highlight_size: 100px;
 
-.slider {
+.Slider {
+	flex-grow: 1;
+	width: 100%;
+
 	display: flex;
 	align-items: center;
 
 	@include Theme.theme;
-}
 
-.slider .track-wrap {
-	position: relative;
-	height: $height;
+	// CSS Interface
+	.background-color {
+		background-color: hsl(0, 0%, 80%);
+	}
 
-	flex-grow: 1;
-	cursor: pointer;
+	.fill-color {
+		background-color: hsl(0, 0%, 50%);
+	}
 
-	.track {
-		position: absolute;
-		top: calc($height / 2 - $track_thickness / 2);
-		left: 0px;
+	.thumb-color {
+		background-color: hsl(0, 0%, 30%);
+	}
 
-		border-radius: calc($track_thickness / 2);
-		width: 100%;
-		height: $track_thickness;
+	.thumb-hover-color {
+		background-color: hsl(0, 0%, 30%);
+	}
 
-		background-color: var(--theme_backgrd_color);
+	.track-wrap {
+		position: relative;
+		height: $height;
+	
+		flex-grow: 1;
 		cursor: pointer;
-
-		.fill {
-			border-radius: inherit;
-			height: inherit;
-			background-color: var(--theme_backgrd_hard_hover_color);
-		}
-	}
-
-	.thumb {
-		position: absolute;
-		top: calc($height / 2 - $max_highlight_size / 2);
-
-		width:  $max_highlight_size;
-		height: $max_highlight_size;
-
-		.highlight {
+	
+		.track {
 			position: absolute;
-			top: 0px;
+			top: calc($height / 2 - $track_thickness / 2);
 			left: 0px;
-			z-index: -1;
-
+	
+			border-radius: calc($track_thickness / 2);
 			width: 100%;
-			height: 100%;
-
-			display: flex;
-			justify-content: center;
-			align-items: center;
-
-			div {
-				border-radius: 100%;
-				width: 0px;
-				height: 0px;
-
-				transition: width .2s, height .2s;
+			height: $track_thickness;
+	
+			cursor: pointer;
+	
+			.fill {
+				border-radius: inherit;
+				height: inherit;
 			}
 		}
-
-		.btn {
+	
+		.thumb {
 			position: absolute;
-			top: 0px;
-			left: 0px;
-
-			width: 100%;
-			height: 100%;
-
-			display: flex;
-			justify-content: center;
-			align-items: center;
-
-			button {
-				border-style: none;
-				border-radius: 100%;
-				padding: 0px;
-				width:  $thumb_size;
-				height: $thumb_size;
-
-				background-color: var(--theme_backgrd_hard_hover_color);
-
-				cursor: pointer;
+			top: calc($height / 2 - $max_highlight_size / 2);
+	
+			width:  $max_highlight_size;
+			height: $max_highlight_size;
+	
+			.highlight {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				z-index: -1;
+	
+				width: 100%;
+				height: 100%;
+	
+				display: flex;
+				justify-content: center;
+				align-items: center;
+	
+				div {
+					border-radius: 100%;
+					width: 40px;
+					height: 40px;
+	
+					transition: width .3s, height .3s, background .3s;
+				}
+			}
+	
+			.btn {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+	
+				width: 100%;
+				height: 100%;
+	
+				display: flex;
+				justify-content: center;
+				align-items: center;
+	
+				button {
+					border-style: none;
+					border-radius: 100%;
+					padding: 0px;
+					width:  $thumb_size;
+					height: $thumb_size;
+	
+					cursor: pointer;
+				}
 			}
 		}
 	}
-}
 
-.slider .numeric {
-	display: flex;
-	align-items: center;
-
-	input {
-		border: 1px solid black;
-		border-radius: 4px;
-
-		font-family: var(--theme_font);
-		font-size: 0.9rem;
-		color: black;
-		text-align: right;
-	}
-
-	input:focus {
-		outline: none;
-	}
-
-	::-webkit-outer-spin-button,
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
+	.numeric {
+		display: flex;
+		align-items: center;
+	
+		input {
+			border: 1px solid black;
+			border-radius: 4px;
+	
+			font-family: var(--theme_font);
+			font-size: 0.9rem;
+			color: black;
+			text-align: right;
+		}
+	
+		input:focus {
+			outline: none;
+		}
+	
+		::-webkit-outer-spin-button,
+		::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
 	}
 }

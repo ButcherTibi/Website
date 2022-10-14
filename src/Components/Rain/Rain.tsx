@@ -254,7 +254,7 @@ function reducer(state: State, action: DispatchParams) {
 		}
 		case ActionType.ash_preset: {
 			let preset = new RainProps()
-			preset.drop_color = 'hsl(0, 100%, 0%)'
+			preset.drop_color = 'hsl(5, 100%, 55%)'
 			preset.drop_angle = 120
 			preset.drop_duration_min = 7500
 			preset.drop_duration_max = 10000
