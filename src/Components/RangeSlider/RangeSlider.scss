@@ -1,0 +1,79 @@
+@use '../../Theme.scss';
+
+
+.RangeSlider {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	@include Theme.theme;
+
+	// CSS Interface
+	.background-color {
+		background-color: hsl(0, 0%, 80%);
+	}
+
+	.fill-color {
+		background-color: hsl(0, 0%, 50%);
+	}
+
+	.thumb-color {
+		background-color: hsl(0, 0%, 30%);
+	}
+
+	.hover-fill-color {
+		background-color: hsl(0, 0%, 30%);
+	}
+
+	.track {
+		position: relative;
+		width: 100%;
+		flex-grow: 1;
+		cursor: pointer;
+
+		.track-empty {
+			position: absolute;
+			left: 0px;
+			
+			width: 100%;
+
+			.track-fill {
+				position: absolute;
+				height: 100%;
+			}
+
+			.hover-fill {
+				position: absolute;
+				border-radius: 99px;
+				transition: background-color .3s;
+			}
+		}
+
+		.thumb {
+			position: absolute;
+			width: 0px;
+			height: 0px;
+			overflow: visible;
+
+			button {
+				position: relative;
+
+				border-radius: 999px;
+			}
+		}
+	}
+
+	.numeric {
+		border: 1px solid black;
+		border-radius: 4px;
+
+		font-family: var(--theme_font);
+		font-size: 0.9rem;
+		color: black;
+		text-align: right;
+
+		&:focus {
+			outline: none;
+		}
+	}
+}

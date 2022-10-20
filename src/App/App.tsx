@@ -10,7 +10,7 @@ import AccordionPage from '../Pages/AccordionPage';
 import CardListPage from '../Pages/CardListPage';
 import DropdownPage from '../Pages/DropdownPage';
 import MenuPage from '../Pages/MenuPage'
-import SliderPage from '../Pages/SliderPage';
+// import Database from '../Components/Database/Database';
 import Page404 from '../Pages/404';
 
 import PageWrapper from '../Components/PageWrapper/PageWrapper';
@@ -58,10 +58,10 @@ export abstract class AppPages {
 		url: 'menu-page',
 		elem: <MenuPage />
 	}
-	static slider: AppPage = {
-		url: 'slider',
-		elem: <SliderPage />
-	}
+	// static database: AppPage = {
+	// 	url: 'database',
+	// 	elem: <Database />
+	// }
 }
 
 

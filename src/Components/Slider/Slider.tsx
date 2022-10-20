@@ -10,7 +10,6 @@ export interface SliderProps {
 	value: number
 	onValueChange: (value: number) => void
 
-	default?: number
 	min?: number
 	max?: number
 	step?: number
@@ -24,6 +23,7 @@ export interface SliderProps {
 	pressed_btn_color?: string
 };
 
+// TODO: over render fix
 export default function Slider(props: SliderProps)
 {
 	const min = props.min ?? 0
@@ -40,7 +40,7 @@ export default function Slider(props: SliderProps)
 	const [display_value, setDisplayValue] = useState(props.value.toFixed(2));	
 	const [is_thumb_pressed, setIsThumbPressed] = useState(false);
 
-	const track_wrap_elem = useRef<HTMLDivElement>(null)
+	const track_elem = useRef<HTMLDivElement>(null)
 
 
 	const updateValue = (new_value: number) => {
@@ -66,7 +66,7 @@ export default function Slider(props: SliderProps)
 				return
 			}
 	
-			let rect = track_wrap_elem.current!.getBoundingClientRect()
+			let rect = track_elem.current!.getBoundingClientRect()
 			let new_ratio = (e.pageX - rect.left) / (rect.right - rect.left)
 			new_ratio = new_ratio < 0 ? 0 : new_ratio
 			new_ratio = new_ratio > 1 ? 1 : new_ratio
@@ -145,13 +145,13 @@ export default function Slider(props: SliderProps)
 	}
 
 	const onEnter = () => {
-		const track_wrap = track_wrap_elem.current!
+		const track_wrap = track_elem.current!
 		const div = track_wrap.querySelector('.highlight div')! as HTMLDivElement
 		div.style.backgroundColor = hover_btn_color
 	}
 
 	const onLeave = () => {
-		const track_wrap = track_wrap_elem.current!
+		const track_wrap = track_elem.current!
 		const div = track_wrap.querySelector('.highlight div')! as HTMLDivElement
 		div.style.backgroundColor = ''
 	}
@@ -185,7 +185,7 @@ export default function Slider(props: SliderProps)
 
 	return <>
 		<div className='Slider'>
-			<div className='track-wrap' ref={track_wrap_elem}
+			<div className='track-wrap' ref={track_elem}
 				onMouseDown={setThumb}
 				onTouchMove={setThumbTouch}
 				onTouchEnd={endTouchDrag}

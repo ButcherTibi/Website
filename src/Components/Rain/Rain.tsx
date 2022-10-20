@@ -2,6 +2,7 @@ import React, {
 	useEffect, useReducer, useRef, useCallback
 } from 'react'
 import NumericInput from '../NumericInput/NumericInput'
+import RangeSlider from '../RangeSlider/RangeSlider'
 import { jitter } from '../../Common'
 
 import './Rain.scss'
@@ -401,6 +402,16 @@ export function RainDemo()
 							onValueChange={value => updateEditorParam('drop_length_max', value)}
 						/>
 					</div>
+					<RangeSlider
+						left_value={state.editor_props.drop_length_min}
+						right_value={state.editor_props.drop_length_max}
+						onLeftValueChange={value => updateEditorParam('drop_length_min', value)}
+						onRightValueChange={value => updateEditorParam('drop_length_max', value)}
+
+						min={0}
+						max={100}
+						display_input={true}
+					/>
 				</div>
 
 				<div className="btns-cell">

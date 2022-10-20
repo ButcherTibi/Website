@@ -28,6 +28,16 @@ export const jitter = (min: number = 0, max: number = 1) => {
 	return min + ((max - min) * Math.random())
 }
 
+export const clamp = (value: number, min: number, max: number) => {
+	if (value < min) {
+		return min
+	}
+	else if (value > max) {
+		return max
+	}
+	return value
+}
+
 export function clearAnimations(elem: Element)
 {
 	elem.getAnimations().forEach(anim => anim.cancel())
