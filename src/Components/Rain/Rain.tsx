@@ -2,6 +2,7 @@ import React, {
 	useEffect, useReducer, useRef, useCallback
 } from 'react'
 import NumericInput from '../NumericInput/NumericInput'
+import Slider from '../Slider/Slider'
 import RangeSlider from '../RangeSlider/RangeSlider'
 import { jitter } from '../../Common'
 
@@ -228,7 +229,7 @@ function reducer(state: State, action: DispatchParams) {
 			preset.drop_duration_min = 5000
 			preset.drop_duration_max = 7500
 			preset.drop_x_deviation_min = 100
-			preset.drop_x_deviation_min = 200
+			preset.drop_x_deviation_max = 200
 			preset.drop_length_min = 500
 			preset.drop_length_max = 1000
 
@@ -244,8 +245,8 @@ function reducer(state: State, action: DispatchParams) {
 			preset.drop_duration_max = 10000
 			preset.drop_thickness_min = 30
 			preset.drop_thickness_max = 50
-			preset.drop_x_deviation_min = 500
-			preset.drop_x_deviation_min = 500
+			preset.drop_x_deviation_min = 100
+			preset.drop_x_deviation_max = 500
 			preset.drop_length_min = 1000
 			preset.drop_length_max = 1000 
 
@@ -261,8 +262,8 @@ function reducer(state: State, action: DispatchParams) {
 			preset.drop_duration_max = 10000
 			preset.drop_thickness_min = 200
 			preset.drop_thickness_max = 200
-			preset.drop_x_deviation_min = 1000
-			preset.drop_x_deviation_min = 1000
+			preset.drop_x_deviation_min = 100
+			preset.drop_x_deviation_max = 1000
 			preset.drop_length_min = 0
 			preset.drop_length_max = 0 
 
@@ -304,6 +305,12 @@ export function RainDemo()
 		})
 	}
 
+	const slider_props = {
+		hover_btn_color: 'hsla(209deg, 75%, 47%, 0.25)',
+		pressed_btn_color: 'hsla(209deg, 75%, 47%, 0.5)'
+	}
+
+
 	// Render
 	//console.log('render')
 	return <>
@@ -336,82 +343,94 @@ export function RainDemo()
 					</div>
 				</div>
 
-				<div className="general params" style={{gridArea: 'general'}}>	
-					<NumericInput
-						label="Numărul de picături"
-						value={state.editor_props.drop_count}
-						onValueChange={value => updateEditorParam('drop_count', value)}
-					/>
-					<NumericInput
-						label="Unghiul de cădere"
-						value={state.editor_props.drop_angle}
-						onValueChange={value => updateEditorParam('drop_angle', value)}
-					/>
+				<div className="general params" style={{gridArea: 'general'}}>						
+					<div>
+						<label>Numărul de picături</label>
+						<Slider
+							{...slider_props}
+							value={state.editor_props.drop_count}
+							onValueChange={value => updateEditorParam('drop_count', value)}
+							min={1}
+							max={200}
+							show_numeric_input={true}
+						/>
+					</div>
+
+					<div>
+						<label>Unghiul de cădere</label>
+						<Slider
+							{...slider_props}
+							value={state.editor_props.drop_angle}
+							onValueChange={value => updateEditorParam('drop_angle', value)}
+							min={-360}
+							max={+360}
+							show_numeric_input={true}
+						/>
+					</div>
 				</div>
 
 				<div className='pozitie params' style={{gridArea: 'pozitie'}}>
-					<div className='interval'>
-						<NumericInput
-							label="Timpul minim de cădere"
-							value={state.editor_props.drop_duration_min}
-							onValueChange={value => updateEditorParam('drop_duration_min', value)}
-						/>
-						<NumericInput
-							label="Timpul maxim de cădere"
-							value={state.editor_props.drop_duration_max}
-							onValueChange={value => updateEditorParam('drop_duration_max', value)}
+					<div>
+						<label>Timpul de cădere</label>
+						<RangeSlider
+							{...slider_props}
+							left_value={state.editor_props.drop_duration_min}
+							right_value={state.editor_props.drop_duration_max}
+							onLeftValueChange={value => updateEditorParam('drop_duration_min', value)}
+							onRightValueChange={value => updateEditorParam('drop_duration_max', value)}
+
+							min={0}
+							max={10_000}
+							display_input={true}
 						/>
 					</div>
-					<div className='interval'>
-						<NumericInput
-							label="Deviație minimă de cădere"
-							value={state.editor_props.drop_x_deviation_min}
-							onValueChange={value => updateEditorParam('drop_x_deviation_min', value)}
-						/>
-						<NumericInput
-							label="Deviație maxim de cădere"
-							value={state.editor_props.drop_x_deviation_max}
-							onValueChange={value => updateEditorParam('drop_x_deviation_max', value)}
+
+					<div>
+						<label>Deviație de cădere</label>
+						<RangeSlider
+							{...slider_props}
+							left_value={state.editor_props.drop_x_deviation_min}
+							right_value={state.editor_props.drop_x_deviation_max}
+							onLeftValueChange={value => updateEditorParam('drop_x_deviation_min', value)}
+							onRightValueChange={value => updateEditorParam('drop_x_deviation_max', value)}
+
+							min={0}
+							max={1000}
+							display_input={true}
 						/>
 					</div>
 				</div>
 
 				<div className='shape params' style={{gridArea: 'shape'}}>
-					<div className='interval'>
-						<NumericInput
-							label="Grosimea minimă a picături"
-							value={state.editor_props.drop_thickness_min}
-							onValueChange={value => updateEditorParam('drop_thickness_min', value)}
+					<div>
+						<label>Grosimea unei picături</label>
+						<RangeSlider
+							{...slider_props}
+							left_value={state.editor_props.drop_thickness_min}
+							right_value={state.editor_props.drop_thickness_max}
+							onLeftValueChange={value => updateEditorParam('drop_thickness_min', value)}
+							onRightValueChange={value => updateEditorParam('drop_thickness_max', value)}
+
+							min={0}
+							max={300}
+							display_input={true}
 						/>
-						<NumericInput
-							label="Grosimea maximă a picături"
-							value={state.editor_props.drop_thickness_max}
-							onValueChange={value => updateEditorParam('drop_thickness_max', value)}
-						/>		
 					</div>
 
-					<div className='interval'>
-						<NumericInput
-							label="Lungimea minimă a picături"
-							value={state.editor_props.drop_length_min}
-							onValueChange={value => updateEditorParam('drop_length_min', value)}
-						/>
-						<NumericInput
-							label="Lungimea maximă a picături"
-							value={state.editor_props.drop_length_max}
-							onValueChange={value => updateEditorParam('drop_length_max', value)}
+					<div>
+						<label>Lungimea unei picături</label>
+						<RangeSlider
+							{...slider_props}
+							left_value={state.editor_props.drop_length_min}
+							right_value={state.editor_props.drop_length_max}
+							onLeftValueChange={value => updateEditorParam('drop_length_min', value)}
+							onRightValueChange={value => updateEditorParam('drop_length_max', value)}
+
+							min={0}
+							max={1000}
+							display_input={true}
 						/>
 					</div>
-					<RangeSlider
-						left_value={state.editor_props.drop_length_min}
-						right_value={state.editor_props.drop_length_max}
-						onLeftValueChange={value => updateEditorParam('drop_length_min', value)}
-						onRightValueChange={value => updateEditorParam('drop_length_max', value)}
-
-						min={0}
-						max={100}
-						display_input={true}
-					/>
 				</div>
 
 				<div className="btns-cell">

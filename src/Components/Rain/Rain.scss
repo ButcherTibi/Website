@@ -53,10 +53,23 @@
 			"shape shape"
 			"btns btns"
 		;
+
+		@media (max-width: 700px), (max-height: 700px) {
+			grid-template-areas:
+				"description"
+				"presets"
+				"general"
+				"pozitie"
+				"shape"
+				"btns"
+			;
+		}
 	
 		gap: 15px;
 
-		--back_color: hsla(209, 100%, 50%, 1);
+		--preset_hue: 209;
+		--preset_sat: 100%;
+		--back_color: hsla(var(--preset_hue), var(--preset_sat), 50%, 1);
 		--text_color: hsl(99deg, 51%, 100%);
 
 		.presets {
@@ -101,6 +114,40 @@
 			display: flex;
 			flex-direction: column;
 			gap: 7px;
+
+			> div {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+			}
+
+			.Slider {
+				.background-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 80%);
+				}
+
+				.fill-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+
+				.thumb-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+			}
+
+			.RangeSlider {
+				.background-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 80%);
+				}
+
+				.fill-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+
+				.thumb-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+			}
 		}
 	
 		.description {			

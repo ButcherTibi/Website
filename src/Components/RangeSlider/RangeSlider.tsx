@@ -19,7 +19,8 @@ interface Props {
 	height?: number
 	thickness?: number
 	hover_thickness?: number
-	hover_color?: string
+	hover_btn_color?: string
+	pressed_btn_color?: string
 	thumb_size?: number
 
 	display_input?: boolean
@@ -39,8 +40,9 @@ const RangeSlider = (props: Props) => {
 	const max = props.max ?? 1
 	const height = props.height ?? 30
 	const thickness = props.thickness ?? 5
-	const hover_thickness = props.hover_thickness ?? 10
-	const hover_color = props.hover_color ?? 'hsla(0, 0%, 0%, 0.5)'
+	const hover_thickness = props.hover_thickness ?? 40
+	const hover_color = props.hover_btn_color ?? 'hsla(0, 0%, 0%, 0.5)'
+	const pressed_btn_color = props.pressed_btn_color ?? 'hsla(0, 0%, 0%, 0.75)'
 	const thumb_size = props.thumb_size ?? 20
 	const display_input = props.display_input ?? false
 	const input_width = props.input_width ?? 60
@@ -114,6 +116,31 @@ const RangeSlider = (props: Props) => {
 	}, [props.right_value, right_display])
 
 
+	const assignThumbColor = (ratio: number, color: string) => {
+		const new_value = min + ((max - min) * ratio)
+		const center = left_value + (right_value - left_value) / 2
+
+		let active_selector = ''
+		let inactive_selector = ''
+
+		if (new_value < center) {
+			active_selector = '.left-thumb .hover'
+			inactive_selector = '.right-thumb .hover'
+		}
+		else {
+			active_selector = '.right-thumb .hover'
+			inactive_selector = '.left-thumb .hover'
+		}
+
+		const track_wrap = track_elem.current!
+		let elem = track_wrap.querySelector(active_selector)! as HTMLDivElement
+		elem.style.backgroundColor = color
+
+		elem = track_wrap.querySelector(inactive_selector)! as HTMLDivElement
+		elem.style.backgroundColor = 'transparent'
+	}
+
+
 	const setThumb = (e: React.MouseEvent) => {
 		e.preventDefault()
 		is_thumb_pressed.current = true
@@ -123,6 +150,20 @@ const RangeSlider = (props: Props) => {
 		new_ratio = new_ratio < 0 ? 0 : new_ratio
 		new_ratio = new_ratio > 1 ? 1 : new_ratio
 
+		assignThumbColor(new_ratio, pressed_btn_color)
+		updateValueFromRatio(new_ratio)
+	}
+
+	const setThumbTouch = (e: React.TouchEvent) => {
+		is_thumb_pressed.current = true
+		const page_x = e.targetTouches.item(0).pageX
+
+		let rect = e.currentTarget!.getBoundingClientRect()
+		let new_ratio = (page_x - rect.left) / (rect.right - rect.left)
+		new_ratio = new_ratio < 0 ? 0 : new_ratio
+		new_ratio = new_ratio > 1 ? 1 : new_ratio
+
+		assignThumbColor(new_ratio, pressed_btn_color)
 		updateValueFromRatio(new_ratio)
 	}
 
@@ -159,16 +200,28 @@ const RangeSlider = (props: Props) => {
 	}
 
 
-	const onEnter = () => {
+	const onMouseMove = (e: React.MouseEvent) => {
+		if (is_thumb_pressed.current! === true) {
+			return
+		}
+
 		const track_wrap = track_elem.current!
-		const div = track_wrap.querySelector('.hover-fill')! as HTMLDivElement
-		div.style.backgroundColor = hover_color
+
+		let rect = track_wrap.getBoundingClientRect()
+		let ratio = (e.pageX - rect.left) / (rect.right - rect.left)
+		ratio = ratio < 0 ? 0 : ratio
+		ratio = ratio > 1 ? 1 : ratio
+
+		assignThumbColor(ratio, hover_color)
 	}
 
-	const onLeave = () => {
+	const onMouseLeave = () => {
 		const track_wrap = track_elem.current!
-		const div = track_wrap.querySelector('.hover-fill')! as HTMLDivElement
-		div.style.backgroundColor = 'transparent'
+		const left_div = track_wrap.querySelector('.left-thumb .hover')! as HTMLDivElement
+		left_div.style.backgroundColor = 'transparent'
+		
+		const right_div = track_wrap.querySelector('.right-thumb .hover')! as HTMLDivElement
+		right_div.style.backgroundColor = 'transparent'
 	}
 
 	
@@ -190,17 +243,10 @@ const RangeSlider = (props: Props) => {
 		top: (height - thickness) / 2,
 		height: thickness
 	}
-
+ 
 	const track_fill_style: CSSProperties = {
 		left: `${left_ratio * 100}%`,
 		width: `${(right_ratio - left_ratio) * 100}%`
-	}
-
-	const hover_fill_style: CSSProperties = {
-		top: -hover_thickness / 2 + thickness / 2,
-		left: `calc(${left_ratio * 100}% - ${hover_thickness / 2}px)`,
-		width: `calc(${(right_ratio - left_ratio) * 100}% + ${hover_thickness}px)`,
-		height: hover_thickness
 	}
 
 	const left_thumb_style: CSSProperties = {
@@ -213,11 +259,18 @@ const RangeSlider = (props: Props) => {
 		top: height / 2
 	}
 
+	const hover_style: CSSProperties = {
+		left: -hover_thickness / 2,
+		top: -hover_thickness / 2,
+		width: hover_thickness,
+		height: hover_thickness
+	}
+
 	const btn_style: CSSProperties = {
 		left: -thumb_size / 2,
 		top: -thumb_size / 2,
 		width: thumb_size,
-		height: thumb_size,
+		height: thumb_size
 	}
 
 	let left_input: React.ReactElement | null = null
@@ -238,21 +291,26 @@ const RangeSlider = (props: Props) => {
 		{left_input}
 		<div className='track' ref={track_elem} style={track_style}
 			onMouseDown={setThumb}
-			onMouseEnter={onEnter}
-			onMouseLeave={onLeave}
+			onTouchMove={setThumbTouch}
+			onMouseMove={onMouseMove}
+			onMouseLeave={onMouseLeave}
 		>
 			<div className='track-empty background-color' style={track_empty_style}>
 				<div className='track-fill fill-color' style={track_fill_style} />
-				<div className='hover-fill hover-fill-color' style={hover_fill_style} />
+				{/* <div className='hover-fill hover-fill-color' style={hover_fill_style} /> */}
 			</div>
-
-			
 
 			<div className='left-thumb thumb' style={left_thumb_style}>
-				<button className='thumb-color' style={btn_style} />
+				<div>
+					<div className='hover' style={hover_style} />
+					<button className='thumb-color' style={btn_style} />
+				</div>
 			</div>
 			<div className='right-thumb thumb' style={right_thumb_style}>
-				<button className='thumb-color' style={btn_style} />
+				<div>
+					<div className='hover' style={hover_style} />
+					<button className='thumb-color' style={btn_style} />
+				</div>
 			</div>
 		</div>
 		{right_input}
