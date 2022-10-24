@@ -1,7 +1,6 @@
 import React, {
 	useEffect, useReducer, useRef, useCallback
 } from 'react'
-import NumericInput from '../NumericInput/NumericInput'
 import Slider from '../Slider/Slider'
 import RangeSlider from '../RangeSlider/RangeSlider'
 import { jitter } from '../../Common'
