@@ -10,7 +10,10 @@ import AccordionPage from '../Pages/AccordionPage';
 import CardListPage from '../Pages/CardListPage';
 import DropdownPage from '../Pages/DropdownPage';
 import MenuPage from '../Pages/MenuPage'
-// import Database from '../Components/Database/Database';
+import Database from '../Components/Database/Database';
+import MapSetPractice from '../Components/MapSetPractice/MapSetPractice';
+import ProtoPractice from '../Components/PrototypePractice/PrototypePractice'
+import InheritancePractice from '../Components/InheritancePractice/InheritancePractice';
 import Page404 from '../Pages/404';
 
 import PageWrapper from '../Components/PageWrapper/PageWrapper';
@@ -58,10 +61,22 @@ export abstract class AppPages {
 		url: 'menu-page',
 		elem: <MenuPage />
 	}
-	// static database: AppPage = {
-	// 	url: 'database',
-	// 	elem: <Database />
-	// }
+	static database: AppPage = {
+		url: 'database',
+		elem: <Database />
+	}
+	static map_set_practice: AppPage = {
+		url: 'map_set_practice',
+		elem: <MapSetPractice />
+	}
+	static proto_practice: AppPage = {
+		url: 'proto_practice',
+		elem: <ProtoPractice />
+	}
+	static inheritance_practice: AppPage = {
+		url: 'inheritance_practice',
+		elem: <InheritancePractice />
+	}
 }
 
 

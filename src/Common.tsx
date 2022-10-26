@@ -1,9 +1,4 @@
 
-// export class WebsiteURLs {
-// 	static leafs = '/leafs'
-// 	static rain = '/rain'
-// }
-
 export enum DisplayFormat {
 	desktop,
 	mobile
@@ -41,4 +36,13 @@ export const clamp = (value: number, min: number, max: number) => {
 export function clearAnimations(elem: Element)
 {
 	elem.getAnimations().forEach(anim => anim.cancel())
+}
+
+export const timedPromise = <T,>(prom: Promise<T>, timeout_ms: number): Promise<T> => {
+	return Promise.race([
+		prom,
+		new Promise((_stub, reject) => setTimeout(() => 
+			reject('out of time')
+		, timeout_ms))
+	]) as Promise<T>
 }

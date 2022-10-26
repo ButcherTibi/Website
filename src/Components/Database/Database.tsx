@@ -1,8 +1,11 @@
-// import './Database.scss'
-// import React, { useEffect } from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import './Database.scss'
+import React, { useEffect } from 'react'
 
-// import { firestore } from '../../index'
-// import { collection, getDocs, addDoc, QuerySnapshot, doc, getDoc, FirestoreDataConverter } from 'firebase/firestore'
+import { firestore } from '../../index'
+import { collection, getDocs, addDoc, QuerySnapshot, doc, getDoc, FirestoreDataConverter
+} from 'firebase/firestore'
+import { timedPromise } from '../../Common'
 
 
 // class DbDocument {
@@ -21,39 +24,32 @@
 // }
 
 
-// const Database = () => {
-// 	useEffect(() => {
-// 		const f = async () => {
-// 			try {
-// 				const docs = await getDocs(collection(firestore, 'test_collection'))
+const Database = () => {
+	// useEffect(() => {
+	// 	const f = async () => {
+	// 		try {
+	// 			let docs = await timedPromise(getDocs(collection(firestore, 'test_collection')), 1000)
+	// 			docs.forEach((doc) => {
+	// 			 	console.log(`${doc.id} => ${doc.data()}`);
+	// 			})
 
-// 				docs.forEach((doc) => {
-// 					console.log(`${doc.id} => ${doc.data()}`);
-// 				})
+	// 			// const document = doc(firestore, 'test_collection/IaVYFoAWq8jC79BWoa0R');
+	// 			// const f = await getDoc(document)
+	// 			// console.log(`id ${f.id} data = ${(f.data() as any)['text']}`)
+	// 		}
+	// 		catch (e) {
+	// 			console.log(e)
+	// 		}
+	// 	}
 
-// 				const document = doc(firestore, 'test_collection/IaVYFoAWq8jC79BWoa0R');
-// 				const f = await getDoc(document)
-// 				console.log(`id ${f.id} data = ${(f.data() as any)['text']}`)
+	// 	f()
+	// }, [])
+	
 
-// 				// const doc_ref = await addDoc(collection(db, 'test_collection'), {
-// 				// 	text: 'text_data',
-// 				// 	num: 12
-// 				// })
+	return <div className='Database'>
+		<p>firebase</p>
+ 	</div>
+}
 
-// 				// console.log(`Document adăugat ${doc_ref.id}`)
-// 			}
-// 			catch (e) {
-// 				console.log(e)
-// 			}
-// 		}
-
-// 		f()
-// 	}, [])
-
-// 	return <div className='Database'>
-// 		<p>firebase</p>
-// 	</div>
-// }
-
-// export default Database
-export {}
+export default Database
+// export {}

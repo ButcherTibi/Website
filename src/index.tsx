@@ -1,7 +1,7 @@
 import React from 'react';
-// import { firebase_options } from './Security/FirebaseConfig';
-// import { initializeApp } from 'firebase/app';
-// import { getFirestore } from 'firebase/firestore'
+import { firebase_options } from './Security/FirebaseConfig';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore'
 
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -12,11 +12,11 @@ import App from './App/App';
 import './index.scss';
 
 // Firebase
-// export const firebase = initializeApp(firebase_options)
+export const firebase = initializeApp(firebase_options)
 
 // TODO: AppCheck reCaptcha3
 
-// export const firestore = getFirestore(firebase)
+export const firestore = getFirestore(firebase)
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
