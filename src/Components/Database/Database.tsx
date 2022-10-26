@@ -2,7 +2,7 @@
 import './Database.scss'
 import React, { useEffect } from 'react'
 
-import { firestore } from '../../index'
+// import { firestore } from '../../index'
 import { collection, getDocs, addDoc, QuerySnapshot, doc, getDoc, FirestoreDataConverter
 } from 'firebase/firestore'
 import { timedPromise } from '../../Common'
