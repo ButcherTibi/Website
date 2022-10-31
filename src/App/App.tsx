@@ -1,19 +1,20 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 
-import FrontPage from '../Pages/FrontPage/FrontPage';
+import FrontPage from '../Pages/FrontPage/FrontPage'
 
 import LeafsPage from '../Components/Leafs/Leafs'
 import { RainDemo } from '../Components/Rain/Rain'
 import { ReduxPractice } from '../Components/Redux Practice/ReduxPractice'
-import AccordionPage from '../Pages/AccordionPage';
-import CardListPage from '../Pages/CardListPage';
-import DropdownPage from '../Pages/DropdownPage';
+import AccordionPage from '../Pages/AccordionPage'
+import CardListPage from '../Pages/CardListPage'
+import DropdownPage from '../Pages/DropdownPage'
 import MenuPage from '../Pages/MenuPage'
-import Database from '../Components/Database/Database';
-import MapSetPractice from '../Components/MapSetPractice/MapSetPractice';
+import Database from '../Components/Database/Database'
+import MapSetPractice from '../Components/MapSetPractice/MapSetPractice'
 import ProtoPractice from '../Components/PrototypePractice/PrototypePractice'
-import InheritancePractice from '../Components/InheritancePractice/InheritancePractice';
+import InheritancePractice from '../Components/InheritancePractice/InheritancePractice'
+import AccessChildState from '../Components/ReactPractice/AccessChildState'
 import Page404 from '../Pages/404';
 
 import PageWrapper from '../Components/PageWrapper/PageWrapper';
@@ -76,6 +77,10 @@ export abstract class AppPages {
 	static inheritance_practice: AppPage = {
 		url: 'inheritance_practice',
 		elem: <InheritancePractice />
+	}
+	static react_practice: AppPage = {
+		url: 'access_child_state',
+		elem: <AccessChildState />
 	}
 }
 

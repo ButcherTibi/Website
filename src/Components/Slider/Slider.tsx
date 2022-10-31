@@ -1,6 +1,7 @@
 import React, {
 	useState, useRef, useEffect, 
 	CSSProperties,
+	useCallback,
 } from "react";
 
 import './Slider.scss';
@@ -26,6 +27,7 @@ export interface SliderProps {
 // TODO: over render fix
 export default function Slider(props: SliderProps)
 {
+	const onValueChange = props.onValueChange
 	const min = props.min ?? 0
 	const max = props.max ?? 1
 	const step = props.step
@@ -38,31 +40,26 @@ export default function Slider(props: SliderProps)
 	const highlight_size = 40;
 
 	const [display_value, setDisplayValue] = useState(props.value.toFixed(2));	
-	const [is_thumb_pressed, setIsThumbPressed] = useState(false);
 
 	const track_elem = useRef<HTMLDivElement>(null)
+	const is_thumb_pressed = useRef(false)
 
 
-	const updateValue = (new_value: number) => {
+	const updateValueFromRatio = useCallback((ratio: number) => {
+		let new_value = min + ((max - min) * ratio)
+
 		if (step !== undefined &&	min < new_value && new_value < max) {
 			new_value -= new_value % step;
 		}
 
-		props.onValueChange(new_value)
+		onValueChange(new_value)
 		setDisplayValue(new_value.toFixed(2))
-	}
-
-
-	const setValueFromRatio = (ratio: number) => {
-		updateValue(min + ((max - min) * ratio))
-	};
+	}, [step, max, min, onValueChange]);
 
 
 	useEffect(() => {
-		// console.log('use effect')
-
 		const moveThumb = (e: MouseEvent) => {
-			if (is_thumb_pressed === false) {
+			if (is_thumb_pressed.current! === false) {
 				return
 			}
 	
@@ -71,11 +68,11 @@ export default function Slider(props: SliderProps)
 			new_ratio = new_ratio < 0 ? 0 : new_ratio
 			new_ratio = new_ratio > 1 ? 1 : new_ratio
 	
-			setValueFromRatio(new_ratio);
+			updateValueFromRatio(new_ratio);
 		};
 	
 		const endThumbMovement = () => {
-			setIsThumbPressed(false);
+			is_thumb_pressed.current = false
 		};
 
 		document.body.addEventListener('mousemove', moveThumb);
@@ -85,47 +82,44 @@ export default function Slider(props: SliderProps)
 			document.body.removeEventListener('mousemove', moveThumb);
 			document.body.removeEventListener('mouseup', endThumbMovement);
 		};
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [is_thumb_pressed]);
+	}, [updateValueFromRatio]);
 
 
 	// Update numeric input to incoming value
 	useEffect(() => {
-		if (parseFloat(display_value) !== props.value) {
+		// console.log(`Top down value = ${props.value}, display_value = ${display_value}`)
+
+		if (props.value !== parseFloat(display_value)) {
 			setDisplayValue(props.value.toFixed(2))
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.value])
+	}, [props.value, display_value])
 
 
-	const setThumb = (e: React.MouseEvent) => {
+	const onThumbDown = (e: React.MouseEvent) => {
 		e.preventDefault();
-		
-		setIsThumbPressed(true);
+		const page_x = e.pageX
 
-		let rect = e.currentTarget!.getBoundingClientRect()
-		let new_ratio = (e.pageX - rect.left) / (rect.right - rect.left)
-		new_ratio = new_ratio < 0 ? 0 : new_ratio
-		new_ratio = new_ratio > 1 ? 1 : new_ratio
-
-		setValueFromRatio(new_ratio)
-	};
-
-	const setThumbTouch = (e: React.TouchEvent) => {
-		const page_x = e.targetTouches.item(0).pageX
-
-		setIsThumbPressed(true);
+		is_thumb_pressed.current = true
 
 		let rect = e.currentTarget!.getBoundingClientRect()
 		let new_ratio = (page_x - rect.left) / (rect.right - rect.left)
 		new_ratio = new_ratio < 0 ? 0 : new_ratio
 		new_ratio = new_ratio > 1 ? 1 : new_ratio
 
-		setValueFromRatio(new_ratio)
-	}
+		updateValueFromRatio(new_ratio)
+	};
 
-	const endTouchDrag = () => {
-		setIsThumbPressed(false)
+	const onThumbTouch = (e: React.TouchEvent) => {
+		const page_x = e.targetTouches.item(0).pageX
+
+		is_thumb_pressed.current = true
+
+		let rect = e.currentTarget!.getBoundingClientRect()
+		let new_ratio = (page_x - rect.left) / (rect.right - rect.left)
+		new_ratio = new_ratio < 0 ? 0 : new_ratio
+		new_ratio = new_ratio > 1 ? 1 : new_ratio
+
+		updateValueFromRatio(new_ratio)
 	}
 
 
@@ -140,24 +134,29 @@ export default function Slider(props: SliderProps)
 				new_value -= new_value % step;
 			}
 	
-			props.onValueChange(new_value)
+			onValueChange(new_value)
 		}
 	}
 
-	const onEnter = () => {
+	const onMouseMove = () => {
+		if (is_thumb_pressed.current! === true) {
+			return
+		}
+
 		const track_wrap = track_elem.current!
 		const div = track_wrap.querySelector('.highlight div')! as HTMLDivElement
 		div.style.backgroundColor = hover_btn_color
 	}
 
-	const onLeave = () => {
+	const onMouseLeave = () => {
 		const track_wrap = track_elem.current!
 		const div = track_wrap.querySelector('.highlight div')! as HTMLDivElement
 		div.style.backgroundColor = ''
 	}
 
 	// Render
-	// console.log('slider render')
+	// console.log(`render`)
+
 	let clamped_value = props.value
 	if (clamped_value < min) {
 		clamped_value = min
@@ -177,7 +176,7 @@ export default function Slider(props: SliderProps)
 	};
 	
 	let highlight_style: CSSProperties | undefined;
-	if (is_thumb_pressed) {
+	if (is_thumb_pressed.current) {
 		highlight_style = {
 			backgroundColor: pressed_btn_color
 		};
@@ -186,11 +185,10 @@ export default function Slider(props: SliderProps)
 	return <>
 		<div className='Slider'>
 			<div className='track-wrap' ref={track_elem}
-				onMouseDown={setThumb}
-				onTouchMove={setThumbTouch}
-				onTouchEnd={endTouchDrag}
-				onMouseEnter={onEnter}
-				onMouseLeave={onLeave}
+				onMouseDown={onThumbDown}
+				onTouchMove={onThumbTouch}
+				onMouseMove={onMouseMove}
+				onMouseLeave={onMouseLeave}
 			>
 				<div className='track background-color'>
 					<div className="fill fill-color" style={track_fill_style}></div>
