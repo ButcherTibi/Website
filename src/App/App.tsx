@@ -5,6 +5,7 @@ import FrontPage from '../Pages/FrontPage/FrontPage'
 
 import LeafsPage from '../Components/Leafs/Leafs'
 import { RainDemo } from '../Components/Rain/Rain'
+import { FancyCommentDemo } from '../Components/FancyComment/FancyComment'
 import { ReduxPractice } from '../Components/Redux Practice/ReduxPractice'
 import AccordionPage from '../Pages/AccordionPage'
 import CardListPage from '../Pages/CardListPage'
@@ -38,6 +39,10 @@ export abstract class AppPages {
 	static rain: AppPage = {
 		url: 'rain',
 		elem: <PageWrapper children={<RainDemo />} />
+	}
+	static fancy_comment: AppPage = {
+		url: 'fancy-comment',
+		elem: <PageWrapper children={<FancyCommentDemo />} />
 	}
 	static redux_practice: AppPage = {
 		url: 'redux-practice',

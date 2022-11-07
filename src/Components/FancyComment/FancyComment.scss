@@ -1,0 +1,19 @@
+
+.EditFancyComment {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+
+	.tool-bar {
+		
+	}
+
+	textarea {
+		resize: vertical;
+	}
+}
+
+.comment-demo {
+	margin-top: 50px;
+	flex-grow: 1;
+}
