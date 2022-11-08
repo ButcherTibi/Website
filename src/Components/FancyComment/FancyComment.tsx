@@ -7,14 +7,14 @@ export const ShowFancyComment = () => {
 }
 
 
-interface EditFancyComment {
-	comment_in: string
-	onSave: (encoded_text: string) => void
-}
+// interface EditFancyCommentProps {
+// 	comment_in: string
+// 	onSave: (encoded_text: string) => void
+// }
 
 export const EditFancyComment = () => {
 	const [text, setText] = useState('')
-	const [encoded_text, f] = useState('')
+	// const [encoded_text, f] = useState('')
 
 
 	const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

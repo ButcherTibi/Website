@@ -7,7 +7,7 @@ import './TimelinePlanets.scss'
 
 function extractMonthYear(date: Date): string {
 	let [month, , year] =
-		Intl.DateTimeFormat("ro", { year: "numeric", month: "long" })
+		Intl.DateTimeFormat(navigator.language, { year: "numeric", month: "long" })
 		.formatToParts(date)
 	;
 

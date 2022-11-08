@@ -309,6 +309,23 @@ export function RainDemo()
 		pressed_btn_color: 'hsla(209deg, 75%, 47%, 0.5)'
 	}
 
+	const is_ro = navigator.language === 'ro'
+
+	let description: JSX.Element
+	if (is_ro) {
+		description = <>
+			<h3>Componenta <code>Rain</code></h3>
+			<p>Crează o ploaie unde fiecare picătură este generată procedural.</p>
+			<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
+		</>
+	}
+	else {
+		description = <>
+			<h3><code>Rain</code> component</h3>
+			<p>Creates a rain were each drop is generated procedurally.</p>
+			<p>The appearance can be changed using the fields below.</p>
+		</>
+	}
 
 	// Render
 	//console.log('render')
@@ -319,32 +336,30 @@ export function RainDemo()
 		<main className='rain-demo content-wrap'>
 			<div className='editor content'>
 				<div className="description">
-					<h3>Componenta <code>Rain</code></h3>
-					<p>Crează o ploaie unde fiecare picătură este generată procedural.</p>
-					<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
+					{description}
 				</div>
 
 				<div className="presets" style={{gridArea: 'presets'}}>
-					<h3>Presetări</h3>
+					<h3>{is_ro ? 'Presetări' : 'Presets'}</h3>
 					<div className="presets-list">
 						<button onClick={() => dispatch({type: ActionType.initial_preset})}>
-							Inițial
+							{is_ro ? 'Inițial' : 'Initial'}
 						</button>
 						<button onClick={() => dispatch({type: ActionType.lines_preset})}>
-							Linii
+							{is_ro ? 'Linii' : 'Lines'}
 						</button>
-						<button onClick={() => dispatch({type: ActionType.bars_preset})}>
-							Bare
+						<button onClick={() => dispatch({type: ActionType.bars_preset})}>					
+							{is_ro ? 'Bare' : 'Bars'}
 						</button>
 						<button onClick={() => dispatch({type: ActionType.ash_preset})}>
-							Bule
+							{is_ro ? 'Bule' : 'Bubbles'}
 						</button>
 					</div>
 				</div>
 
 				<div className="general params" style={{gridArea: 'general'}}>						
 					<div>
-						<label>Numărul de picături</label>
+						<label>{is_ro ? 'Numărul de picături' : 'Droplet count'}</label>
 						<Slider
 							{...slider_props}
 							value={state.editor_props.drop_count}
@@ -356,7 +371,7 @@ export function RainDemo()
 					</div>
 
 					<div>
-						<label>Unghiul de cădere</label>
+						<label>{is_ro ? 'Unghiul de cădere' : 'Fall angle'}</label>
 						<Slider
 							{...slider_props}
 							value={state.editor_props.drop_angle}
@@ -370,7 +385,7 @@ export function RainDemo()
 
 				<div className='pozitie params' style={{gridArea: 'pozitie'}}>
 					<div>
-						<label>Timpul de cădere</label>
+						<label>{is_ro ? 'Timpul de cădere (milisecunde)' : 'Fall duration (miliseconds)'}</label>
 						<RangeSlider
 							{...slider_props}
 							left_value={state.editor_props.drop_duration_min}
@@ -385,7 +400,7 @@ export function RainDemo()
 					</div>
 
 					<div>
-						<label>Deviație de cădere</label>
+						<label>{is_ro ? 'Deviație de cădere' : 'Fall deviation'}</label>
 						<RangeSlider
 							{...slider_props}
 							left_value={state.editor_props.drop_x_deviation_min}
@@ -402,7 +417,7 @@ export function RainDemo()
 
 				<div className='shape params' style={{gridArea: 'shape'}}>
 					<div>
-						<label>Grosimea unei picături</label>
+						<label>{is_ro ? 'Grosimea unei picături' : 'Droplet thickness'}</label>
 						<RangeSlider
 							{...slider_props}
 							left_value={state.editor_props.drop_thickness_min}
@@ -417,7 +432,7 @@ export function RainDemo()
 					</div>
 
 					<div>
-						<label>Lungimea unei picături</label>
+						<label>{is_ro ? 'Lungimea unei picături' : 'Droplet length'}</label>
 						<RangeSlider
 							{...slider_props}
 							left_value={state.editor_props.drop_length_min}
@@ -433,7 +448,9 @@ export function RainDemo()
 				</div>
 
 				<div className="btns-cell">
-					<button onClick={applyEditorProps}>Aplică</button>
+					<button onClick={applyEditorProps}>
+						{is_ro ? 'Aplică' : 'Apply'}
+					</button>
 				</div>
 			</div>
 		</main>

@@ -40,11 +40,8 @@ function Header()
 				<header className="content-wrap">
 					<div className="content">
 						<NavLink className={'name'} to={'/'}><h3>Măcelaru Tiberiu</h3></NavLink>
-						<div className='work-in-progress'>
-							<h3>Work in progress. Nu e gata.</h3>
-						</div>
 						<div className='job'>
-							<h3>Front-End Developer</h3>
+							<h3>Frontend Developer</h3>
 						</div>
 					</div>
 				</header>
@@ -56,9 +53,6 @@ function Header()
 					<div className='content'>
 						<div className='name'>
 							<NavLink to={'/'}><h3>Măcelaru Tiberiu</h3></NavLink>
-						</div>
-						<div className='work-in-progress'>
-							<h3>Work in progress</h3>
 						</div>
 					</div>
 				</header>

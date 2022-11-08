@@ -47,36 +47,6 @@ header {
 		.name:hover h3 {
 			font-weight: bold;
 		}
-
-		.work-in-progress {
-			box-sizing: border-box;
-			border-radius: 7px;
-			padding: 0px 50px;
-			height: 100%;
-
-			display: none;
-			justify-content: center;
-			align-items: center;
-
-			--stripe_thickness: 30px;
-			--half_thickness: calc(var(--stripe_thickness) / 2);
-			background: repeating-linear-gradient(
-				-45deg,
-				hsla(60, 100%, 50%, 1) 0 var(--half_thickness),
-				hsla(0, 0%, 0%, 0) var(--half_thickness) var(--stripe_thickness)
-			);
-
-			@media (max-width: 700px) {
-				padding: initial;
-			}
-
-			h3 {
-				box-sizing: border-box;
-				border-radius: 5px;
-				padding: 5px 10px;
-				background-color: hsla(0, 0%, 0%, .75);
-			}
-		}
 	}
 }
 

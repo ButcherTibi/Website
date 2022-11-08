@@ -434,6 +434,26 @@ function LeafsDemo()
 		})
 	}
 
+	const is_ro = navigator.language === 'ro'
+
+	let description: JSX.Element
+	if (is_ro) {
+		description = <>
+			<h3>Componenta <code>Leafs</code></h3>
+			<p>Crează o serie de inele concentrice de frunze. Fiecare frunză este generată randomizată pentru a avea un aspect mai natural.</p>
+			<p>Poți să dai click pentru a relua animația de deschidere/închidere.</p>
+			<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
+		</>
+	}
+	else {
+		description = <>
+			<h3><code>Leafs</code> component</h3>
+			<p>Creates a series of concentric rings of leafs. Each leaf is randomly generated to have a more natural apperance.</p>
+			<p>You can click it to replay the opening/closing animations.</p>
+			<p>The apperance can be changed using the fields below.</p>
+		</>
+	}
+
 	const common_props = {
 		show_numeric_input: true,
 		hover_btn_color: 'hsla(99deg, 51%, 47%, 0.25)',
@@ -450,17 +470,14 @@ function LeafsDemo()
 		<main className="leafs-demo content-wrap">
 			<div className="editor content">
 				<div className="description">
-					<h3>Componenta <code>Leafs</code></h3>
-					<p>Crează o serie de inele concentrice de frunze. Fiecare frunză este generată randomizată pentru a avea un aspect mai natural</p>
-					<p>Poți să dai click pentru a relua animația de deschidere/închidere.</p>
-					<p>Aspectul se poate schimba folosind câmpurile de mai jos.</p>
+					{description}
 				</div>
 
 				<div className="presets" style={{gridArea: 'presets'}}>
-					<h3>Presetări</h3>
+					<h3>{is_ro ? 'Presetări' : 'Presets'}</h3>
 					<div className="presets-list">
 						<button onClick={() => dispatch({type: ActionType.initial_preset})}>
-							Inițial
+							{is_ro ? 'Inițial' : 'Initial'}
 						</button>
 						<button onClick={() => dispatch({type: ActionType.flip_preset})}>
 							Flip
@@ -473,7 +490,7 @@ function LeafsDemo()
 
 				<div className="params ring-params">	
 					<div>
-						<label>Numărul de inele</label>
+						<label>{is_ro ? 'Numărul de inele' : 'Ring count'}</label>
 						<Slider
 							value={state.editor_props.ring_count!}
 							onValueChange={value => updateEditorParam('ring_count', value)}
@@ -484,7 +501,7 @@ function LeafsDemo()
 						/>
 					</div>
 					<div>
-						<label>Dimensiunea inelului central</label>
+						<label>{is_ro ? 'Dimensiunea inelului central' : 'Center ring size'}</label>
 						<Slider
 							value={state.editor_props.ring_close_size!}
 							onValueChange={value => updateEditorParam('ring_close_size', value)}
@@ -494,7 +511,7 @@ function LeafsDemo()
 						/>
 					</div>
 					<div>
-						<label>Decalajul unghiului inelelor la deschidere</label>
+						<label>{is_ro ? 'Decalajul unghiului inelelor la deschidere' : 'Angle offset when opening'}</label>
 						<Slider
 							value={state.editor_props.ring_open_angle_offset!}
 							onValueChange={value => updateEditorParam('ring_open_angle_offset', value)}
@@ -507,7 +524,7 @@ function LeafsDemo()
 
 				<div className="params leaf-params">
 					<div>
-						<label>Dimensiunea inițială a frunzelor</label>
+						<label>{is_ro ? 'Dimensiunea inițială a frunzelor' : 'Initial leaf size'}</label>
 						<Slider
 							value={state.editor_props.leaf_init_size!}
 							onValueChange={value => updateEditorParam('leaf_init_size', value)}
@@ -517,7 +534,7 @@ function LeafsDemo()
 						/>
 					</div>
 					<div>
-						<label>Factorul de creștere a frunzelor</label>
+						<label>{is_ro ? 'Factorul de creștere a frunzelor' : 'Leaf growth factor'}</label>
 						<Slider
 							value={state.editor_props.leaf_growth_factor!}
 							onValueChange={value => updateEditorParam('leaf_growth_factor', value)}
@@ -527,7 +544,7 @@ function LeafsDemo()
 						/>
 					</div>
 					<div>
-						<label>Nivelul de suprapunere a frunzelor</label>
+						<label>{is_ro ? 'Nivelul de suprapunere a frunzelor' : 'Overlap level of leafs'}</label>
 						<Slider
 							value={state.editor_props.leaf_overlap!}
 							onValueChange={value => updateEditorParam('leaf_overlap', value)}
@@ -539,7 +556,9 @@ function LeafsDemo()
 				</div>
 
 				<div className="btns-cell">
-					<button onClick={() => dispatch(new DispatchParams())}>Aplică</button>
+					<button onClick={() => dispatch(new DispatchParams())}>
+						{is_ro ? 'Aplică' : 'Apply'}
+					</button>
 				</div>
 			</div>
 			

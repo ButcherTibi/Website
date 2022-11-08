@@ -37,6 +37,164 @@ import infrared_map from '../../Resources/infrared_map.jpg'
 import './FrontPage.scss'
 
 
+const ats_experience_en: JSX.Element = <>
+	<div className="company-desc">
+		<h3 className="subtitle">Firm description</h3>
+		<p>ATS creates software for public institutions which help in calculating taxes, payment of salaries, managing of budgets, receipts, contracts and other types of documents.</p>
+	</div>
+
+	<div className="work-desc">
+		<h3 className="subtitle">Responsibilities</h3>
+		<p>I was a fullstack developer who worked on multiple projects at the same time.</p>
+		<ul>
+			<li><p>Made the Frontend portion of the apps in React with TypeScript;</p></li>
+			<li><p>Used a JavaScript library called <NewTabLink url="https://js.devexpress.com" >DevExtreme</NewTabLink> for creating datagrids, data inputs, popups, tables and data exports in Excel;</p></li>
+			<li><p>Used <NewTabLink url="https://axios-http.com"><code>Axios</code></NewTabLink> or <NewTabLink url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch API</code></NewTabLink> for requests to the server;</p></li>
+			<li><p>Made the Backend portion as a <NewTabLink url="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/routing?WT.mc_id=dotnet-35129-website&view=aspnetcore-6.0">Web API</NewTabLink> written in C#;</p></li>
+			<li><p>Interfaced with the database using <NewTabLink url="https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli">Entity Framework</NewTabLink>;</p></li>
+			<li><p>Made databases for projects;</p></li>
+			<li><p>Wrote queries and stored procedures in T-SQL;</p></li>
+			<li><p>Worked in the maintenance of a ASP.NET WebForms project which used the <NewTabLink url="https://www.devexpress.com">DevExpress</NewTabLink> library;</p></li>
+			<li><p>Worked with PHP  to create a WordPress theme for a site;</p></li>
+		</ul>
+	</div>
+
+	<div className="apps">
+		<h3 className="subtitle">Applications</h3>
+		<div className="app-list">
+			<div className="app">
+				<h3>Document Management</h3>
+				<p>I worked in developing an app for managing documents in a public institution.</p>
+				<p>Within the application diagrams could be defined composed from nodes and arches, nodes represented users and the arches between the nodes controlled how a folder would move from one user to the other.</p>
+				<p>Each folder would receive a unique number of registration.</p>
+			</div>
+
+			<div className="app">
+				<h3>Backup App</h3>
+				<p>I worked on creating a remote backuping app that runs on Linux. The app would do all the calendaristic scheduling of tasks thru which the remote server content would be transferred to the local server where the app was installed.</p>
+				<p>The file transfer from the mounting location to the destination was done using the <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> command invoked on a separate process. For each transferred file multiple versions where maintained.</p>	
+				<p>The application was a .NET Core Web API hosted inside a docker container together with a  MariaDB database instance.</p>
+				<p>Testing was done using WSL (Windows Subsystem For Linux) where WSL would host an Ubuntu image which had part of the Windows filesystem mounted to it.</p>
+				<p>The docker container was then deployed on TrueNAS (NOT BY ME).</p>
+			</div>
+
+			<div className="app">
+				<h3>Transport authorizations</h3>
+				<p>I made an app for tracking transport authorizations.</p>
+			</div>
+
+			<div className="app">
+				<h3>WebInvest</h3>
+				<p>Reassembled an app for managing investments, acquisitions and contract in a public institution.</p>
+			</div>
+		</div>
+	</div>
+</>
+
+
+const ats_experience_ro: JSX.Element = <>
+	<div className="company-desc">
+		<h3 className="subtitle">Descrierea firmei</h3>
+		<p>ATS creează software pentru instituți publice care ajută la calcularea taxelor, plata salarilor, gestiunea bugetelor, facturilor, contractelor și altor tipuri de documente.</p>
+	</div>
+
+	<div className="work-desc">
+		<h3 className="subtitle">Responsabilități</h3>
+		<p>Eram developer Fullstack care lucra la mai multe proiecte simultan.</p>
+		<ul>
+			<li><p>Cream partea de Frontend la aplicați în React cu Typescript;</p></li>
+			<li><p>Foloseam o librărie JavaScript <NewTabLink url="https://js.devexpress.com" >DevExtreme</NewTabLink> pentru datagriduri, inputuri de date, popups, tabele și exportare de date în Excel;</p></li>
+			<li><p>Foloseam <NewTabLink url="https://axios-http.com"><code>Axios</code></NewTabLink> sau <NewTabLink url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch API</code></NewTabLink> pentru requesturi către server;</p></li>
+			<li><p>Cream partea de Backend ca <NewTabLink url="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/routing?WT.mc_id=dotnet-35129-website&view=aspnetcore-6.0">Web API</NewTabLink> scris în C#;</p></li>
+			<li><p>Interfațam cu baza de date prin <NewTabLink url="https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli">Entity Framework</NewTabLink>;</p></li>
+			<li><p>Cream baze de date pentru proiecte;</p></li>
+			<li><p>Scriam queries și proceduri stocate în T-SQL;</p></li>
+			<li><p>Lucram la mentenanța unui proiect ASP.NET WebForms care folosește librăria <NewTabLink url="https://www.devexpress.com">DevExpress</NewTabLink>;</p></li>
+			<li><p>Lucrat cu PHP pentru a crea o tema Wordpress pentru un site;</p></li>
+		</ul>
+	</div>
+
+	<div className="apps">
+		<h3 className="subtitle">Aplicații</h3>
+		<div className="app-list">
+			<div className="app">
+				<h3>Document Management</h3>
+				<p>Făceam dezvoltare la o aplicație de management a documentelor dintr-o instituție publică.</p>
+				<p>În cadrul aplicației se puteau defini diagrame compuse din noduri și arce, nodurile reprezentau utilizatori iar arcele dintre noduri controlau cum va parcurge un dosar de la un utilizator la altul.</p>
+				<p>Fiecare dosar creat primea un număr unic de înregistrare.</p>
+			</div>
+
+			<div className="app">
+				<h3>Backup App</h3>
+				<p>Am lucrat la crearea unei aplicați de backup remote care rulează pe Linux, aplicația permitea programarea calendaristică a unor task-uri prin care se transfera conținutul serverului remote în serverul local unde era instalată aplicația.</p>
+				<p>Transferul de fișiere de la locația de montare la locația destinație se făcea folosind comanda <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> invocată pe un process separat. Pentru fiecare fișier transferat se mențineau mai multe versiuni.</p>
+			</div>
+
+			<div className="app">
+				<h3>Autorizați de transport</h3>
+				<p>Am făcut o aplicație de evidență a autorizațiilor de transport.</p>
+			</div>
+
+			<div className="app">
+				<h3>WebInvest</h3>
+				<p>Reasamblat o aplicație de management a investițiilor, achizițiilor și contractelor dintr-o instituție publică.</p>
+			</div>
+		</div>
+	</div>
+</>
+
+
+const bloom_expertience_en: JSX.Element = <>
+	<div className="company-desc">
+		<h3>Company description</h3>
+		<p>The company was known for making maps and replicas for geographic zones and buildings.</p>
+	</div>
+
+	<div className="work-desc">
+		<h3>Activity</h3>
+		
+		<div className="stages">
+			<div className="stage">
+				<h4>The french army</h4>
+				<p>For the first 6 months I worked for the french army.</p>
+				<p>Approximately at the start of each month I received a satellite capture image in the human colored spectrum + infrared and had to digitally draw/mark each structure, building and street in a defined zone.</p>
+			</div>
+			
+			<div className="stage">
+				<h4>TomTom</h4>
+				<p>For the last 6 months I worked for TomTom.</p>
+				<p>Each day I received a set GPS routes and had to verify if the trip could be made by a car. I was using something similar with Google Street View and Google Earth to accomplish the inspection.</p>
+			</div>
+		</div>
+	</div>
+</>
+
+
+const bloom_expertience_ro: JSX.Element = <>
+	<div className="company-desc">
+		<h3>Descrierea firmei</h3>
+		<p>Firma era cunoscută ca realizând hărți și machete pentru zone geografice și clădiri.</p>
+	</div>
+
+	<div className="work-desc">
+		<h3>Activitate</h3>
+		
+		<div className="stages">
+			<div className="stage">
+				<h4>Armata franceză</h4>
+				<p>Pentru primele 6 luni am lucrat pentru armata franceză.</p>
+				<p>Aproximativ la începutul fiecărei luni primeam o imagine capturată de un satelit în spectru de culoare uman + infraroșu și trebuia să marchez/conturez digital fiecare structură/clădire/stradă într-o zonă definită.</p>
+			</div>
+			
+			<div className="stage">
+				<h4>TomTom</h4>
+				<p>Pentru ultimele 6 luni am lucrat pentru TomTom.</p>
+				<p>În fiecare zi primeam un set de rute GPS și trebuia să verific dacă traseul putea fi parcurs de către o mașină. Foloseam ceva similar cu Google Street View și Google Earth pentru a realiza verificările.</p>
+			</div>
+		</div>
+	</div>
+</>
+
 
 function FrontPage()
 {
@@ -186,6 +344,19 @@ function FrontPage()
 		}
 	}
 
+	// Experience
+	const is_ro = navigator.language === 'ro'
+	let ats_experience: JSX.Element;
+	let bloom_experience: JSX.Element;
+	if (is_ro) {
+		ats_experience = ats_experience_ro
+		bloom_experience = bloom_expertience_ro
+	}
+	else {
+		ats_experience = ats_experience_en
+		bloom_experience = bloom_expertience_en
+	}
+
 	return <>
 		<div className="front-page page">
 			<Header />
@@ -205,39 +376,39 @@ function FrontPage()
 
 					planets={[
 						{ name: "TypeScript", icon: typescript_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+							{ text: 'Interface', icon: typescript_icon}, 
+							{ text: 'Generics', icon: typescript_icon},
+							{ text: 'Enum', icon: typescript_icon}]
 						},
 						{ name: "JavaScript", icon: javascript_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+							{ text: 'Classes', icon: javascript_icon}, 
+							{ text: 'Arrow functions', icon: javascript_icon},
+							{ text: 'Object literals', icon: javascript_icon}]
 						},
 						{ name: "React", icon: react_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+							{ text: 'Hooks', icon: react_icon}, 
+							{ text: 'State', icon: react_icon},
+							{ text: 'Props', icon: react_icon}]
 						},
-						{ name: "HTML", icon: html_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+						{ name: "HTML5", icon: html_icon, moons: [ 
+							{ text: 'Semantic', icon: html_icon}, 
+							{ text: 'Multimedia', icon: html_icon},
+							{ text: 'Local Storage', icon: html_icon}]
 						},
-						{ name: "CSS", icon: css_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+						{ name: "CSS3", icon: css_icon, moons: [ 
+							{ text: 'Flexbox', icon: css_icon}, 
+							{ text: 'Variables', icon: css_icon},
+							{ text: 'Media Queries', icon: css_icon}]
 						},
 						{ name: "C# Web API", icon: csharp_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+							{ text: 'REST', icon: typescript_icon}, 
+							{ text: 'JSON', icon: typescript_icon},
+							{ text: 'CORS', icon: typescript_icon}]
 						},
 						{ name: "Entity Framework", icon: ef_core_icon, moons: [ 
-							{ text: 'Descripție 1', icon: typescript_icon}, 
-							{ text: 'Descripție 2', icon: typescript_icon},
-							{ text: 'Descripție 3', icon: typescript_icon}]
+							{ text: 'LINQ', icon: typescript_icon}, 
+							{ text: 'Database context', icon: typescript_icon},
+							{ text: 'Model', icon: typescript_icon}]
 						},
 					]}
 
@@ -248,7 +419,7 @@ function FrontPage()
 
 			<section className="experience-title content-wrap">
 				<div className="content">
-					<h3>Experiență</h3>
+					<h3>{is_ro ? 'Experiență' : 'Experience'}</h3>
 				</div>
 			</section>
 
@@ -257,61 +428,14 @@ function FrontPage()
 					<TimelinePlanets {...timeline_props}>
 						<TimelinePlanet
 							company="Advanced Technology Systems"
-							job="Full-stack developer"
+							job="Fullstack developer"
 							start_date={new Date(2020, 7)}
 							end_date={new Date(2022, 8)}
 							logo={ats_logo}
 							background={ats_office}
 							class_name='work-activity'
 						>
-							<div className="company-desc">
-								<h3 className="subtitle">Descrierea firmei</h3>
-								<p>ATS creează software pentru instituți publice care ajută la calcularea taxelor, plata salarilor, gestiunea bugetelor, facturilor, contractelor și altor tipuri de documente.</p>
-							</div>
-
-							<div className="work-desc">
-								<h3 className="subtitle">Responsabilități</h3>
-								<p>Eram developer Fullstack care lucra la mai multe proiecte simultan.</p>
-								<ul>
-									<li><p>Cream partea de Frontend la aplicați în React cu Typescript;</p></li>
-									<li><p>Foloseam o librărie JavaScript <NewTabLink url="https://js.devexpress.com" >DevExtreme</NewTabLink> pentru datagriduri, inputuri de date, popups, tabele și exportare de date în Excel;</p></li>
-									<li><p>Foloseam <NewTabLink url="https://axios-http.com"><code>Axios</code></NewTabLink> sau <NewTabLink url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch API</code></NewTabLink> pentru requesturi către server;</p></li>
-									<li><p>Cream partea de Backend ca <NewTabLink url="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/routing?WT.mc_id=dotnet-35129-website&view=aspnetcore-6.0">Web API</NewTabLink> scris în C#;</p></li>
-									<li><p>Interfațam cu baza de date prin <NewTabLink url="https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli">Entity Framework</NewTabLink>;</p></li>
-									<li><p>Cream baze de date pentru proiecte;</p></li>
-									<li><p>Scriam queries și proceduri stocate în T-SQL;</p></li>
-									<li><p>Lucram la mentenanța unui proiect ASP.NET WebForms care folosește librăria <NewTabLink url="https://www.devexpress.com">DevExpress</NewTabLink>;</p></li>
-									<li><p>Lucrat cu PHP pentru a crea o tema Wordpress pentru un site;</p></li>
-								</ul>
-							</div>
-
-							<div className="apps">
-								<h3 className="subtitle">Aplicații</h3>
-								<div className="app-list">
-									<div className="app">
-										<h3>Document Management</h3>
-										<p>Făceam dezvoltare la o aplicație de management a documentelor dintr-o instituție publică.</p>
-										<p>În cadrul aplicației se puteau defini diagrame compuse din noduri și arce, nodurile reprezentau utilizatori iar arcele dintre noduri controlau cum va parcurge un dosar de la un utilizator la altul.</p>
-										<p>Fiecare dosar creat primea un număr unic de înregistrare.</p>
-									</div>
-
-									<div className="app">
-										<h3>Backup App</h3>
-										<p>Am lucrat la crearea unei aplicați de backup remote care rulează pe Linux, aplicația permitea programarea calendaristică a unor task-uri prin care se transfera conținutul serverului remote în serverul local unde era instalată aplicația.</p>
-										<p>Transferul de fișiere de la locația de montare la locația destinație se făcea folosind comanda <a href="https://linux.die.net/man/1/rsync" target="_blank" rel="noreferrer">RSYNC</a> invocată pe un process separat. Pentru fiecare fișier transferat se mențineau mai multe versiuni.</p>
-									</div>
-
-									<div className="app">
-										<h3>Autorizați de transport</h3>
-										<p>Am făcut o aplicație de evidență a autorizațiilor de transport.</p>
-									</div>
-
-									<div className="app">
-										<h3>WebInvest</h3>
-										<p>Reasamblat o aplicație de management a investițiilor, achizițiilor și contractelor dintr-o instituție publică.</p>
-									</div>
-								</div>
-							</div>
+							{ats_experience}
 						</TimelinePlanet>
 
 						<TimelinePlanet
@@ -323,28 +447,7 @@ function FrontPage()
 							background={infrared_map}
 							class_name='work-activity'
 						>
-							<div className="company-desc">
-								<h3>Descrierea firmei</h3>
-								<p>Firma era cunoscută ca realizând hărți și machete pentru zone geografice și clădiri.</p>
-							</div>
-
-							<div className="work-desc">
-								<h3>Activitate</h3>
-								
-								<div className="stages">
-									<div className="stage">
-										<h4>Armata franceză</h4>
-										<p>Pentru primele 6 luni am lucrat pentru armata franceză.</p>
-										<p>Aproximativ la începutul fiecărei luni primeam o imagine capturată de un satelit în spectru de culoare uman + infraroșu și trebuia să marchez/conturez digital fiecare structură/clădire/stradă într-o zonă definită.</p>
-									</div>
-									
-									<div className="stage">
-										<h4>TomTom</h4>
-										<p>Pentru ultimele 6 luni am lucrat pentru TomTom.</p>
-										<p>În fiecare zi primeam un set de rute GPS și trebuia să verific dacă traseul putea fi parcurs de către o mașină. Foloseam ceva similar cu Google Street View și Google Earth pentru a realiza verificările.</p>
-									</div>
-								</div>
-							</div>
+							{bloom_experience}
 						</TimelinePlanet>
 					</TimelinePlanets>
 				</div>
@@ -352,18 +455,23 @@ function FrontPage()
 
 			<section className="demos-title content-wrap">
 				<div className="content">
-					<h3>Demonstrații</h3>
+					<h3>{is_ro ? 'Demonstrații' : 'Demos'}</h3>
 				</div>
 			</section>
 
 			<section className="demo-list content-wrap">
 				<div className="content">
 					<DemoCardList>
-						<DemoCard preview_img={Leafs_preview} title='Frunze' to="/leafs"
-							rezumat="Animație de închidere/ deschidre a unui vârtej de frunze menit să aibă rol de background."
+						<DemoCard preview_img={Leafs_preview}
+							title={is_ro ? 'Frunze' : 'Leafs'}
+							to="/leafs"
+							rezumat={is_ro ? "Animație de închidere/ deschidre a unui vârtej de frunze menit să aibă rol de background." : 
+							"Closing and opening of a leaf vortex meant to serve as background."}
 						/>
-						<DemoCard preview_img={Rain_preview} title='Ploaie' to="/rain"
-							rezumat="Animație de ploaie pentru background."
+						<DemoCard preview_img={Rain_preview}
+							title={is_ro ? 'Ploaie' : 'Rain'} 
+							to="/rain"
+							rezumat={is_ro ? "Animație de ploaie pentru background." : "Rain like animation for background."}
 						/>
 					</DemoCardList>
 				</div>
