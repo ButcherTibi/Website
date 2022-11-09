@@ -1,0 +1,68 @@
+.solsys-container {
+	width: 100%;
+	height: 100vh;
+
+	background-color: black;
+}
+
+.solsys-demo {
+	.editor {
+		margin: 15px 0px;
+
+		display: flex;
+		flex-direction: column;
+
+		gap: 15px;
+
+		--preset_hue: 182deg;
+		--preset_sat: 51%;
+		--preset_lum: 47%;
+		--back_color: hsl(var(--preset_hue), var(--preset_sat), var(--preset_lum));
+		--text_color: hsl(var(--preset_hue), var(--preset_sat), 100%);
+
+
+		.description {			
+			grid-area: description;
+
+			h3 {
+				margin-bottom: 5px;
+			}
+
+			p {
+				margin-bottom: 3px;
+				
+			}
+		}
+
+		.presets {
+			h3 {
+				margin-bottom: 5px;
+			}
+
+			.presets-list {
+				display: flex;
+				gap: 10px;
+			}
+		}
+
+		.params {
+			display: flex;
+			flex-direction: column;
+			gap: 7px;
+
+			.Slider {
+				.background-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 80%);
+				}
+
+				.fill-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+
+				.thumb-color {
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+			}
+		}
+	}
+}

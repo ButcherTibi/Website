@@ -489,6 +489,7 @@ export class DecoRingSettings {
 }
 
 export class SolarSystemProps {
+	/** How much to zoomin when clicking a planet. */
 	zoom_scale: number = 2
 	
 	sun_icon: string = ''
@@ -759,6 +760,7 @@ function SolarSystem(props: SolarSystemProps)
 							src={props.sun_icon} alt=""
 							style={sun_img_style}
 						/>
+						
 						<div style={sun_name_style}>
 							<h3 style={{fontSize: props.sun_name_size}}>
 								{props.sun_name}
