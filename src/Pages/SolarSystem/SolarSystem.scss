@@ -30,7 +30,6 @@
 
 			p {
 				margin-bottom: 3px;
-				
 			}
 		}
 
@@ -61,6 +60,135 @@
 
 				.thumb-color {
 					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%);
+				}
+			}
+
+			// > div {
+			// 	display: flex;
+			// 	flex-direction: column;
+			// 	gap: 3px;
+			// }
+		}
+
+		.sun-name-param {
+			display: flex;
+			flex-direction: column;
+			gap: 3px;
+
+			input {
+				outline: none;
+				box-sizing: border-box;
+				width: 100%;
+				
+				font-family: inherit;
+				font-size: 16px;
+				color: black;
+			}
+		}
+
+		.planet-list-param {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+
+			.planets {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 20px;
+
+				.planet {
+					box-sizing: border-box;
+					border-radius: 10px;
+					padding: 10px;
+					flex-basis: 217px;
+
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+
+					background-color: hsl(var(--preset_hue), var(--preset_sat), 50%, 0.6);
+
+					.planet-param {
+						display: flex;
+						flex-direction: column;
+						gap: 5px;
+					}
+
+					.moons-param {
+						margin-left: 12px;
+						display: flex;
+						flex-direction: column;
+
+						.moons {
+							display: flex;
+							flex-direction: column;
+							gap: 7px;
+
+							.moon {
+								border-radius: 10px;
+								padding: 5px;
+
+								display: flex;
+								flex-direction: column;
+								gap: 2px;
+
+								background-color: hsl(var(--preset_hue), var(--preset_sat), 50%, 0.7);
+							
+								> div {
+									display: flex;
+									flex-direction: column;
+									gap: 5px;
+								}
+							}
+						}
+					}
+
+					input {
+						outline: none;
+						font-family: inherit;
+						font-size: 14px;
+						color: black;
+					}
+				}
+			}
+
+			.planet-btn, .moon-btn {
+				transition: color .3s;
+			}
+
+			.planet-btn {
+				font-size: 16px;
+			}
+
+			.moon-btn {
+				font-size: 14px;
+			}
+
+			.delete-btn:hover {
+				color: hsl(0, 100%, 50%);
+			}
+
+			.add-btn.planet-btn:hover {
+				color: hsl(var(--preset_hue), var(--preset_sat), 50%)
+			}
+
+			.add-btn.moon-btn:hover {
+				color: white;
+			}
+		}
+
+		.params .deco-rings {
+			.deco-ring {
+				display: flex;
+				flex-direction: column;
+				gap: 15px;
+
+				> div {
+					margin-left: 20px;
+
+					> h4 {
+						margin-bottom: 5px;
+					}
 				}
 			}
 		}

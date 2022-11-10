@@ -96,7 +96,92 @@ const init_planets: PlanetSettings[] = [
 			}
 		]
 	},
+	{
+		key: '3',
+		name: 'Planet 4',
+		icon: typescript_icon,
+		moons: [
+			{
+				key: '0',
+				text: 'Moon 1',
+				icon: typescript_icon
+			},
+			{
+				key: '1',
+				text: 'Moon 2',
+				icon: typescript_icon
+			},
+			{
+				key: '2',
+				text: 'Moon 3',
+				icon: typescript_icon
+			}
+		]
+	},
+	{
+		key: '4',
+		name: 'Planet 5',
+		icon: typescript_icon,
+		moons: [
+			{
+				key: '0',
+				text: 'Moon 1',
+				icon: typescript_icon
+			},
+			{
+				key: '1',
+				text: 'Moon 2',
+				icon: typescript_icon
+			},
+			{
+				key: '2',
+				text: 'Moon 3',
+				icon: typescript_icon
+			}
+		]
+	},
+	{
+		key: '5',
+		name: 'Planet 6',
+		icon: typescript_icon,
+		moons: [
+			{
+				key: '0',
+				text: 'Moon 1',
+				icon: typescript_icon
+			},
+			{
+				key: '1',
+				text: 'Moon 2',
+				icon: typescript_icon
+			},
+			{
+				key: '2',
+				text: 'Moon 3',
+				icon: typescript_icon
+			}
+		]
+	},
 ]
+
+class SetDecoRingsArgs {
+	diameter?: number = 800
+	thickness?: number = 2
+	offset_from_center?: number = 70
+	revolution_duration_ms?: number = 30_000
+	start_angle?: number = 0
+
+	line_count?: number = 4
+	line_length?: number = 30
+	line_thickness?: number = 7
+	line_spacing?: number = 0
+
+	inner_circle_diameter?: number = 700
+	inner_circle_dash_length?: number = 50
+	inner_circle_dash_gap?: number = 50
+	inner_circle_thickness?: number = 2
+	inner_circle_revolution_duration_ms?: number = 30_000
+}
 
 class DecoRingSettings {
 	key = ''
@@ -209,7 +294,7 @@ const SolarSystemDemo = () => {
 			return [
 				...prev,
 				{
-					key: new Date().toString(),
+					key: Date.now().toString(),
 					name: 'New planet',
 					icon: typescript_icon,
 					moons: []
@@ -248,7 +333,7 @@ const SolarSystemDemo = () => {
 					new_planet.moons = [
 						...new_planet.moons,
 						{
-							key: new Date().toString(),
+							key: Date.now().toString(),
 							text: 'New moon',
 							icon: typescript_icon
 						}
@@ -294,6 +379,61 @@ const SolarSystemDemo = () => {
 				}
 
 				return new_planet
+			})
+		})
+	}
+
+	const addDecoRing = () => {
+		setDecoRings(prev => {
+			return [
+				...prev,
+				{
+					key: Date.now().toString(),
+					diameter: 1100,
+					thickness: 2,
+					offset_from_center: 150,
+					revolution_duration_ms: blend(20_000, 40_000, 1),
+					start_angle: blend(0, 360, 1),
+								
+					line_count: 8,
+					line_length: 35,
+					line_thickness: 5,
+					line_spacing: 15,
+
+					inner_circle_diameter: 1050,
+					inner_circle_dash_length: 200,
+					inner_circle_dash_gap: 400,
+					inner_circle_thickness: 2,
+					inner_circle_revolution_duration_ms: 60_000
+				}
+			]
+		})
+	}
+
+	const setDecoRing = (deco_ring_key: string, changed_params: SetDecoRingsArgs) => {
+		setDecoRings(prev => {
+			return prev.map(deco_ring => {
+				let new_deco_ring = { ...deco_ring }
+
+				if (deco_ring.key === deco_ring_key) {
+
+					for (let param in changed_params) {
+						let changed_param = (changed_params as any)[param]
+						if (changed_param !== undefined) {
+							(new_deco_ring as any)[param] = changed_param
+						}
+					}
+				}
+
+				return new_deco_ring
+			})
+		})
+	}
+
+	const deleteDecoRing = (deco_ring_key: string) => {
+		setDecoRings(prev => {
+			return prev.filter(deco_ring => {
+				return deco_ring.key !== deco_ring_key
 			})
 		})
 	}
@@ -403,7 +543,7 @@ const SolarSystemDemo = () => {
 							max={300}
 						/>
 					</div>
-					<div>
+					<div className="sun-name-param">
 						<label>Sun name</label>
 						<TextInput
 							value={sun_name}
@@ -477,46 +617,47 @@ const SolarSystemDemo = () => {
 					<div className="planet-list-param">
 						<label>Planets</label>
 						<ul className="planets">
-							{planets.map(planet => {
+							{planets.map((planet, index) => {
 								return <li className="planet" key={planet.key}>
-									<div>
+									<h4>{`Planet ${index + 1}`}</h4>
+									<div className="planet-param">
 										<label>Planet name</label>
 										<TextInput
 											value={planet.name}
 											onValueChange={value => setPlanetName(planet.key, value)}
 										/>
 									</div>
-									<div className="moon">
+									<div className="moons-param">
 										<ul className="moons">
 											{planet.moons.map(moon => {
-												return <li>
-													<div>
+												return <li className="moon" key={moon.key}>
+													<div className="moon-param">
 														<label>Moon text</label>
 														<TextInput
 															value={moon.text}
 															onValueChange={value => setMoonName(planet.key, moon.key, value)}
 														/>
 													</div>
-													<button
+													<button className="delete-btn moon-btn"
 														onClick={() => deleteMoon(planet.key, moon.key)}>
 														Delete moon
 													</button>
 												</li>
 											})}
 										</ul>
-										<button className="add-btn"
+										<button className="add-btn moon-btn"
 											onClick={() => addMoon(planet.key)}>
 											Add moon
 										</button>
 									</div>
-									<button className="delete-btn"
+									<button className="delete-btn planet-btn"
 										onClick={() => deletePlanet(planet.key)}>
 										Delete planet
 									</button>
 								</li>
 							})}
 						</ul>
-						<button className="add-btn"
+						<button className="add-btn planet-btn"
 							onClick={addPlanet}>
 							Add planet
 						</button>
@@ -533,12 +674,165 @@ const SolarSystemDemo = () => {
 					</div>
 				</div>
 
-				{/* <div className="params">
+				<div className="params">
 					<h3>Decorative rings settings</h3>
-					<div>
-						
-					</div>
-				</div> */}
+					<ul className="deco-rings">
+						{deco_rings.map((deco_ring, index) => {
+							return <li className="deco-ring" key={deco_ring.key}>
+								<h3>{`Ring ${index + 1}`}</h3>
+								<div>
+									<h4>Ring settings</h4>
+									<div>
+										<label>Diameter</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.diameter}
+											onValueChange={value => setDecoRing(deco_ring.key, { diameter: value })}
+											min={0}
+											max={1500}
+										/>
+									</div>
+									<div>
+										<label>Thickness</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.thickness}
+											onValueChange={value => setDecoRing(deco_ring.key, { thickness: value })}
+											min={0}
+											max={25}
+										/>
+									</div>
+									<div>
+										<label>Offset from center</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.offset_from_center}
+											onValueChange={value => setDecoRing(deco_ring.key, { offset_from_center: value })}
+											min={0}
+											max={600}
+										/>
+									</div>
+									<div>
+										<label>Revolution duration (miliseconds)</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.revolution_duration_ms}
+											onValueChange={value => setDecoRing(deco_ring.key, { revolution_duration_ms: value })}
+											min={500}
+											max={60_000}
+										/>
+									</div>
+								</div>
+
+								<div>
+									<h4>Line settings</h4>
+									<div>
+										<label>Line count</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.line_count}
+											onValueChange={value => setDecoRing(deco_ring.key, { line_count: value })}
+											min={0}
+											max={50}
+										/>
+									</div>
+									<div>
+										<label>Length</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.line_length}
+											onValueChange={value => setDecoRing(deco_ring.key, { line_length: value })}
+											min={0}
+											max={100}
+										/>
+									</div>
+									<div>
+										<label>Thickness</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.line_thickness}
+											onValueChange={value => setDecoRing(deco_ring.key, { line_thickness: value })}
+											min={0}
+											max={25}
+										/>
+									</div>
+									<div>
+										<label>Spacing</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.line_spacing}
+											onValueChange={value => setDecoRing(deco_ring.key, { line_spacing: value })}
+											min={0}
+											max={150}
+										/>
+									</div>
+								</div>
+
+								<div>
+									<h4>Inner circle settings</h4>
+									<div>
+										<label>Diameter</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.inner_circle_diameter}
+											onValueChange={value => setDecoRing(deco_ring.key, { inner_circle_diameter: value })}
+											min={0}
+											max={1500}
+										/>
+									</div>
+									<div>
+										<label>Dash length</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.inner_circle_dash_length}
+											onValueChange={value => setDecoRing(deco_ring.key, { inner_circle_dash_length: value })}
+											min={0}
+											max={500}
+										/>
+									</div>
+									<div>
+										<label>Dash gap</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.inner_circle_dash_gap}
+											onValueChange={value => setDecoRing(deco_ring.key, { inner_circle_dash_gap: value })}
+											min={0}
+											max={500}
+										/>
+									</div>
+									<div>
+										<label>Thickness</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.inner_circle_thickness}
+											onValueChange={value => setDecoRing(deco_ring.key, { inner_circle_thickness: value })}
+											min={0}
+											max={25}
+										/>
+									</div>
+									<div>
+										<label>Revolution duration (miliseconds)</label>
+										<Slider
+											{...common_slider_props}
+											value={deco_ring.inner_circle_revolution_duration_ms}
+											onValueChange={value => setDecoRing(deco_ring.key, { inner_circle_revolution_duration_ms: value })}
+											min={50}
+											max={60_000}
+										/>
+									</div>
+								</div>
+								<button
+									onClick={() => deleteDecoRing(deco_ring.key)}>
+									Delete decorative ring
+								</button>
+							</li>
+						})}
+					</ul>
+					<button
+						onClick={addDecoRing}>
+						Add decorative ring
+					</button>
+				</div>
 			</div>
 		</main>
 	</>
