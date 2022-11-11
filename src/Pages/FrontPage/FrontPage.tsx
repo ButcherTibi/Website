@@ -156,8 +156,8 @@ const bloom_expertience_en: JSX.Element = <>
 		
 		<div className="stages">
 			<div className="stage">
-				<h4>The french army</h4>
-				<p>For the first 6 months I worked for the french army.</p>
+				<h4>The french client</h4>
+				<p>For the first 6 months I worked for a french client.</p>
 				<p>Approximately at the start of each month I received a satellite capture image in the human colored spectrum + infrared and had to digitally draw/mark each structure, building and street in a defined zone.</p>
 			</div>
 			
@@ -182,8 +182,8 @@ const bloom_expertience_ro: JSX.Element = <>
 		
 		<div className="stages">
 			<div className="stage">
-				<h4>Armata franceză</h4>
-				<p>Pentru primele 6 luni am lucrat pentru armata franceză.</p>
+				<h4>Client francez</h4>
+				<p>Pentru primele 6 luni am lucrat pentru un client francez.</p>
 				<p>Aproximativ la începutul fiecărei luni primeam o imagine capturată de un satelit în spectru de culoare uman + infraroșu și trebuia să marchez/conturez digital fiecare structură/clădire/stradă într-o zonă definită.</p>
 			</div>
 			
