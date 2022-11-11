@@ -1,17 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import SolarSystem from "../../Components/Orbit/Orbits"
-import Slider, { SliderProps } from "../../Components/Slider/Slider"
+import Slider from "../../Components/Slider/Slider"
 import TextInput from '../../Components/TextInput/TextInput'
 import { blend } from "../../Common"
 
-import typescript_icon from '../../Resources/icons8-typescript-96.svg'
-// import javascript_icon from '../../Resources/icons8-javascript-96.svg'
-// import react_icon from '../../Resources/icons8-react-160.png'
-// import html_icon from '../../Resources/icons8-html-5-96.svg'
-// import css_icon from '../../Resources/icons8-css3-96.svg'
-// import csharp_icon from '../../Resources/C_sharp.svg'
-// import ef_core_icon from '../../Resources/ef_core.png'
+import sun_icon from '../../Resources/sun-vaporwave.png'
+import planet_icon from '../../Resources/planet.png'
+import moon_icon from '../../Resources/moon.png'
 
 import './SolarSystem.scss'
 
@@ -33,132 +29,147 @@ const init_planets: PlanetSettings[] = [
 	{
 		key: '0',
 		name: 'Planet 1',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
-			},
-			{
-				key: '1',
-				text: 'Moon 2',
-				icon: typescript_icon
-			},
-			{
-				key: '2',
-				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
 			}
 		]
 	},
 	{
 		key: '1',
 		name: 'Planet 2',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '1',
 				text: 'Moon 2',
-				icon: typescript_icon
-			},
-			{
-				key: '2',
-				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
 			}
 		]
 	},
 	{
 		key: '2',
 		name: 'Planet 3',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '1',
 				text: 'Moon 2',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '2',
 				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
 			}
 		]
 	},
 	{
 		key: '3',
 		name: 'Planet 4',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '1',
 				text: 'Moon 2',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '2',
 				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
+			},
+			{
+				key: '3',
+				text: 'Moon 4',
+				icon: moon_icon
 			}
 		]
 	},
 	{
 		key: '4',
 		name: 'Planet 5',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '1',
 				text: 'Moon 2',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '2',
 				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
+			},
+			{
+				key: '3',
+				text: 'Moon 4',
+				icon: moon_icon
+			},
+			{
+				key: '4',
+				text: 'Moon 5',
+				icon: moon_icon
 			}
 		]
 	},
 	{
 		key: '5',
 		name: 'Planet 6',
-		icon: typescript_icon,
+		icon: planet_icon,
 		moons: [
 			{
 				key: '0',
 				text: 'Moon 1',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '1',
 				text: 'Moon 2',
-				icon: typescript_icon
+				icon: moon_icon
 			},
 			{
 				key: '2',
 				text: 'Moon 3',
-				icon: typescript_icon
+				icon: moon_icon
+			},
+			{
+				key: '3',
+				text: 'Moon 4',
+				icon: moon_icon
+			},
+			{
+				key: '4',
+				text: 'Moon 5',
+				icon: moon_icon
+			},
+			{
+				key: '5',
+				text: 'Moon 6',
+				icon: moon_icon
 			}
 		]
 	},
@@ -285,8 +296,58 @@ const SolarSystemDemo = () => {
 	const [deco_rings, setDecoRings] = useState(init_deco_rings)
 
 
-	const applyInitialPreset = () => {
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [])
 
+	const applyInitialPreset = () => {
+		setZoomScale(2)
+		setOrbitDiameter(600)
+		setRevolutionDuration(60_000)
+
+		setSunDiameter(100)
+		setSunName('Sun name')
+		setSunNameSize(22)
+		setSunNameSpacing(40)
+		setCoronaDiameter(150)
+
+		setPlanetDiameter(75)
+		setPlanetNameSize(16)
+		setPlanetNameSpacing(10)
+		setPlanets(init_planets)
+		setMoonDiameter(50)
+
+		setDecoRings(init_deco_rings)
+	}
+
+	const applyHarmonyPreset = () => {
+		setZoomScale(2)
+		setOrbitDiameter(600)
+		setRevolutionDuration(60_000)
+
+		setSunDiameter(100)
+		setSunName('Sun name')
+		setSunNameSize(0)
+		setSunNameSpacing(40)
+		setCoronaDiameter(230)
+
+		setPlanetDiameter(0)
+		setPlanetNameSize(0)
+		setPlanetNameSpacing(10)
+
+		let planets: PlanetSettings[] = []
+		for (let i = 0; i < 16; i++) {
+			planets.push({
+				key: i.toString(),
+				name: '',
+				icon: planet_icon,
+				moons: []
+			})
+		}
+		setPlanets(planets)
+		setMoonDiameter(50)
+
+		setDecoRings(init_deco_rings)
 	}
 
 	const addPlanet = () => {
@@ -296,7 +357,7 @@ const SolarSystemDemo = () => {
 				{
 					key: Date.now().toString(),
 					name: 'New planet',
-					icon: typescript_icon,
+					icon: planet_icon,
 					moons: []
 				}
 			]
@@ -335,7 +396,7 @@ const SolarSystemDemo = () => {
 						{
 							key: Date.now().toString(),
 							text: 'New moon',
-							icon: typescript_icon
+							icon: moon_icon
 						}
 					]
 				}
@@ -448,7 +509,7 @@ const SolarSystemDemo = () => {
 			<SolarSystem
 				zoom_scale={zoom_scale}
 
-				sun_icon={typescript_icon}
+				sun_icon={sun_icon}
 				sun_diameter={sun_diameter}
 				sun_name={sun_name}
 				sun_name_size={sun_name_size}
@@ -492,8 +553,9 @@ const SolarSystemDemo = () => {
 
 				<div className="presets">
 					<h3>Presets</h3>
-					<div className="preset-list">
+					<div className="presets-list">
 						<button onClick={applyInitialPreset}>Initial</button>
+						<button onClick={applyHarmonyPreset}>Harmony</button>
 					</div>
 				</div>
 
@@ -590,7 +652,7 @@ const SolarSystemDemo = () => {
 							{...common_slider_props}
 							value={planet_diameter}
 							onValueChange={value => setPlanetDiameter(value)}
-							min={1}
+							min={0}
 							max={300}
 						/>
 					</div>
@@ -600,7 +662,7 @@ const SolarSystemDemo = () => {
 							{...common_slider_props}
 							value={planet_name_size}
 							onValueChange={value => setPlanetNameSize(value)}
-							min={1}
+							min={0}
 							max={50}
 						/>
 					</div>
@@ -821,14 +883,14 @@ const SolarSystemDemo = () => {
 										/>
 									</div>
 								</div>
-								<button
+								<button className="delete-btn ring-btn"
 									onClick={() => deleteDecoRing(deco_ring.key)}>
 									Delete decorative ring
 								</button>
 							</li>
 						})}
 					</ul>
-					<button
+					<button className="add-btn ring-btn"
 						onClick={addDecoRing}>
 						Add decorative ring
 					</button>

@@ -41,6 +41,30 @@
 			.presets-list {
 				display: flex;
 				gap: 10px;
+
+				button {
+					border-radius: 7px;
+					border: 2px solid var(--back_color);
+					padding: 7px 30px;
+		
+					font-size: 16px;
+					color: var(--text_color);
+		
+					background-color: var(--back_color);
+					transition: color .3s, background .3s;
+
+					@media (hover: hover) {
+						&:hover {
+							color: var(--back_color);
+							background-color: var(--text_color);
+						}
+					}
+
+					&:active {
+						color: var(--back_color);
+						background-color: var(--text_color);
+					}
+				}
 			}
 		}
 
@@ -151,30 +175,6 @@
 					}
 				}
 			}
-
-			.planet-btn, .moon-btn {
-				transition: color .3s;
-			}
-
-			.planet-btn {
-				font-size: 16px;
-			}
-
-			.moon-btn {
-				font-size: 14px;
-			}
-
-			.delete-btn:hover {
-				color: hsl(0, 100%, 50%);
-			}
-
-			.add-btn.planet-btn:hover {
-				color: hsl(var(--preset_hue), var(--preset_sat), 50%)
-			}
-
-			.add-btn.moon-btn:hover {
-				color: white;
-			}
 		}
 
 		.params .deco-rings {
@@ -191,6 +191,30 @@
 					}
 				}
 			}
+		}
+
+		.planet-btn, .moon-btn, .ring-btn {
+			transition: color .3s;
+		}
+
+		.planet-btn, .ring-btn {
+			font-size: 16px;
+		}
+
+		.moon-btn {
+			font-size: 14px;
+		}
+
+		.delete-btn:hover {
+			color: hsl(0, 100%, 50%);
+		}
+
+		.add-btn.planet-btn:hover, .add-btn.ring-btn:hover {
+			color: hsl(var(--preset_hue), var(--preset_sat), 50%)
+		}
+
+		.add-btn.moon-btn:hover {
+			color: white;
 		}
 	}
 }

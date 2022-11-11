@@ -16,6 +16,7 @@ import { blend, Interval, DisplayFormat } from "../../Common"
 import portret from '../../Resources/Me.jpeg'
 import Leafs_preview from '../../Resources/Leafs_preview.png'
 import Rain_preview from '../../Resources/Rain_preview.png'
+import SolarSystem_preview from '../../Resources/solar_sys.png'
 
 // Planets
 import typescript_icon from '../../Resources/icons8-typescript-96.svg'
@@ -472,6 +473,11 @@ function FrontPage()
 							title={is_ro ? 'Ploaie' : 'Rain'} 
 							to="/rain"
 							rezumat={is_ro ? "Animație de ploaie pentru background." : "Rain like animation for background."}
+						/>
+						<DemoCard preview_img={SolarSystem_preview}
+							title='Solar System'
+							to='/solar-system'
+							rezumat='Solar system animation with sun, planets, moons and additional rings all orbiting the center.'
 						/>
 					</DemoCardList>
 				</div>

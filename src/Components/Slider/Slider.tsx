@@ -56,33 +56,52 @@ export default function Slider(props: SliderProps)
 		setDisplayValue(new_value.toFixed(2))
 	}, [step, max, min, onValueChange]);
 
+	
+	const updateValueFromX = useCallback((pointer_pos_x: number) => {
+		is_thumb_pressed.current = true
+
+		let rect = track_elem.current!.getBoundingClientRect()
+		let new_ratio = (pointer_pos_x - rect.left) / (rect.right - rect.left)
+		new_ratio = new_ratio < 0 ? 0 : new_ratio
+		new_ratio = new_ratio > 1 ? 1 : new_ratio
+
+		updateValueFromRatio(new_ratio)
+	}, [updateValueFromRatio])
+
 
 	useEffect(() => {
 		const moveThumb = (e: MouseEvent) => {
 			if (is_thumb_pressed.current! === false) {
 				return
 			}
-	
-			let rect = track_elem.current!.getBoundingClientRect()
-			let new_ratio = (e.pageX - rect.left) / (rect.right - rect.left)
-			new_ratio = new_ratio < 0 ? 0 : new_ratio
-			new_ratio = new_ratio > 1 ? 1 : new_ratio
-	
-			updateValueFromRatio(new_ratio);
+			updateValueFromX(e.pageX)
 		};
+
+
+		const moveThumbTouch = (e: TouchEvent) => {
+			if (is_thumb_pressed.current! === false) {
+				return
+			}
+			updateValueFromX(e.targetTouches.item(0)!.pageX)
+		}
 	
+
 		const endThumbMovement = () => {
 			is_thumb_pressed.current = false
 		};
 
-		document.body.addEventListener('mousemove', moveThumb);
-		document.body.addEventListener('mouseup', endThumbMovement);
+		document.body.addEventListener('mousemove', moveThumb)
+		document.body.addEventListener('touchmove', moveThumbTouch)
+		document.body.addEventListener('mouseup', endThumbMovement)
+		document.body.addEventListener('touchend', endThumbMovement)
 
 		return () => {
-			document.body.removeEventListener('mousemove', moveThumb);
-			document.body.removeEventListener('mouseup', endThumbMovement);
+			document.body.removeEventListener('mousemove', moveThumb)
+			document.body.removeEventListener('touchmove', moveThumbTouch)
+			document.body.removeEventListener('mouseup', endThumbMovement)
+			document.body.removeEventListener('touchend', endThumbMovement)
 		};
-	}, [updateValueFromRatio]);
+	}, [updateValueFromX]);
 
 
 	// Update numeric input to incoming value
@@ -95,31 +114,13 @@ export default function Slider(props: SliderProps)
 	}, [props.value, display_value])
 
 
-	const onThumbDown = (e: React.MouseEvent) => {
+	const updateValueFromMouseX = (e: React.MouseEvent) => {
 		e.preventDefault();
-		const page_x = e.pageX
-
-		is_thumb_pressed.current = true
-
-		let rect = e.currentTarget!.getBoundingClientRect()
-		let new_ratio = (page_x - rect.left) / (rect.right - rect.left)
-		new_ratio = new_ratio < 0 ? 0 : new_ratio
-		new_ratio = new_ratio > 1 ? 1 : new_ratio
-
-		updateValueFromRatio(new_ratio)
+		updateValueFromX(e.pageX)
 	};
 
-	const onThumbTouch = (e: React.TouchEvent) => {
-		const page_x = e.targetTouches.item(0).pageX
-
-		is_thumb_pressed.current = true
-
-		let rect = e.currentTarget!.getBoundingClientRect()
-		let new_ratio = (page_x - rect.left) / (rect.right - rect.left)
-		new_ratio = new_ratio < 0 ? 0 : new_ratio
-		new_ratio = new_ratio > 1 ? 1 : new_ratio
-
-		updateValueFromRatio(new_ratio)
+	const updateValueFromFingerX = (e: React.TouchEvent) => {
+		updateValueFromX(e.targetTouches.item(0).pageX)
 	}
 
 
@@ -138,7 +139,7 @@ export default function Slider(props: SliderProps)
 		}
 	}
 
-	const onMouseMove = () => {
+	const addHighlight = () => {
 		if (is_thumb_pressed.current! === true) {
 			return
 		}
@@ -148,12 +149,13 @@ export default function Slider(props: SliderProps)
 		div.style.backgroundColor = hover_btn_color
 	}
 
-	const onMouseLeave = () => {
+	const removeHighlight = () => {
 		const track_wrap = track_elem.current!
 		const div = track_wrap.querySelector('.highlight div')! as HTMLDivElement
 		div.style.backgroundColor = ''
 	}
 
+	
 	// Render
 	// console.log(`render`)
 
@@ -185,10 +187,13 @@ export default function Slider(props: SliderProps)
 	return <>
 		<div className='Slider'>
 			<div className='track-wrap' ref={track_elem}
-				onMouseDown={onThumbDown}
-				onTouchMove={onThumbTouch}
-				onMouseMove={onMouseMove}
-				onMouseLeave={onMouseLeave}
+				onMouseDown={updateValueFromMouseX}
+				onTouchMove={updateValueFromFingerX}
+
+				onMouseMove={addHighlight}
+
+				onMouseLeave={removeHighlight}
+				onTouchEnd={removeHighlight}
 			>
 				<div className='track background-color'>
 					<div className="fill fill-color" style={track_fill_style}></div>

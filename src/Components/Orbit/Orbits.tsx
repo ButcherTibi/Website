@@ -276,8 +276,8 @@ function Orbit(props: OrbitProps)
 	{
 		const main_orbit_diameter = props.main_orbit_diameter / 2 * props.scale;
 
-		let x = Math.sin(angle) * main_orbit_diameter
-		let y = Math.cos(angle) * main_orbit_diameter
+		let x = Math.cos(angle) * main_orbit_diameter
+		let y = Math.sin(angle) * main_orbit_diameter
 		x += props.solar_system_center.x
 		y += props.solar_system_center.y
 		x += props.offset.x * props.scale
@@ -316,8 +316,8 @@ function Orbit(props: OrbitProps)
 
 		const main_orbit_half_radius = main_orbit_radius / 2
 
-		let x = Math.sin(angle) * main_orbit_half_radius
-		let y = Math.cos(angle) * main_orbit_half_radius
+		let x = Math.cos(angle) * main_orbit_half_radius
+		let y = Math.sin(angle) * main_orbit_half_radius
 		x += props.solar_system_center.x
 		y += props.solar_system_center.y
 		x += props.offset.x * props.scale
@@ -436,7 +436,7 @@ function CoronaRay(props: CoronaRayProps)
 				${center + props.offset.x * props.scale}px,
 				${center + props.offset.y * props.scale}px
 			)
-			rotate(${angle - angle_step / 4}deg)
+			rotate(-${angle}deg)
 			scale(${props.scale})
 		`
 	}
@@ -447,7 +447,7 @@ function CoronaRay(props: CoronaRayProps)
 				${center + props.offset.x * props.scale}px,
 				${center + props.offset.y * props.scale}px
 			)
-			rotate(${angle + angle_step / 4}deg)
+			rotate(-${angle + angle_step / 2}deg)
 			scale(${props.scale})
 		`
 	}
